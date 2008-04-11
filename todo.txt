@@ -1,0 +1,37 @@
+Future Features:
+
+Bugs:
+* mp3 music
+* fli player starves message loop.
+* gamemenu->quit goes to pilot menu
+* keyboard config not used by game.
+* joystick calibrate, does nothing remove it?
+* joystick not implemented
+* windowed/fullscreen option not implemented
+* mainmenu->viewstats->outputstates asserts
+* add random game option
+* make gl a compile option
+* remove stub.h/stub.c
+* make SYS_Error work with variable args.
+* remove unused source files
+* cull unused functions/variables from source
+* make sure glcylindrix.c is not dependent on windows.h
+* glcylindrix should pay attention to detail options.
+* glcylindrix should draw wire tube
+
+* create math library
+* move to all floating point math.
+* allow for variable timestep
+* experiment with impulse physics for control.
+
+* tcp/ip networking
+* latency hiding & prediction
+
+* proper memory allocation.
+* optimization pass.
+
+* port to linux
+* port to gba/ds
+
+* advanced rendering features glow/trails motion blur, shadows.
+
