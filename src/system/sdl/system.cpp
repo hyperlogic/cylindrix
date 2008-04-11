@@ -162,6 +162,8 @@ static void processKeys()
 static bool process()
 {
 	processKeys();
+	
+	SYS_ProcessSound();
 
 	bool done = GameLoop();
 

@@ -13,8 +13,15 @@ struct SYS_Wave
 	struct SYS_Wave* next;
 	struct SYS_Wave* prev;
 	ALuint buffer;
-	ALuint source;  // used for single instance sounds.
-	const char* filename;		// for debugging.
+	ALuint source;  		// used for single instance sounds.
+	
+	mpg123_handle* mh;		// only used for streaming mp3 sounds.
+	ALuint mp3_buffers[2];	// only used for streaming mp3 sounds.
+	int bufferIndex;
+	int channels;			// only used for streaming mp3 sounds.
+	long rate;				// only used for streaming mp3 sounds.
+	size_t bufferSize;		// size in bytes of streaming mp3 buffers.
+	const char* filename;	// for debugging.
 };
 
 #define SIZEOFWAVEPOOL 500
@@ -117,7 +124,7 @@ void SYS_InitSound()
 		printf("Error mpg123_init() : %s\n", mpg123_plain_strerror(error));
 	}
 	
-	SYS_SOUNDHANDLE music = SYS_LoadSound( "music/track02.mp3");
+	SYS_SOUNDHANDLE music = SYS_LoadSound("music/track02.mp3");
 	SYS_PlaySound(music, true);
 }
 
@@ -130,6 +137,13 @@ void SYS_ShutdownSound()
 	alcMakeContextCurrent(0);
 	alcDestroyContext(context);
 	alcCloseDevice(device);
+}
+
+static void SYS_ProcessStreaming();
+
+void SYS_ProcessSound()
+{
+	SYS_ProcessStreaming();
 }
 
 static SYS_Wave* GetWaveFromFreePool()
@@ -152,9 +166,10 @@ static SYS_Wave* GetWaveFromFreePool()
 	usedList = wave;
 
 	// init the resources.
-	wave->buffer = 0;
+	wave->buffer = -1;
 	wave->source = -1;
 	wave->filename = 0;
+	wave->mh = 0;
 
 #ifdef SYS_SOUNDDEBUG
 	soundsLoaded++;
@@ -175,6 +190,8 @@ static void ReturnWaveToPool( SYS_Wave* wave )
 		wave->next->prev = wave->prev;
 	if ( usedList == wave )
 		usedList = wave->next;
+	if ( wave->mh )
+		mpg123_delete(wave->mh);
 	
 	// add wave to head of freeList
 	wave->next = freeList;
@@ -255,7 +272,7 @@ static SYS_SOUNDHANDLE SYS_LoadMP3File(char* filename)
 		mpg123_delete(mh);
 		return 0;
 	}
-	
+
 	int channels, encoding;
 	long rate;
 	error = mpg123_getformat(mh, &rate, &channels, &encoding);
@@ -278,40 +295,83 @@ static SYS_SOUNDHANDLE SYS_LoadMP3File(char* filename)
 	// Ensure that this output format will not change (it could, when we allow it).
 	mpg123_format_none(mh);
 	mpg123_format(mh, rate, channels, encoding);
-
-	size_t block_size = mpg123_outblock( mh );
-	size_t buffer_size = 1024 * 1024 * 100;  // 100 megs
-	unsigned char* buffer = (unsigned char*)malloc( buffer_size );
-	size_t bytes_read = 0;
-	size_t total_bytes_read = 0;
-	unsigned char* b = buffer;
-
-	do
-	{
-		error = mpg123_read(mh, b, block_size, &bytes_read);
-		b += bytes_read;
-		total_bytes_read += bytes_read;
-		
-		printf( "read %d bytes! total = %d\n", (unsigned int)bytes_read, (unsigned int)total_bytes_read);
-		
-		// We are not in feeder mode, so MPG123_OK, MPG123_ERR and MPG123_NEW_FORMAT are the only possibilities.
-		//   We do not handle a new format, MPG123_DONE is the end... so abort on anything not MPG123_OK.
-	} while (error == MPG123_OK);
 	
-	printf("bytes_read = %d\n", (unsigned int)total_bytes_read);
-
+	// create streaming OpenAL buffers.
 	SYS_Wave* wave = GetWaveFromFreePool();
 	wave->filename = filename;
-	alGenBuffers(1, &wave->buffer);
+	
+	alGenBuffers(2, wave->mp3_buffers);
+	CheckForErrors();
+	
+	wave->bufferIndex = 0;
+	wave->bufferSize = mpg123_outblock( mh ) * 64;
+	wave->rate = rate;
+	wave->channels = channels;
+	wave->mh = mh;
+	
+	return (SYS_SOUNDHANDLE)wave;
+}
+
+static void SYS_StreamNextBuffer(int bufferIndex, SYS_Wave* wave)
+{
+	assert(wave->mh);
+	
+	// TODO: should probably use a static buffer
+	unsigned char* buffer = (unsigned char*)malloc( wave->bufferSize );
+	size_t bytes_read = 0;
+	
+	int error = mpg123_read(wave->mh, buffer, wave->bufferSize, &bytes_read);
+	
+	// We are not in feeder mode, so MPG123_OK, MPG123_ERR and MPG123_NEW_FORMAT are the only possibilities.
+	//   We do not handle a new format, MPG123_DONE is the end... so abort on anything not MPG123_OK.
+	//} while (error == MPG123_OK);
+	
+	if ( error != MPG123_OK )
+	{
+		// we hit the end.
+		assert(0);	// TODO: loop or stop the sound...
+	}
+		
+	printf("bytes_read = %d\n", (unsigned int)bytes_read);
 
 	// copy PCM data into OpenAL buffer
-	alBufferData(wave->buffer, AL_FORMAT_STEREO16, buffer, total_bytes_read, rate);
+	alBufferData(wave->mp3_buffers[bufferIndex], AL_FORMAT_STEREO16, buffer, bytes_read, wave->rate);
 	CheckForErrors();
 
 	free(buffer);
-	mpg123_delete(mh);
-	
-	return (SYS_SOUNDHANDLE)wave;
+}
+
+static void SYS_ProcessStreaming()
+{	
+	// loop over the used wave list.
+	SYS_Wave* wave = usedList;	
+	while (wave)
+	{		
+		// if this is a streaming sound and it's currently playing
+		if (wave->mh && SYS_IsSoundPlaying((SYS_SOUNDHANDLE)wave))
+		{
+			// if we need to fill the next buffer
+			ALint val;
+			alGetSourcei(wave->source, AL_BUFFERS_PROCESSED, &val);
+			CheckForErrors();
+			
+			if (val)	// val is not zero
+			{
+				printf("processStreaming() for %s\n", wave->filename);
+				
+				alSourceUnqueueBuffers(wave->source,1,&wave->mp3_buffers[wave->bufferIndex]);
+				CheckForErrors();
+				
+				SYS_StreamNextBuffer(wave->bufferIndex, wave);
+				
+				alSourceQueueBuffers(wave->source,1,&wave->mp3_buffers[wave->bufferIndex]);
+				CheckForErrors();
+				
+				wave->bufferIndex = (wave->bufferIndex + 1) % 2;
+			}
+		}
+		wave = wave->next;
+	}
 }
 
 SYS_SOUNDHANDLE SYS_LoadSound(char* filename)
@@ -347,9 +407,10 @@ void SYS_ReleaseSound( SYS_SOUNDHANDLE soundHandle )
 #endif
 
 	assert(wave);
-	alDeleteBuffers(1, &wave->buffer);
+	if (wave->buffer != -1)
+		alDeleteBuffers(1, &wave->buffer);
 
-	if (wave->source)
+	if (wave->source != -1)
 		alDeleteSources(1, &wave->source);
 
 	ReturnWaveToPool(wave);
@@ -409,16 +470,35 @@ void SYS_PlaySoundVolume( SYS_SOUNDHANDLE soundHandle, int looping, unsigned cha
 {
 	SYS_Wave* wave = (SYS_Wave*)soundHandle;
 	assert(wave);
-
-	if (wave->source)
-		alDeleteSources(1, &wave->source);
 	
-	alGenSources(1, &wave->source);
-	alSourcei(wave->source, AL_BUFFER, wave->buffer);
-	alSourcef(wave->source, AL_GAIN, volume/255.0f);
-	alSourcei(wave->source, AL_LOOPING, looping ? AL_TRUE : AL_FALSE);
-	alSourcei(wave->source, AL_SOURCE_RELATIVE, 1);
-	alSourcePlay(wave->source);
+	if (wave->mh)
+	{
+		if (wave->source != -1)
+			alDeleteSources(1, &wave->source);
+	
+		alGenSources(1, &wave->source);
+		SYS_StreamNextBuffer(0, wave);		
+		SYS_StreamNextBuffer(1, wave);		
+		alSourceQueueBuffers(wave->source, 2, wave->mp3_buffers);
+		alSourcef(wave->source, AL_GAIN, volume/255.0f);
+		//alSourcei(wave->source, AL_LOOPING, looping ? AL_TRUE : AL_FALSE);
+		alSourcei(wave->source, AL_SOURCE_RELATIVE, 1);		
+		alSourcePlay(wave->source);
+		
+		printf("playing %s\n", wave->filename );
+	}
+	else
+	{
+		if (wave->source != -1)
+			alDeleteSources(1, &wave->source);
+	
+		alGenSources(1, &wave->source);
+		alSourcei(wave->source, AL_BUFFER, wave->buffer);
+		alSourcef(wave->source, AL_GAIN, volume/255.0f);
+		alSourcei(wave->source, AL_LOOPING, looping ? AL_TRUE : AL_FALSE);
+		alSourcei(wave->source, AL_SOURCE_RELATIVE, 1);
+		alSourcePlay(wave->source);
+	}
 }
 
 void SYS_SetListenerOrientation( float position[3], float forward[3], float up[3] )
@@ -448,7 +528,7 @@ void SYS_TriggerSound3D( SYS_SOUNDHANDLE soundHandle, float position[3], unsigne
 	// find a stopped or unallocated source in the pool
 	for ( i = 0; i < SIZEOFSOURCEPOOL; ++i )
 	{
-		if ( sourcePool[i] == 0xffffffff )
+		if ( sourcePool[i] == -1 )
 		{
 			// allocate a new source
 			alGenSources(1, &sourcePool[i]);
