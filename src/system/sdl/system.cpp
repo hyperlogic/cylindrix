@@ -173,7 +173,7 @@ int main( int argc, char* argv[] )
 
 	atexit( SDL_Quit );
 
-	SDL_Surface* screen = SDL_SetVideoMode( 640, 480, 32, SDL_HWSURFACE | SDL_RESIZABLE | SDL_OPENGL );
+	SDL_Surface* screen = SDL_SetVideoMode( 800, 600, 32, SDL_HWSURFACE | SDL_RESIZABLE | SDL_OPENGL );
 
 	if ( !screen )
 		SYS_Error( "Couldn't create SDL screen!\n" );
