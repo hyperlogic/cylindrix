@@ -6,16 +6,10 @@
 #include <SDL/SDL.h>
 #include "../../gameloop.h"
 #include "../system.h"
+#include <stdarg.h>
 
 unsigned char keysDown[255];
 unsigned char keysPressed[255];
-
-void SYS_Error( const char* error, ... )
-{
-	// TODO: handle variable arguments
-	fprintf( stderr, "%s", error );
-	exit( 0 );
-}
 
 void SYS_SwapBuffers()
 {

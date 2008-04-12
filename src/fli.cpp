@@ -21,7 +21,7 @@
 #include "util.h" /* For exit_gracefully() */
 #include "keys.h"
 
-extern char g_DataPath[255];
+extern const char* g_DataPath;
 
 extern long TIMER_CLICKS_PER_SECOND; /* from omega.c */
 extern long GAME_CLICKS_PER_SECOND;  /* */

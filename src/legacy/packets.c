@@ -21,7 +21,7 @@
 #include "util.h"
 #include "menu.h" /* For the exit game cludge */
 
-extern char g_DataPath[255];
+extern const char* g_DataPath;
 
 char recieve_buffer[30]; /* in omega.c */
 int recieve_length;

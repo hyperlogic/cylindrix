@@ -21,7 +21,7 @@
 #include "object.h"
 #include "collide.h"
 
-extern char g_DataPath[255];
+extern const char* g_DataPath;
 
 void Load_Tank( Vehicle *tank, enum VehicleType tank_type )
     {

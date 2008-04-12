@@ -17,6 +17,8 @@
 */
 
 #include <string.h>
+#include <stdio.h>
+#include <stdlib.h>
 
 #ifndef SYSTEM_H
 #define SYSTEM_H
@@ -106,7 +108,8 @@ enum KeyValues
 // AJT: TODO: add support for numpad and support for left/right shift, alt & ctrl
 
 // AJT: TODO: msvc6 doesnt support varidac macros.
-void SYS_Error( const char* error, ... );
+//void SYS_Error( const char* error, ... );
+#define SYS_Error(...) fprintf(stderr, __VA_ARGS__)
 
 void SYS_SwapBuffers();
 

@@ -19,9 +19,9 @@
 #include "pcx.h"
 #include "prim.h"
 
-/* Allocate about 64k for image->buffer */
-extern char g_DataPath[255];
+extern const char* g_DataPath;
 
+/* Allocate about 64k for image->buffer */
 void PCX_Allocate( pcx_picture_ptr image )
     {
 
@@ -64,7 +64,7 @@ void PCX_Load( char *filename, pcx_picture_ptr image )
 
      if ( (fp = fopen( newfilename, "rb") ) == NULL ) /* Open the PCX file */
          {
-          printf("ERROR OPENING FILE!!! \n");
+          SYS_Error("ERROR OPENING FILE!!! %s\n", newfilename);
           exit(0);
          }
 

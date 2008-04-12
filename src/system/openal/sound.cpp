@@ -34,7 +34,7 @@ struct SYS_Wave* usedList = 0;
 // used for dynamic sounds (fire & forget, play once)
 #define SIZEOFSOURCEPOOL 50
 ALuint sourcePool[SIZEOFSOURCEPOOL];
-
+extern char* g_DataPath;
 
 #ifdef SYS_SOUNDDEBUG
 FILE* soundLog;
@@ -243,9 +243,12 @@ static SYS_SOUNDHANDLE SYS_LoadWAVFile(char* filename)
 	SDL_AudioSpec wav_spec;
 	Uint32 wav_length;
 	Uint8 *wav_buffer;
+	
+	char newfilename[512];
+	sprintf(newfilename,"%s%s",g_DataPath,filename);
 
 	// Get PCM data from a WAV file
-	if (SDL_LoadWAV(filename, &wav_spec, &wav_buffer, &wav_length) == 0)
+	if (SDL_LoadWAV(newfilename, &wav_spec, &wav_buffer, &wav_length) == 0)
 	{
 		fprintf(stderr, "Could not open wav %s: %s\n", filename, SDL_GetError());
 		return 0;
@@ -283,7 +286,10 @@ static SYS_SOUNDHANDLE SYS_LoadMP3File(char* filename)
 		return 0;
 	}
 	
-	error = mpg123_open(mh, filename);
+	char newfilename[512];
+	sprintf(newfilename,"%s%s",g_DataPath,filename);
+	
+	error = mpg123_open(mh, newfilename);
 	if (error != MPG123_OK)
 	{
 		printf("error mpg123_open()\n");

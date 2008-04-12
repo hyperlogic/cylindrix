@@ -21,8 +21,7 @@
 #include "fli.h"
 #include "util.h"
 
-
-extern char g_DataPath[255];
+extern const char* g_DataPath;
 
 game_configuration_type game_configuration;
 

@@ -19,7 +19,7 @@
 #include <stdio.h>
 #include "level.h"
 
-extern char g_DataPath[255];
+extern const char* g_DataPath;
 
 int Load_Level( char *filename, level_type *level )
     {

@@ -24,7 +24,8 @@
 #include "config.h"
 #include "serial.h"
 
-extern char g_DataPath[255];
+extern const char* g_DataPath;
+
 
 /* Parses input for a pilot name that is inclosed in angle brakets */
 

@@ -233,7 +233,12 @@ int temp_int;
 
 char frame_rate_str[80];   /* frame rate to be blitted on the screen */
 
-char g_DataPath[255];
+//#define MACOS_BUNDLE
+#ifdef MACOS_BUNDLE
+const char* g_DataPath = "./Cylindrix.app/Contents/MacOS/";
+#else
+const char* g_DataPath = "./";
+#endif
 
 /* init_game() loads the game.cfg file and initializes stuff that only needs to be
    initialized one time, like the double_buffer, some transformation matrices, sin
@@ -241,8 +246,6 @@ char g_DataPath[255];
 
 void init_game( int argc, const char *argv[] )
 {
-	sprintf(g_DataPath, "./");
-
     /* init the double buffer */
     Init_Double_Buffer();
     

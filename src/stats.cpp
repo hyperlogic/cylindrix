@@ -22,7 +22,7 @@
 
 #include <stdio.h>
 
-extern char g_DataPath[255];
+extern const char* g_DataPath;
 
 int Save_Game_Stats( game_stats_type *game_stats, char *filename )
 {

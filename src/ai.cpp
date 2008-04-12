@@ -18,7 +18,7 @@
 
 #include "ai.h"
 
-extern char g_DataPath[255];
+extern const char* g_DataPath;
 
 /* prototype for the initalization screen print out */
 

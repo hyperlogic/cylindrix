@@ -76,7 +76,7 @@ long quit_game = FALSE;
 
 extern game_stats_type game_stats;
 
-extern char g_DataPath[255];
+extern const char* g_DataPath;
 
 /* globals */
 

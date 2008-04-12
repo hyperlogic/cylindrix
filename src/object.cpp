@@ -53,7 +53,7 @@
 
 #include <assert.h>
 
-extern char g_DataPath[255];
+extern const char* g_DataPath;
 
 long vrpz = (-3 << MEXP);           /* z coord of the view reference point */
 long xmin = (-4383);   /* -3.0 */   /* min x coord of window on view plane */

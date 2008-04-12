@@ -25,7 +25,7 @@
 #include "pylon.h"
 #include "ai_util.h"
 
-extern char g_DataPath[255];
+extern const char* g_DataPath;
 
 void change_pylon_color( Pylon *pylon, Gradient gradient )
 {
