@@ -8,6 +8,8 @@
 #include <OpenAL/alc.h>
 #include <mpg123.h>
 
+//#define SYS_SOUNDDEBUG
+
 struct SYS_Wave
 {
 	struct SYS_Wave* next;
@@ -33,14 +35,13 @@ struct SYS_Wave* usedList = 0;
 #define SIZEOFSOURCEPOOL 50
 ALuint sourcePool[SIZEOFSOURCEPOOL];
 
-// for testing
-void DumpSDLAudioSpec(const SDL_AudioSpec* spec)
-{
-	printf("freq = %d\n", spec->freq);
-	printf("format = %d\n", spec->format);
-	printf("silence = %d\n", spec->silence);
-	printf("channels = %d\n", spec->channels);
-}
+
+#ifdef SYS_SOUNDDEBUG
+FILE* soundLog;
+char* soundLogFileName = "sound.log";
+int soundsLoaded = 0;
+int soundsFree = SIZEOFWAVEPOOL;
+#endif
 
 void CheckForErrors()
 {
@@ -63,22 +64,28 @@ void CheckForErrors()
 
 void SYS_InitSound()
 {
-	/*
+	
+#ifdef SYS_SOUNDDEBUG
+	soundsLoaded = 0;
+	soundsFree = SIZEOFWAVEPOOL;
+	soundLog = fopen( soundLogFileName, "w" );
+	fprintf(soundLog, "SYS_InitSound() - OpenAL SKU - %d sounds in pool\n", soundsFree);
+	
 	if (alcIsExtensionPresent(NULL, "ALC_ENUMERATION_EXT") == AL_TRUE)
 	{
 		const char* devicesStr = alcGetString(0, ALC_DEVICE_SPECIFIER);
 		const char* defaultDeviceStr = alcGetString(0, ALC_DEFAULT_DEVICE_SPECIFIER);
-		printf("OpenAL default device = %s\n", defaultDeviceStr);
+		fprintf(soundLog, "OpenAL default device = %s\n", defaultDeviceStr);
 		
-		printf("All devices:\n");
+		fprintf(soundLog, "All devices:\n");
 		const char* p = devicesStr;
 		while( *p != 0 )
 		{
-			printf("%s\n",p);
+			fprintf(soundLog, "%s\n", p);
 			p += (strlen(p) + 1);
 		}
 	}
-	*/
+#endif
 			
 	// open device
 	ALCdevice* device = alcOpenDevice(0);
@@ -88,10 +95,10 @@ void SYS_InitSound()
 		return;
 	}
 	
-	/*
+#ifdef SYS_SOUNDDEBUG
 	const char* extStr = alcGetString(device, ALC_EXTENSIONS);
-	printf("OpenAL extentions : %s\n", extStr);
-	*/
+	fprintf(soundLog, "OpenAL extentions : %s\n", extStr);
+#endif
 
 	alGetError(); // clear error code
 
@@ -123,13 +130,24 @@ void SYS_InitSound()
 	{
 		printf("Error mpg123_init() : %s\n", mpg123_plain_strerror(error));
 	}
-	
-	SYS_SOUNDHANDLE music = SYS_LoadSound("music/track02.mp3");
-	SYS_PlaySound(music, true);
 }
 
 void SYS_ShutdownSound()
-{
+{	
+#ifdef SYS_SOUNDDEBUG
+	fprintf( soundLog, "SYS_ShutdownSound(), %d loaded, %d free\n", soundsLoaded, soundsFree );	
+#endif
+	
+	while ( usedList )
+	{		
+		SYS_ReleaseSound( (SYS_SOUNDHANDLE)usedList );
+	}
+	
+#ifdef SYS_SOUNDDEBUG
+	fprintf( soundLog, "Cleaned up used sounds, %d loaded, %d free\n", soundsLoaded, soundsFree );
+	fclose( soundLog );
+#endif
+	
 	mpg123_exit();
 	
 	ALCcontext* context = alcGetCurrentContext();
@@ -312,7 +330,7 @@ static SYS_SOUNDHANDLE SYS_LoadMP3File(char* filename)
 	return (SYS_SOUNDHANDLE)wave;
 }
 
-static void SYS_StreamNextBuffer(int bufferIndex, SYS_Wave* wave)
+static bool SYS_StreamNextBuffer(int bufferIndex, SYS_Wave* wave)
 {
 	assert(wave->mh);
 	
@@ -329,16 +347,20 @@ static void SYS_StreamNextBuffer(int bufferIndex, SYS_Wave* wave)
 	if ( error != MPG123_OK )
 	{
 		// we hit the end.
-		assert(0);	// TODO: loop or stop the sound...
+		return false;	// TODO: loop or stop the sound...
 	}
-		
+
+#ifdef SYS_SOUNDDEBUG		
 	printf("bytes_read = %d\n", (unsigned int)bytes_read);
+#endif
 
 	// copy PCM data into OpenAL buffer
 	alBufferData(wave->mp3_buffers[bufferIndex], AL_FORMAT_STEREO16, buffer, bytes_read, wave->rate);
 	CheckForErrors();
 
 	free(buffer);
+	
+	return true;
 }
 
 static void SYS_ProcessStreaming()
@@ -357,17 +379,24 @@ static void SYS_ProcessStreaming()
 			
 			if (val)	// val is not zero
 			{
+#ifdef SYS_SOUNDDEBUG
 				printf("processStreaming() for %s\n", wave->filename);
-				
+#endif				
 				alSourceUnqueueBuffers(wave->source,1,&wave->mp3_buffers[wave->bufferIndex]);
 				CheckForErrors();
 				
-				SYS_StreamNextBuffer(wave->bufferIndex, wave);
-				
-				alSourceQueueBuffers(wave->source,1,&wave->mp3_buffers[wave->bufferIndex]);
-				CheckForErrors();
-				
-				wave->bufferIndex = (wave->bufferIndex + 1) % 2;
+				bool success = SYS_StreamNextBuffer(wave->bufferIndex, wave);
+				if (success)
+				{
+					alSourceQueueBuffers(wave->source,1,&wave->mp3_buffers[wave->bufferIndex]);
+					CheckForErrors();
+					wave->bufferIndex = (wave->bufferIndex + 1) % 2;
+				}
+				else
+				{
+					// TODO: loop instead of stopping
+					SYS_StopSound((SYS_SOUNDHANDLE)wave);
+				}
 			}
 		}
 		wave = wave->next;
@@ -403,14 +432,14 @@ void SYS_ReleaseSound( SYS_SOUNDHANDLE soundHandle )
 	SYS_Wave* wave = (SYS_Wave*)soundHandle;
 
 #ifdef SYS_SOUNDDEBUG
-	fprintf( soundLog, "SYS_ReleaseSound( \"%s\" ), %d loaded, %d free\n", wave->fileName, soundsLoaded-1, soundsFree+1 );
+	fprintf( soundLog, "SYS_ReleaseSound( \"%s\" ), %d loaded, %d free\n", wave->filename, soundsLoaded-1, soundsFree+1 );
 #endif
 
 	assert(wave);
-	if (wave->buffer != -1)
+	if (wave->buffer != (unsigned int)-1)
 		alDeleteBuffers(1, &wave->buffer);
 
-	if (wave->source != -1)
+	if (wave->source != (unsigned int)-1)
 		alDeleteSources(1, &wave->source);
 
 	ReturnWaveToPool(wave);
@@ -473,7 +502,7 @@ void SYS_PlaySoundVolume( SYS_SOUNDHANDLE soundHandle, int looping, unsigned cha
 	
 	if (wave->mh)
 	{
-		if (wave->source != -1)
+		if (wave->source != (unsigned int)-1)
 			alDeleteSources(1, &wave->source);
 	
 		alGenSources(1, &wave->source);
@@ -484,12 +513,13 @@ void SYS_PlaySoundVolume( SYS_SOUNDHANDLE soundHandle, int looping, unsigned cha
 		//alSourcei(wave->source, AL_LOOPING, looping ? AL_TRUE : AL_FALSE);
 		alSourcei(wave->source, AL_SOURCE_RELATIVE, 1);		
 		alSourcePlay(wave->source);
-		
-		printf("playing %s\n", wave->filename );
+#ifdef SYS_SOUNDDEBUG		
+		printf("playing stream %s\n", wave->filename );
+#endif
 	}
 	else
 	{
-		if (wave->source != -1)
+		if (wave->source != (unsigned int)-1)
 			alDeleteSources(1, &wave->source);
 	
 		alGenSources(1, &wave->source);
@@ -528,7 +558,7 @@ void SYS_TriggerSound3D( SYS_SOUNDHANDLE soundHandle, float position[3], unsigne
 	// find a stopped or unallocated source in the pool
 	for ( i = 0; i < SIZEOFSOURCEPOOL; ++i )
 	{
-		if ( sourcePool[i] == -1 )
+		if ( sourcePool[i] == (unsigned int)-1 )
 		{
 			// allocate a new source
 			alGenSources(1, &sourcePool[i]);

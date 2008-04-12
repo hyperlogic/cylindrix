@@ -157,7 +157,7 @@ void SYS_ShutdownSound()
 
 	// release all buffers in the usedPool.
 	while ( usedList )
-	{		
+	{
 		SYS_ReleaseSound( (SYS_SOUNDHANDLE)usedList );
 	}
 

@@ -1866,10 +1866,12 @@ void main_menu_return_key()
         
             Enable_Color_Palette( &menu_stuff.general_menu_background );
         
+/*	// TODO: play some music
             if( game_configuration.music_on ) {
                 Play_Song( MENU_SONG );
                 Set_Cd_Volume( game_configuration.music_vol );
             }
+*/
         }
 
     }

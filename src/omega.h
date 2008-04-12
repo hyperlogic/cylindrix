@@ -43,7 +43,7 @@ extern boolean renderSoftwareBuffer;
 
 extern SYS_SOUNDHANDLE sample[MAX_WORLD_SAMPLES];
 extern SYS_SOUNDHANDLE computer_sample[MAX_COMPUTER_SAMPLES];
-
+extern SYS_SOUNDHANDLE music;
 
 void tournament_game_setup();
 void setup_game();

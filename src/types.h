@@ -128,17 +128,17 @@ extern unsigned long ptime;
 
 /* cd track defines */
                            
-#define SCAVENGER_SONG     9
-#define BOK_SONG           7
-#define SUCCUBI_SONG       10
-#define SENTRY_SONG        4
-#define HUMAN_SONG         2
-#define SLAR_SONG          5
-#define BIOMECHANOID_SONG  12
-#define PHAROAH_SONG       6
-#define OVERLORD_SONG      11
-#define WATCHER_SONG       3
-#define MENU_SONG          8
+#define SCAVENGER_SONG     "music/track09.mp3"
+#define BOK_SONG           "music/track07.mp3"
+#define SUCCUBI_SONG       "music/track10.mp3"
+#define SENTRY_SONG        "music/track04.mp3"
+#define HUMAN_SONG         "music/track02.mp3"
+#define SLAR_SONG          "music/track05.mp3"
+#define BIOMECHANOID_SONG  "music/track12.mp3"
+#define PHAROAH_SONG       "music/track06.mp3"
+#define OVERLORD_SONG      "music/track11.mp3"
+#define WATCHER_SONG       "music/track03.mp3"
+#define MENU_SONG          "music/track08.mp3"
 
 
 /* End of John's defines ------------- */

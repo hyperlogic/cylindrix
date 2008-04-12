@@ -215,6 +215,7 @@ extern WingmanMenuData wingman_menu_data;
 
 SYS_SOUNDHANDLE sample[MAX_WORLD_SAMPLES];
 SYS_SOUNDHANDLE computer_sample[MAX_COMPUTER_SAMPLES];
+SYS_SOUNDHANDLE music;
 
 /* mod contains all data for the mod file */
 
@@ -245,13 +246,6 @@ void init_game( int argc, const char *argv[] )
     /* init the double buffer */
     Init_Double_Buffer();
     
-    /* allocate the smart_heap that is used for some sample loading and freeing */
-	// AJT: disabled until sound is hooked up.
-	/*
-    if( allocate_smart_heap( 2000000 ) == FALSE )
-        SYS_Error("smart_heap_allocate() failed\n" );
-	*/
-    
     /* load in all the stuff needed for the menus, like text, pcx pictures & 3d_objs */
     init_menu_stuff( &menu_stuff );
 
@@ -270,51 +264,17 @@ void init_game( int argc, const char *argv[] )
     init_sine_table();    
     init_arc_cos_table();
 
-	// AJT: disabled until keyboard input is working.
-	/*
-    Init_Keys();
-	*/
     keyboard_installed = TRUE;
-
-	// AJT: disabled until timer is working.
-	/*
-    if( !timer_installed ) {
-        Init_Timer();
-        Set_Timer_Speed( TIMER_220HZ );         
-        timer_installed = TRUE;
-    }
-	*/
-
-	// AJT: disabled until sound is working.
-	/*
-    if( !ignore_sound_card ) {
-
-        if( sb_install_driver(11000) != SB_SUCCESS ) {
-            fprintf(stderr,"Error: %s\n\n",sb_driver_error);
-            game_configuration.sound_on = FALSE;
-            sb_installed = FALSE;            
-            game_configuration.voices_on = FALSE;
-        }
-        else {
-            Init_Jon_Samples();
-            game_configuration.sound_on = TRUE;
-            game_configuration.voices_on = TRUE;
-            sb_installed = TRUE;
-        }        
-    }
-	*/    
     
     Clear_Game_Stats( &game_stats );
     Clear_Overall_Stats( &overall_stats );
     
-	// AJT: disabled until music is working.
-	/*
+	// play music
     if( game_configuration.music_on ) 
 	{
-        Play_Song( MENU_SONG );
-        Set_Cd_Volume( game_configuration.music_vol );
+		music = SYS_LoadSound(MENU_SONG);		
+		SYS_PlaySoundVolume(music, true, game_configuration.music_vol);
     }
-	*/
 }
 
 void setup_game()

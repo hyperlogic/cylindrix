@@ -91,7 +91,7 @@ struct TournamentLevelData
 
 struct TournamentLevelData tournamentLevelData[ NumLevels ] =
 {
-	{ { 18, 17, 16 }, "gamedata/level9.dat" },
+	{ { 18, 17, 16 }, "gamedata/level9.dat",  },
 	{ { 10, 11, 12 }, "gamedata/level10.dat" },
 	{ { 19, 20, 21 }, "gamedata/level2.dat" },
 	{ { 32, 33, 31 }, "gamedata/level4.dat" },
@@ -374,6 +374,32 @@ void MainMenuExit()
 	Free_Menu_Sounds();
 }
 
+static char* LookupMusicFilename(char* cylinder_filename)
+{	
+	if(strcmp(cylinder_filename,"gamedata/level1.dat") == 0)
+		return SCAVENGER_SONG;
+	else if(strcmp(cylinder_filename,"gamedata/level2.dat") == 0)
+		return BOK_SONG;
+	else if(strcmp(cylinder_filename,"gamedata/level3.dat") == 0)
+		return SUCCUBI_SONG;
+	else if(strcmp(cylinder_filename,"gamedata/level4.dat") == 0)
+		return SENTRY_SONG;
+	else if(strcmp(cylinder_filename,"gamedata/level5.dat") == 0)
+		return HUMAN_SONG;
+	else if(strcmp(cylinder_filename,"gamedata/level6.dat") == 0)
+		return SLAR_SONG;
+	else if(strcmp(cylinder_filename,"gamedata/level7.dat") == 0)
+		return BIOMECHANOID_SONG;
+	else if(strcmp(cylinder_filename,"gamedata/level8.dat") == 0)
+		return PHAROAH_SONG;
+	else if(strcmp(cylinder_filename,"gamedata/level9.dat") == 0)
+		return OVERLORD_SONG;
+	else if(strcmp(cylinder_filename,"gamedata/level10.dat") == 0)
+		return WATCHER_SONG;
+	else
+		return MENU_SONG;
+}
+
 
 //
 // GAMESTATE_CUSTOMGAME
@@ -398,14 +424,15 @@ void StartCustomGame()
     Clear_Game_Stats( &game_stats );
     strcpy( game_stats.name, game_configuration.pilot_name );
 
-	// AJT: TODO figure out which song to play
-	/*
+	// play some music
 	if ( game_configuration.music_on ) 
 	{
-		Play_Song( song_number );
-		Set_Cd_Volume( game_configuration.music_vol );
+		if (music)
+			SYS_ReleaseSound(music);	
+			
+		music = SYS_LoadSound(LookupMusicFilename(game_configuration.cylinder_filename));		
+		SYS_PlaySoundVolume(music, true, game_configuration.music_vol);
 	}
-	*/
 
 	PlayGameIntroEnter();
 	currentPlayGameState = PLAYGAMESTATE_INTRO;
@@ -437,14 +464,15 @@ void StartTournamentGame()
     Clear_Game_Stats( &game_stats );
     strcpy( game_stats.name, game_configuration.pilot_name );
 
-	// AJT: TODO figure out which song to play
-	/*
+	// play some music
 	if ( game_configuration.music_on ) 
 	{
-		Play_Song( song_number );
-		Set_Cd_Volume( game_configuration.music_vol );
+		if (music)
+			SYS_ReleaseSound(music);	
+			
+		music = SYS_LoadSound(LookupMusicFilename(game_configuration.cylinder_filename));		
+		SYS_PlaySoundVolume(music, true, game_configuration.music_vol);
 	}
-	*/
 
     /* In tournament, USER GETS SHITTY ASS AI WINGMAN!!!! */
 	world_stuff.player_array[1].character.skill_level = 0;
