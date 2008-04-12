@@ -91,7 +91,7 @@ struct TournamentLevelData
 
 struct TournamentLevelData tournamentLevelData[ NumLevels ] =
 {
-	{ { 18, 17, 16 }, "gamedata/level9.dat",  },
+	{ { 18, 17, 16 }, "gamedata/level9.dat" },
 	{ { 10, 11, 12 }, "gamedata/level10.dat" },
 	{ { 19, 20, 21 }, "gamedata/level2.dat" },
 	{ { 32, 33, 31 }, "gamedata/level4.dat" },
