@@ -6,14 +6,14 @@ PLATFORM = MACOSX
 # SDL Mac OS X
 ifeq ($(PLATFORM),MACOSX)
 GCC = g++
-CFLAGS = -Wall -D GLCYLINDRIX -O -D DARWIN -I /Developer/SDKs/MacOSX10.4u.sdk/System/Library/Frameworks/OpenGL.framework/Headers -I /Developer/SDKs/MacOSX10.4u.sdk/System/Library/Frameworks/GLUT.framework/Headers -I /Library/Frameworks/SDL.framework/Headers
+CFLAGS = -Wall -D GLCYLINDRIX -O3 -D DARWIN -I /Developer/SDKs/MacOSX10.4u.sdk/System/Library/Frameworks/OpenGL.framework/Headers -I /Developer/SDKs/MacOSX10.4u.sdk/System/Library/Frameworks/GLUT.framework/Headers -I /Library/Frameworks/SDL.framework/Headers
 LFLAGS = -framework Cocoa -framework OpenGL -framework GLUT -framework SDL -framework OpenAL -lstdc++ -lmpg123
 endif
 
 # SDL Linux
 ifeq ($(PLATFORM),LINUX)
 GCC = g++
-CFLAGS = -Wall -D GLCYLINDRIX -g #-O 
+CFLAGS = -Wall -D GLCYLINDRIX -O3
 LFLAGS = -lGL -lGLU -lSDL -lc -lmpg123 -lopenal
 endif
 
