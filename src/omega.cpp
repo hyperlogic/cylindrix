@@ -161,7 +161,7 @@
 /* Global variables */
 
 char copyright_string[] = "CYLINDRIX VERSION 2.0 COPYRIGHT 2002 GOLDTREE ENTERPRISES, Hotwarez LLC";
-char version_string[] = "V2.0a1";
+char version_string[] = "V2.02";
 
 //Johnm 9/5/2002 Temporary global boolean to denote that we are rendering the second player's screen
 int g_bRenderingFirstPlayer = 0;
@@ -215,7 +215,7 @@ extern WingmanMenuData wingman_menu_data;
 
 SYS_SOUNDHANDLE sample[MAX_WORLD_SAMPLES];
 SYS_SOUNDHANDLE computer_sample[MAX_COMPUTER_SAMPLES];
-SYS_SOUNDHANDLE music;
+SYS_SOUNDHANDLE music = 0;
 
 /* mod contains all data for the mod file */
 

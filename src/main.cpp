@@ -82,6 +82,7 @@ extern game_stats_type game_stats;
 
 extern SYS_SOUNDHANDLE sample[MAX_WORLD_SAMPLES]; /* This should be in the world_sounds data structure */
 extern SYS_SOUNDHANDLE computer_sample[MAX_COMPUTER_SAMPLES];
+extern SYS_SOUNDHANDLE music;
 extern sb_mod_file *mod;
 extern short num_playing; /* From jonsb.c */
 
@@ -815,6 +816,7 @@ void Init_Menu_Sounds()
 
 void Free_Menu_Sounds()
 {
+	 SYS_StopAllSounds();
      SYS_ReleaseSound( menu_stuff.menu_sounds.enter_sound );
      menu_stuff.menu_sounds.enter_sound = 0;
      SYS_ReleaseSound( menu_stuff.menu_sounds.esc_sound );
@@ -878,6 +880,7 @@ void Init_Menu_Voices()
 
 void Free_Menu_Voices( void )
 {
+	 SYS_StopAllSounds();
      SYS_ReleaseSound( menu_stuff.vehicle_name_sounds.beetle_sound );
      menu_stuff.vehicle_name_sounds.beetle_sound = 0;
      SYS_ReleaseSound( menu_stuff.vehicle_name_sounds.wasp_sound );
@@ -3477,6 +3480,8 @@ void reset_game_to_start( WorldStuff *world_stuff, level_type *level,
 void free_all_samples( WorldStuff *world_stuff )
 {
     long i, j;
+
+	SYS_StopAllSounds();
     
     /* free all the computer samples */
     for( i = 0; i < MAX_COMPUTER_SAMPLES; i++ ) {
@@ -3502,5 +3507,11 @@ void free_all_samples( WorldStuff *world_stuff )
                 world_stuff->player_array[i].character.samples[j] = 0;
             }
         }
-    }    
+    }
+
+	if (music)
+	{
+		SYS_ReleaseSound(music);
+		music = 0;
+	}
 } //free_all_samples

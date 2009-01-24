@@ -7,8 +7,9 @@
 
 # SDL Linux
 GCC = g++
-CFLAGS = -Wall -D GLCYLINDRIX -O
-LFLAGS = -lGL -lGLU -lSDL -lstdc++ #-lmpg123
+CFLAGS = -Wall -D GLCYLINDRIX -g #-O 
+LFLAGS = -lGL -lGLU -lSDL -lc -lmpg123 -lopenal
+
 
 OBJ = ai.o ai_move.o ai_util.o base.o clipping.o collide.o commands.o \
 	config.o do_state.o energy.o events.o explode.o fli.o fx.o gameloop.o \
@@ -37,20 +38,21 @@ $(OBJ) : $(DEPENDS)
 #system.o: system/glut/system.cpp $(DEPENDS)
 #	$(GCC) $(CFLAGS) -c $<
 #
-sound.o : system/glut/sound.cpp $(DEPENDS)
-	$(GCC) $(CFLAGS) -c $<
+#sound.o : system/glut/sound.cpp $(DEPENDS)
+#	$(GCC) $(CFLAGS) -c $<
 
 # SDL system files
 system.o: system/sdl/system.cpp $(DEPENDS)
 	$(GCC) $(CFLAGS) -c $<
 
 # OpenAL sound
-#sound.o : system/openal/sound.cpp $(DEPENDS)
-#	$(GCC) $(CFLAGS) -c $<
+sound.o : system/openal/sound.cpp $(DEPENDS)
+	$(GCC) $(CFLAGS) -c $<
 
 # Mac OS X system files
 #SDLMain.o : system/darwin/SDLMain.m $(DEPENDS)
 #	$(GCC) $(CFLAGS) -c $<
 
-clean:
-	rm $(OBJ) ../cylindrix
+.PHONY : clean
+clean :
+	-rm -f $(OBJ) ../cylindrix

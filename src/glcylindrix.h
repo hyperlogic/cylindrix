@@ -9,6 +9,7 @@
 //#include "allegro/palette.h"
 
 void GL_Cylindrix_Init();
+void GL_Cylindrix_Shutdown();
 
 void GL_Clear();
 

@@ -428,7 +428,7 @@ void StartCustomGame()
 	if ( game_configuration.music_on ) 
 	{
 		if (music)
-			SYS_ReleaseSound(music);	
+			SYS_ReleaseSound(music);
 			
 		music = SYS_LoadSound(LookupMusicFilename(game_configuration.cylinder_filename));		
 		SYS_PlaySoundVolume(music, true, game_configuration.music_vol);
@@ -1153,6 +1153,10 @@ int GameLoop()
 
 void GameShutdown()
 {
+	if (music)
+		SYS_ReleaseSound(music);
+	
 	SYS_ShutdownSound();
+	GL_Cylindrix_Shutdown();
 }
 

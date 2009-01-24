@@ -1923,7 +1923,7 @@ void main_menu_draw_menu()
         y += y_spacing;
     }
     
-    micro_string_blit( version_string, 290, 194,
+    micro_string_blit( version_string, 1, 189,
                        menu_stuff.micro_text.buffer,
                        menu_stuff.micro_text.xpixels + 1,
                        menu_stuff.micro_text.ypixels + 1, SELECTED_TEXT_COLOR );

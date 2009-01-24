@@ -148,4 +148,6 @@ void SYS_PlaySoundVolume( SYS_SOUNDHANDLE soundHandle, int looping, unsigned cha
 void SYS_StopSound( SYS_SOUNDHANDLE soundHandle );
 int SYS_IsSoundPlaying( SYS_SOUNDHANDLE soundHandle );
 
+void SYS_StopAllSounds();
+
 #endif

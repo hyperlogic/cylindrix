@@ -171,8 +171,6 @@ int main( int argc, char* argv[] )
 	if ( SDL_Init( SDL_INIT_VIDEO ) < 0 )
 		SYS_Error( "Couldn't init SDL!\n" );
 
-	atexit( SDL_Quit );
-
 	SDL_Surface* screen = SDL_SetVideoMode( 800, 600, 32, SDL_HWSURFACE | SDL_RESIZABLE | SDL_OPENGL );
 
 	if ( !screen )
@@ -203,6 +201,7 @@ int main( int argc, char* argv[] )
 	}
 
 	GameShutdown();
+	SDL_Quit();
 
 	return 0;
 }

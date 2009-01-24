@@ -213,6 +213,12 @@ void GL_Cylindrix_Init()
 	GL_PalletteTextureInit();	
 }
 
+void GL_Cylindrix_Shutdown()
+{
+    glDeleteTextures( 1, &frameBufferTexture );
+    glDeleteTextures( 1, &paletteTexture );
+}
+
 // clears the screen using the 0'th palette entry.
 void GL_Clear()
 {
