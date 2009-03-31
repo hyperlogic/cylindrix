@@ -1,9 +1,9 @@
 #define INITGUID
-#include "windows.h"
-#include "dsound.h"
-#include "cguid.h"
+#include <windows.h>
+#include <dsound.h>
+#include <cguid.h>
 
-#include "assert.h"
+#include <assert.h>
 #include "..\system.h"
 #include <math.h>
 #include <stdio.h>
@@ -204,7 +204,7 @@ static struct SYS_Wave* AllocWaveFromPool()
 	return wave;
 }
 
-static ReturnWaveToPool( struct SYS_Wave* wave )
+static void ReturnWaveToPool( struct SYS_Wave* wave )
 {
 	assert( wave );
 
@@ -356,6 +356,12 @@ void FillDSBuffer( struct SYS_Wave* wave )
 
 SYS_SOUNDHANDLE SYS_LoadSound( char* fileName )
 {
+	int size = strlen( fileName );
+
+    // TODO: streaming mp3s.
+	if ( fileName[size - 3] == 'm' && fileName[size - 2] == 'p' && fileName[size - 1] == '3' )
+        return 0;
+
 	DSBUFFERDESC dsbd;
 	HRESULT hr;
 	struct SYS_Wave* wave;
@@ -424,13 +430,31 @@ void SYS_ReleaseSound( SYS_SOUNDHANDLE soundHandle )
 	ReturnWaveToPool( wave );
 }
 
+void SYS_TriggerSoundVolumeWithPan( SYS_SOUNDHANDLE soundHandle, unsigned char volume, unsigned char pan );
+
 // plays this sound once, (fire and forget)
 void SYS_TriggerSound( SYS_SOUNDHANDLE soundHandle )
 {
-	SYS_TriggerSoundVolume( soundHandle, 255, 128 );
+	SYS_TriggerSoundVolumeWithPan( soundHandle, 255, 128 );
 }
 
-void SYS_TriggerSoundVolume( SYS_SOUNDHANDLE soundHandle, unsigned char volume, unsigned char pan )
+void SYS_TriggerSoundVolume( SYS_SOUNDHANDLE soundHandle, unsigned char volume )
+{
+	SYS_TriggerSoundVolumeWithPan( soundHandle, volume, 128 );
+}
+
+void SYS_SetListenerOrientation( float position[3], float forward[3], float up[3] )
+{
+	// TODO: spatial sound
+}
+
+void SYS_TriggerSound3D( SYS_SOUNDHANDLE soundHandle, float position[3], unsigned char volume )
+{
+	// TODO: spatial sound
+    SYS_TriggerSoundVolumeWithPan( soundHandle, volume, 128 );
+}
+
+static void SYS_TriggerSoundVolumeWithPan( SYS_SOUNDHANDLE soundHandle, unsigned char volume, unsigned char pan )
 {
 	int i;
 	struct SYS_Wave* wave = (struct SYS_Wave*)soundHandle;
@@ -473,16 +497,21 @@ void SYS_TriggerSoundVolume( SYS_SOUNDHANDLE soundHandle, unsigned char volume, 
 // play this sound but only one instance of this sound is allowed to be playing at once.
 void SYS_PlaySound( SYS_SOUNDHANDLE soundHandle, int looping )
 {
-	SYS_PlaySoundVolume( soundHandle, looping, 255, 128 );
+	SYS_PlaySoundVolume( soundHandle, looping, 255 );
 }
 
-void SYS_PlaySoundVolume( SYS_SOUNDHANDLE soundHandle, int looping, unsigned char volume, unsigned char pan )
+void SYS_PlaySoundVolume( SYS_SOUNDHANDLE soundHandle, int looping, unsigned char volume )
 {
 	struct SYS_Wave* wave = (struct SYS_Wave*)soundHandle;
+
+	// TODO: FIXME HACK AJT
+	if (wave == 0)
+		return;
+
 	assert( wave );
 
+
 	wave->dsb->SetVolume( wave_to_dsound_volume[volume] );
-	wave->dsb->SetPan( wave_to_dsound_pan[pan] );
 
 	wave->dsb->Play( 0, 0, looping ? DSBPLAY_LOOPING : 0 );
 }
@@ -490,6 +519,11 @@ void SYS_PlaySoundVolume( SYS_SOUNDHANDLE soundHandle, int looping, unsigned cha
 void SYS_StopSound( SYS_SOUNDHANDLE soundHandle )
 {
 	struct SYS_Wave* wave = (struct SYS_Wave*)soundHandle;
+
+	// TODO: FIXME HACK AJT
+	if (wave == 0)
+		return;
+
 	assert( wave );
 
 	wave->dsb->Stop();
@@ -503,4 +537,9 @@ int SYS_IsSoundPlaying( SYS_SOUNDHANDLE soundHandle )
 
     wave->dsb->GetStatus( &status );
 	return ( status & DSBSTATUS_PLAYING ) != 0;
+}
+
+void SYS_StopAllSounds()
+{
+
 }

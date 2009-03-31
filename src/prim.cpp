@@ -120,7 +120,6 @@ void Set_Palette_Register( int index, RGB_color_ptr color )
 	//palette[index] = 0xff000000 | (color->blue << 16) | (color->green << 8) | color->red;
 	// wtf colors are only 6 bits?
 	palette[index] = 0xff000000 | (color->blue << 18) | (color->green << 10) | (color->red << 2);
-	
 }
 
 /* Initialize about 64k for the double buffer */

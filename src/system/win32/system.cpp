@@ -12,13 +12,6 @@ LARGE_INTEGER gInitialPerfCount;
 extern unsigned char keysDown[255];
 extern unsigned char keysPressed[255];
 
-void SYS_Error( const char* error, ... )
-{
-	// AJT: on win32 we just ignore the arguments.
-	MessageBox( NULL, error, "Fatal Error", MB_OK );
-	exit( 0 );
-}
-
 void SYS_SwapBuffers()
 {
 	SwapBuffers( hdc );
