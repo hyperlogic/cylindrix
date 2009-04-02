@@ -1,7 +1,9 @@
 # cylindrix makefile
 
+# TODO: determine platform..
 PLATFORM = MACOSX
 #PLATFORM = LINUX
+#PLATFORM = MINGW
 
 # SDL Mac OS X
 ifeq ($(PLATFORM),MACOSX)
@@ -17,6 +19,12 @@ CFLAGS = -Wall -D GLCYLINDRIX -O3
 LFLAGS = -lGL -lGLU -lSDL -lc -lmpg123 -lopenal
 endif
 
+# SDL Win32 using MINGW
+ifeq ($(PLATFORM),MINGW)
+GCC = g++
+CFLAGS = -Wall -D GLCYLINDRIX -O3 -I/msys/1.0/include -I/msys/1.0/local/include -I/code/OpenAL-1.1/include
+LFLAGS = -lmingw32 -lSDLmain -lSDL -lOpenGL32 -lGlu32 -lmpg123 -lopenal32 -L/msys/1.0/lib -L/msys/1.0/local/lib -L/code/OpenAL-1.1/libs/Win32
+endif
 
 OBJ = ai.o ai_move.o ai_util.o base.o clipping.o collide.o commands.o \
 	config.o do_state.o energy.o events.o explode.o fli.o fx.o gameloop.o \

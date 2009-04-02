@@ -1217,8 +1217,8 @@ void Sprint_State( char *state_string, state_type state, int index )
           case HIDE :
               sprintf( state_string, "HIDE %d", index );
               break;
-          case GROUP :
-              sprintf( state_string, "GROUP %d", index );
+          case GROUPUP :
+              sprintf( state_string, "GROUPUP %d", index );
               break;
           case KILL_RADAR_BASE :
               sprintf( state_string, "KILL_RADAR_BASE %d", index );

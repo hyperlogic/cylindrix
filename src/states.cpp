@@ -109,7 +109,7 @@ state_type Find_State( WorldStuff *world_stuff, int index )
           break;
           
           case GROUP_COMMAND:
-          state_weight[GROUP] += (modifier * 20) + obedience_disobedience;
+          state_weight[GROUPUP] += (modifier * 20) + obedience_disobedience;
           break;
           
           default:
@@ -346,7 +346,7 @@ state_type Find_State( WorldStuff *world_stuff, int index )
               surface += aerial_ground * 2;       
               air     -= aerial_ground * 2;
               break;      
-          case GROUP:
+          case GROUPUP:
               if( world_stuff->player_array[player_events[index].my_leader].tank.vehicle_mode == Surface )
                   {
                    surface += 10000;       

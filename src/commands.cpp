@@ -1,3 +1,4 @@
+
 /*
     Copyright (C) 2001 Hotwarez LLC, Goldtree Enterprises
   
@@ -231,7 +232,7 @@ void Handle_Commands( WorldStuff *world_stuff, int leader )
                          player_events[i].memory.command_state = PROTECT_RADAR_BASE;
                          break;
                          case GROUP_COMMAND:
-                         player_events[i].memory.command_state = GROUP;
+                         player_events[i].memory.command_state = GROUPUP;
                          break;
                          case CANCEL_COMMANDS_COMMAND:
                          /* So they'll be the same */

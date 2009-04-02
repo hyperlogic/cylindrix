@@ -340,7 +340,7 @@ void AI_Control( WorldStuff *world_stuff, int vehicle_number )
           case HIDE:
               Hide( world_stuff, vehicle_number );
               break;
-          case GROUP:
+          case GROUPUP:
               Group( world_stuff, vehicle_number );
               break;
           case GET_PYLONS:

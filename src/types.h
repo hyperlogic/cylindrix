@@ -547,7 +547,7 @@ typedef enum { USER_CONTROL, AI_CONTROL, REMOTE_CONTROL, NO_CONTROL } controller
 
 
 typedef enum { ATTACK, GET_ENERGY, PANIC, BEZERK,
-               HIDE, GROUP, GET_PYLONS, PROTECT,
+               HIDE, GROUPUP, GET_PYLONS, PROTECT,
                KILL_RADAR_BASE, PROTECT_RADAR_BASE, EVADE } state_type;
 
 typedef struct
