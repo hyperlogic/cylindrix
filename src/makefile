@@ -1,26 +1,27 @@
 # cylindrix makefile
 
 # TODO: determine platform..
-PLATFORM = MACOSX
+PLATFORM = $(shell uname)
+#PLATFORM = MACOSX
 #PLATFORM = LINUX
 #PLATFORM = MINGW
 
 # SDL Mac OS X
-ifeq ($(PLATFORM),MACOSX)
+ifeq ($(PLATFORM),Darwin)
 GCC = g++
 CFLAGS = -Wall -D GLCYLINDRIX -O3 -D DARWIN -I /Developer/SDKs/MacOSX10.4u.sdk/System/Library/Frameworks/OpenGL.framework/Headers -I /Developer/SDKs/MacOSX10.4u.sdk/System/Library/Frameworks/GLUT.framework/Headers -I /Library/Frameworks/SDL.framework/Headers
 LFLAGS = -framework Cocoa -framework OpenGL -framework GLUT -framework SDL -framework OpenAL -lstdc++ -lmpg123
 endif
 
 # SDL Linux
-ifeq ($(PLATFORM),LINUX)
+ifeq ($(PLATFORM),Linux)
 GCC = g++
 CFLAGS = -Wall -D GLCYLINDRIX -O3
 LFLAGS = -lGL -lGLU -lSDL -lc -lmpg123 -lopenal
 endif
 
-# SDL Win32 using MINGW
-ifeq ($(PLATFORM),MINGW)
+# SDL Microsoft Windows using MINGW
+ifeq ($(PLATFORM),MinGW)
 GCC = g++
 CFLAGS = -Wall -D GLCYLINDRIX -O3 -I/msys/1.0/include -I/msys/1.0/local/include -I/code/OpenAL-1.1/include
 LFLAGS = -lmingw32 -lSDLmain -lSDL -lOpenGL32 -lGlu32 -lmpg123 -lopenal32 -L/msys/1.0/lib -L/msys/1.0/local/lib -L/code/OpenAL-1.1/libs/Win32
@@ -33,7 +34,8 @@ OBJ = ai.o ai_move.o ai_util.o base.o clipping.o collide.o commands.o \
 	radar.o states.o stats.o stub.o tanks.o text.o \
 	util.o voices.o system.o sound.o
 
-ifeq ($(PLATFORM),MACOSX)
+# Link with SDLMain when on MacOSX
+ifeq ($(PLATFORM),Darwin)
 EXTRA_OBJ = SDLMain.o
 else
 EXTRA_OBJ =

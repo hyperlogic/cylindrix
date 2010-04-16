@@ -18,6 +18,8 @@
 #include "text.h"
 #include "fli.h"
 
+extern boolean no_anims;
+
 const char* gameName = "Cylindrix";
 
 enum GameStateEnum
@@ -504,7 +506,7 @@ void SetupLevel( int level )
 	strcpy( game_configuration.cylinder_filename, tournamentLevelData[level].cylinder_filename );
 
 	// play animations.
-    if ( game_configuration.animations_on ) 
+    if ( game_configuration.animations_on && !no_anims ) 
 	{
         Play_Fli( levelFli[level] );
     }	

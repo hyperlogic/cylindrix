@@ -71,7 +71,7 @@ extern boolean renderSoftwareBuffer;
 #endif
 
 extern int     level_warp;
-extern boolean test_anim;
+extern boolean no_anims;
 extern boolean show_readout;
 extern boolean test_samples;
 extern long exit_loop;  /* From omega.c */
@@ -1713,10 +1713,6 @@ void check_command_line_args( int argc, const char *argv[],
          if( (argc > 1 ) && (strcmp( "-readout", argv[i] ) == 0 ) ) {
              show_readout = TRUE;
          }
-         if( (argc > 1 ) && (strcmp( "-test_anim", argv[i] ) == 0 ) ) {
-             test_anim = TRUE;
-         }
-
          if( (argc > 1 ) && (strcmp( "-warp1", argv[i] ) == 0 ) ) {
              level_warp = 1;
          }
@@ -1747,6 +1743,24 @@ void check_command_line_args( int argc, const char *argv[],
          if( (argc > 1 ) && (strcmp( "-warp10", argv[i] ) == 0 ) ) {
              level_warp = 10;
          }
+         if( (argc > 1 ) && (strcmp( "-no_anims", argv[i] ) == 0 ) ) {
+             no_anims = TRUE;
+         }
+		 
+		 if ((argc > 1) && (strcmp( "-h", argv[i]) == 0))
+		 {
+			 printf("Usage: cylindrix [options]\n");
+			 printf("    -no_ai : disable enemy ai\n");
+			 printf("    -no_sound : disable sound\n");
+			 printf("    -readout : enable debug readout\n");
+			 printf("    -no_anims : disable FLI animations\n");
+			 printf("    -warp1 : Warp to level 1\n");
+			 printf("    -warp2 : Warp to level 2\n");
+			 printf("    ...\n");
+			 printf("    -warp10 : Warp to level 10\n");
+			 printf("\n");
+			 exit(1);
+		 }
 
 
         }  /* End of checking for args */
