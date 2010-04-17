@@ -58,9 +58,9 @@ extern unsigned long ptime;
 
 /* defines 10-bit resolution for fractional part of fixed point numbers */
 
-#define MAGIC 1024l      /* represents 1.0 in fixed-point */
-#define MEXP 10l         /* log base 2 of MAGIC */
-#define JUMBO 40960000l  /* a big number */
+#define MAGIC 1024      /* represents 1.0 in fixed-point */
+#define MEXP 10         /* log base 2 of MAGIC */
+#define JUMBO 40960000  /* a big number */
 
 #ifndef TRUE
 #define TRUE 1
@@ -530,7 +530,7 @@ typedef struct {
 
 typedef struct {
     GradientInfo gradient[ NUM_GRADIENTS ]; /* array of gradients */
-    long size;                              /* number of active gradients */
+    int32_t size;                              /* number of active gradients */
 } ColorInfo;
 
 
@@ -740,7 +740,7 @@ typedef struct
      float angular_friction;  /* Radians per frame */
      float surface_friction;   /* Units per frame */
      float air_friction;       /* Units per frame */
-     long yon_clipping_plane; /* Magic Fixed point */
+     int32_t yon_clipping_plane; /* Magic Fixed point */
 
      Orientation base_orientations[2];
      Orientation turret_orientations[2];

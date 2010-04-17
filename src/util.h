@@ -23,9 +23,9 @@
 
 void init_sine_table();
 void init_arc_cos_table();
-long isin( long x );
-long icos( long x );
-long iarccos( long x );
+int32_t isin( int32_t x );
+int32_t icos( int32_t x );
+int32_t iarccos( int32_t x );
 
 unsigned char diffuse_shade( long dotprod, Gradient gradient );
 unsigned char distance_diffuse_shade( long dotprod, long distance, Gradient gradient );
@@ -34,11 +34,11 @@ unsigned char tube_shade( long distance, Gradient gradient );
 unsigned char radar_tube_shade( long distance, Gradient gradient );
 
 
-float mtof( long magic );
-long ftom( float num );
-long rounding_ftom( float num );
-long rounding_fixed_multiply( long x, long y );
-long rounding_fixed_to_long( long fixed );
+float mtof( int32_t magic );
+int32_t ftom( float num );
+int32_t rounding_ftom( float num );
+int32_t rounding_fixed_multiply( int32_t x, int32_t y );
+int32_t rounding_fixed_to_long( int32_t fixed );
 
 /* floating point linear algabra functions */
 

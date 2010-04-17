@@ -28,7 +28,7 @@
 #include "clipping.h"  /* needed in point_visible */
 #include "util.h"
 
-extern long new_hither;     /* needed in point_visible */
+extern int32_t new_hither;     /* needed in point_visible */
 extern Matrix scale_matrix; /* needed in point_visible */
 extern game_configuration_type game_configuration; /* From omega.c */
 extern level_type level; /* From omega.c...we need it for yon_clipping_plane */
@@ -36,8 +36,8 @@ extern level_type level; /* From omega.c...we need it for yon_clipping_plane */
 extern WorldStuff world_stuff;
 
 
-long sine_table[1609]; /* sin( 0.0 ) to sin( PI/2 ) */
-long arc_cos_table[8193]; /* arccos( 0.0 ) to arccos( 1.0 ) in fixed-point
+int32_t sine_table[1609]; /* sin( 0.0 ) to sin( PI/2 ) */
+int32_t arc_cos_table[8193]; /* arccos( 0.0 ) to arccos( 1.0 ) in fixed-point
 			     19.13 */
 			     
 extern long sb_installed;        /* True if the sound card driver is installed */
@@ -64,38 +64,38 @@ void init_arc_cos_table()
 
 /* converts 22.10 fixed-point to float */
 
-float mtof( long magic )
+float mtof( int32_t magic )
 {
     return (float)((float)magic/(float)MAGIC);
 }
 
 /* converts float to 22.10 fixed-point */
 
-long ftom( float num )
+int32_t ftom( float num )
 {
-    return (long)(num * MAGIC);
+    return (int32_t)(num * MAGIC);
 }
 
-long rounding_ftom( float num )
+int32_t rounding_ftom( float num )
 {
     double integer_part, fractional_part;
 
     fractional_part = modf( num * (float)MAGIC, &integer_part );
 
     if( ( fractional_part > 0.0 ) && ( fractional_part >= 0.5 ) ) {
-	return (long)(integer_part + 1.0);
+	return (int32_t)(integer_part + 1.0);
     }
     else if( ( fractional_part < 0.0 ) && ( -fractional_part >= 0.5 ) ) {
-	return (long)(integer_part - 1.0);
+	return (int32_t)(integer_part - 1.0);
     }
     else {
-	return (long)(integer_part);
+	return (int32_t)(integer_part);
     }
 }
 
-long rounding_fixed_multiply( long x, long y )
+int32_t rounding_fixed_multiply( int32_t x, int32_t y )
 {
-    long temp;
+    int32_t temp;
 
     temp = (x * y) >> (MEXP - 1);
 
@@ -107,7 +107,7 @@ long rounding_fixed_multiply( long x, long y )
     }
 }
 
-long rounding_fixed_to_long( long fixed )
+int32_t rounding_fixed_to_long( int32_t fixed )
 {
     fixed = fixed >> (MEXP - 1);
 
@@ -122,7 +122,7 @@ long rounding_fixed_to_long( long fixed )
 /* warning x is expected to be in 19.13 fixed-point not 22.10 */
 /* the result is also in 19.13 fixed-point */
 
-long iarccos( long x )
+int32_t iarccos( int32_t x )
 {
     if( x > 8192 ) {
 	x = 8192;
@@ -141,9 +141,9 @@ long iarccos( long x )
 
 /* gives you the sin of the angle x(radians) in fixed-point */
 
-long isin( long x )
+int32_t isin( int32_t x )
 {
-    long factor = 1;
+    int32_t factor = 1;
 
     while( x < 0 ) {
 	x += 6434;     /* 2 pi */
@@ -162,7 +162,7 @@ long isin( long x )
 
 /* gives you the cos of the angle x(radians) in fixed-point */
 
-long icos( long x )
+int32_t icos( int32_t x )
 {
     return (isin(x+1608));
 }

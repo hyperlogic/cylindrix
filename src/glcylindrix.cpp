@@ -130,7 +130,7 @@ static void GL_RenderBuffer()
 
 	glEnable(GL_TEXTURE_2D);
 	glDisable(GL_LIGHTING);	
-	
+
 	glBegin( GL_POLYGON );
 	glColor3f( fadeAlpha, fadeAlpha, fadeAlpha );
 	
@@ -145,7 +145,7 @@ static void GL_RenderBuffer()
 
 	glTexCoord2f( 0, 0 );	
 	glVertex3f( 0, 1, 0 );
-
+	
 	glEnd();
 
 	glDisable(GL_TEXTURE_2D);
@@ -242,7 +242,7 @@ float GL_IntensityToPaletteTexCoord( WorldStuff* worldStuff, float intensity, Gr
 	// look up gradient properties.
     unsigned char num_colors = worldStuff->color_info.gradient[gradient].num_colors;
     unsigned char offset = worldStuff->color_info.gradient[gradient].first;	
-    long shade;
+    unsigned int shade;
 	
 	// clamp intensity
 	if ( intensity < 0 )	
@@ -289,8 +289,10 @@ void GL_DrawTube( WorldStuff* worldStuff, enum TubeType tubeType )
 	glLoadIdentity();
 
 	gluLookAt( worldStuff->view_orientation.position[0], worldStuff->view_orientation.position[1], worldStuff->view_orientation.position[2],
-		worldStuff->view_orientation.position[0] + worldStuff->view_orientation.front[0], worldStuff->view_orientation.position[1] + worldStuff->view_orientation.front[1], worldStuff->view_orientation.position[2] + worldStuff->view_orientation.front[2],
-		worldStuff->view_orientation.up[0], worldStuff->view_orientation.up[1], worldStuff->view_orientation.up[2] );
+			   worldStuff->view_orientation.position[0] + worldStuff->view_orientation.front[0], 
+			   worldStuff->view_orientation.position[1] + worldStuff->view_orientation.front[1], 
+			   worldStuff->view_orientation.position[2] + worldStuff->view_orientation.front[2],
+			   worldStuff->view_orientation.up[0], worldStuff->view_orientation.up[1], worldStuff->view_orientation.up[2] );
 
 	glBindTexture( GL_TEXTURE_2D, paletteTexture );
 	glEnable( GL_TEXTURE_2D );
@@ -321,7 +323,6 @@ void GL_DrawTube( WorldStuff* worldStuff, enum TubeType tubeType )
 
 			// TODO: make this based on something (yon?)
 			intensity = 1.0f - (len / 25.0f);
-			
 			texCoord = GL_IntensityToPaletteTexCoord( worldStuff, intensity, worldStuff->tube.face[i].gradient );
 	
 			glTexCoord2f( 0, texCoord );
