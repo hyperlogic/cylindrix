@@ -202,7 +202,7 @@ typedef struct
 
 
 void Init_AI( WorldStuff *world_stuff );
-void Load_AI( character_type *character, char *filename, int ai_number );
+void Load_All_AI(Player* players, const char* filename, int* ai_indices);
 void AI_Control( WorldStuff *world_stuff, int vehicle_number );
 void Clear_Ai( void );
 

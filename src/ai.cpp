@@ -53,7 +53,7 @@ void Init_AI( WorldStuff *world_stuff )
     if( test_samples )
     for( i = 0; i < 37; i++ )
         {
-         Load_AI( &character, "people.dat\0", i );
+         Load_AI( &character, "new_people.dat", i );
 
          Play_Voice( character.samples[GREETING] );
          while( !Is_Voice_Done() ) if( Jon_Kbhit() ){done = 1;goto poo;}
@@ -91,10 +91,23 @@ void Init_AI( WorldStuff *world_stuff )
 #endif
     /* End of temporary test thing */
 
+    if (game_configuration.game_type == TournamentGame )
+        tournament_init_print("G3DRPCAIE : FUSING NEURONS FOR AI");
+    else
+        cylindrix_init_print("G3DRPCAIE : FUSING NEURONS FOR AI");
 
-    /* load red0 ai */
+	/* Load up the ai from "new_people.dat" and initialize each player's character struct */
+	int ai_indices[6];
+	ai_indices[0] = game_configuration.red0_ai;
+	ai_indices[1] = game_configuration.red1_ai;
+	ai_indices[2] = game_configuration.red2_ai;
+	ai_indices[3] = game_configuration.blue0_ai;
+	ai_indices[4] = game_configuration.blue1_ai;
+	ai_indices[5] = game_configuration.blue2_ai;
+	Load_All_AI((Player*)world_stuff->player_array, "new_people.dat", ai_indices);
 
-    Load_AI( &world_stuff->player_array[0].character, "people.dat\0",
+#if 0
+    Load_AI( &world_stuff->player_array[0].character, "new_people.dat",
              game_configuration.red0_ai );
 
     if( game_configuration.game_type == TournamentGame ) {
@@ -106,7 +119,7 @@ void Init_AI( WorldStuff *world_stuff )
 
     /* load red1 ai */
 
-    Load_AI( &world_stuff->player_array[1].character, "people.dat\0",
+    Load_AI( &world_stuff->player_array[1].character, "new_people.dat",
              game_configuration.red1_ai );
     
     if( game_configuration.game_type == TournamentGame ) {
@@ -119,7 +132,7 @@ void Init_AI( WorldStuff *world_stuff )
 
     /* load red2 ai */
 
-    Load_AI( &world_stuff->player_array[2].character, "people.dat\0",
+    Load_AI( &world_stuff->player_array[2].character, "new_people.dat",
              game_configuration.red2_ai );
 
     if( game_configuration.game_type == TournamentGame ) {
@@ -132,7 +145,7 @@ void Init_AI( WorldStuff *world_stuff )
 
     /* load blue0 ai */
 
-    Load_AI( &world_stuff->player_array[3].character, "people.dat\0",
+    Load_AI( &world_stuff->player_array[3].character, "new_people.dat",
              game_configuration.blue0_ai );
 
     if( game_configuration.game_type == TournamentGame ) {
@@ -145,7 +158,7 @@ void Init_AI( WorldStuff *world_stuff )
 
     /* load blue1 ai */
 
-    Load_AI( &world_stuff->player_array[4].character, "people.dat\0",
+    Load_AI( &world_stuff->player_array[4].character, "new_people.dat",
              game_configuration.blue1_ai );
 
     if( game_configuration.game_type == TournamentGame ) {
@@ -160,15 +173,12 @@ void Init_AI( WorldStuff *world_stuff )
 
     Load_AI( &world_stuff->player_array[5].character, "people.dat\0",
              game_configuration.blue2_ai );
+#endif
              
-    if( game_configuration.game_type == TournamentGame ) {
-        tournament_init_print( "G3DRPCAIE : FUSING NEURONS FOR AI 5" );    
+    if (game_configuration.game_type == TournamentGame)
         tournament_init_print( "G3DRPCAIE : SYNAPSE PARSING ENABLED" );     
-    }
-    else {
-        cylindrix_init_print( "G3DRPCAIE : FUSING NEURONS FOR AI 5" );    
+    else
         cylindrix_init_print( "G3DRPCAIE : SYNAPSE PARSING ENABLED" );     
-    }    
  
     /* Zero everything in the AI out */
     
@@ -211,6 +221,7 @@ void Init_AI( WorldStuff *world_stuff )
 
 /* Load the ai file filename, and load in the ai_number'th character
    and store it in character */
+#if 0
 void Load_AI( character_type *character, char *filename, int ai_number )
     {
      FILE *fp;
@@ -250,7 +261,76 @@ void Load_AI( character_type *character, char *filename, int ai_number )
 */
 
     } /* End of Load_AI */
+#endif
 
+static const int NUM_LINES_PER_CHARACTER = 18;
+static const int NUM_CHARACTERS = 50;
+struct character_lines
+{
+	char* lines[NUM_LINES_PER_CHARACTER];
+};
+
+void Load_All_AI(Player* players, const char* filename, int* ai_indices)
+{
+	// append path to front of filename.
+	char newfilename[512];
+	sprintf(newfilename, "%s%s",g_DataPath, filename);
+	FILE* fp = fopen(newfilename, "rb");
+	if (!fp)
+		SYS_Error("Error loading AI\n");
+
+	struct character_lines* c_lines = (struct character_lines*)malloc(sizeof(struct character_lines) * NUM_CHARACTERS);
+
+	// load in the WHOLE thing.
+	fseek(fp, 0, SEEK_END);
+	int size = ftell(fp);
+	char* buffer = (char*)malloc(sizeof(char) * (size + 1));
+	fseek(fp, 0, SEEK_SET);
+	fread(buffer, sizeof(char), size, fp);
+
+	int line_count = 0;
+	int c_count = 0;
+	char* line = strtok(buffer, "\n");
+	while (line)
+	{
+		// skip comment lines
+		if (line[0] == '#')
+			continue;
+
+		c_lines[c_count].lines[line_count++] = line;
+
+		// move on to next character.
+		if (line_count == NUM_LINES_PER_CHARACTER)
+		{
+			line_count = 0;
+			c_count++;
+		}
+		line = strtok(0, "\n");
+	}
+
+	int i, j;
+	for (i = 0; i < 6; i++)
+	{
+		character_type* c = &players[i].character;
+		memset(c, 0, sizeof(character_type));
+		strcpy(c->name, c_lines[ai_indices[i]].lines[0]);
+		strcpy(c->filename, c_lines[ai_indices[i]].lines[1]);
+		for (j = 0; j < NUMBER_CHARACTER_SOUNDS; ++j)
+			strcpy(c->sample_filenames[j], c_lines[ai_indices[i]].lines[j+2]);
+		c->passive_aggressive = atoi(c_lines[ai_indices[i]].lines[9]);
+		c->bravery_cowardice = atoi(c_lines[ai_indices[i]].lines[10]);
+		c->aerial_ground = atoi(c_lines[ai_indices[i]].lines[11]);
+		c->obedience_disobedience = atoi(c_lines[ai_indices[i]].lines[12]);
+		c->pylon_grab = atoi(c_lines[ai_indices[i]].lines[13]);
+		c->radar_kill = atoi(c_lines[ai_indices[i]].lines[14]);
+		c->radar_protect = atoi(c_lines[ai_indices[i]].lines[15]);
+		c->skill_level = atoi(c_lines[ai_indices[i]].lines[16]);
+		c->preferred_vehicle = atoi(c_lines[ai_indices[i]].lines[17]);
+	}
+	
+	free(c_lines);
+	free(buffer);
+}
 
 
 void AI_Control( WorldStuff *world_stuff, int vehicle_number )

@@ -16,7 +16,8 @@ endif
 # SDL Linux
 ifeq ($(PLATFORM),Linux)
 GCC = g++
-CFLAGS = -Wall -D GLCYLINDRIX -O3
+#CFLAGS = -Wall -D GLCYLINDRIX -O3
+CFLAGS = -Wall -D GLCYLINDRIX -g
 LFLAGS = -lGL -lGLU -lSDL -lc -lmpg123 -lopenal
 endif
 
@@ -71,6 +72,9 @@ SDLMain.o : system/darwin/SDLMain.m $(DEPENDS)
 	$(GCC) $(CFLAGS) -c $<
 endif
 
-.PHONY : clean
+.PHONY : clean tags
 clean :
 	-rm -f $(OBJ) ../cylindrix
+
+tags :
+	etags.emacs `find . -name "*.cpp" -o -name "*.h"`
