@@ -104,7 +104,7 @@ void Init_AI( WorldStuff *world_stuff )
 	ai_indices[3] = game_configuration.blue0_ai;
 	ai_indices[4] = game_configuration.blue1_ai;
 	ai_indices[5] = game_configuration.blue2_ai;
-	Load_All_AI((Player*)world_stuff->player_array, "new_people.dat", ai_indices);
+	Load_All_AI((Player*)world_stuff->player_array, "gamedata/new_people.dat", ai_indices);
 
 #if 0
     Load_AI( &world_stuff->player_array[0].character, "new_people.dat",
