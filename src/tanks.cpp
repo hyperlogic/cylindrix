@@ -23,25 +23,150 @@
 
 extern const char* g_DataPath;
 
-void Load_Tank( Vehicle *tank, enum VehicleType tank_type )
-    {
-     FILE *fp;
+static const int NUM_LINES_PER_TANK = 61;
+static const int NUM_TANKS = 10;
+struct tank_lines
+{
+	char* lines[NUM_LINES_PER_TANK];
+};
 
+void Load_Tanks(Player* player, const game_configuration_type* gc)
+{
+	// append path to front of filename.
 	char newfilename[512];
+	sprintf(newfilename, "%sgamedata/new_tanks.dat", g_DataPath);
+	FILE* fp = fopen(newfilename, "rb");
+	if (!fp)
+		SYS_Error("Error loading Tanks!\n");
 
-	sprintf(newfilename,"%sgamedata/tanks.tbf",g_DataPath);
+	struct tank_lines* t_lines = (struct tank_lines*)malloc(sizeof(struct tank_lines) * NUM_TANKS);
 
+	// load in the WHOLE thing.
+	fseek(fp, 0, SEEK_END);
+	int size = ftell(fp);
+	char* buffer = (char*)malloc(sizeof(char) * (size + 1));
+	fseek(fp, 0, SEEK_SET);
+	fread(buffer, sizeof(char), size, fp);
 
+	int line_count = 0;
+	int t_count = 0;
+	char* line = strtok(buffer, "\n");
+	while (line)
+	{
+		// skip comment lines
+		if (line[0] == '#')
+			continue;
 
-     if( (fp = fopen( newfilename, "rb" )) == NULL )
-         SYS_Error( "Load_Tank() : fopen failed\n" );
+		t_lines[t_count].lines[line_count++] = line;
 
-     fseek( fp, sizeof( Vehicle ) * tank_type, SEEK_SET );
-     fread( tank, sizeof( Vehicle ), 1, fp );
+		// move on to next tank
+		if (line_count == NUM_LINES_PER_TANK)
+		{
+			line_count = 0;
+			t_count++;
+		}
+		line = strtok(0, "\n");
+	}
 
-     fclose( fp );
+	int i, j;
+	for (i = 0; i < 6; i++)
+	{
+		Vehicle* v = &player[i].tank;
+		memset(v, 0, sizeof(Vehicle));
+		int index;
+		switch(i)
+		{
+		case 0: index = gc->red0_vehicle; break;
+		case 1: index = gc->red1_vehicle; break;
+		case 2: index = gc->red2_vehicle; break;
+		case 3: index = gc->blue0_vehicle; break;
+		case 4: index = gc->blue1_vehicle; break;
+		case 5: index = gc->blue2_vehicle; break;
+		}
+		int l = 0;
+		v->vtype = (VehicleType)atoi(t_lines[index].lines[l++]);
+		v->surface_rad = atof(t_lines[index].lines[l++]);
 
-    } /* End of Load_Tank */
+		v->air_forward_speed = atof(t_lines[index].lines[l++]);
+		v->air_max_forward_speed = atof(t_lines[index].lines[l++]);
+		v->air_inc_forward_speed = atof(t_lines[index].lines[l++]);
+		v->air_max_sidestep_speed = atof(t_lines[index].lines[l++]);
+		v->air_inc_sidestep_speed = atof(t_lines[index].lines[l++]);
+
+		v->air_rise_rot_speed = atof(t_lines[index].lines[l++]);
+		v->air_spin_rot_speed = atof(t_lines[index].lines[l++]);
+		v->air_inc_rot_speed = atof(t_lines[index].lines[l++]);
+		v->air_max_rot_speed = atof(t_lines[index].lines[l++]);
+		v->surface_max_speed = atof(t_lines[index].lines[l++]);
+		v->surface_inc_speed = atof(t_lines[index].lines[l++]);
+		v->surface_inc_sidestep_speed = atof(t_lines[index].lines[l++]);
+
+		v->surface_rot_speed = atof(t_lines[index].lines[l++]);
+		v->surface_inc_rot_speed = atof(t_lines[index].lines[l++]);
+		v->surface_max_rot_speed = atof(t_lines[index].lines[l++]);
+
+		v->laser_speed = atof(t_lines[index].lines[l++]);
+		v->laser_life = atoi(t_lines[index].lines[l++]);
+		v->laser_damage = atoi(t_lines[index].lines[l++]);
+		v->laser_reload_time = atoi(t_lines[index].lines[l++]);
+		v->frames_till_fire_laser = atoi(t_lines[index].lines[l++]);
+
+		v->missile_speed = atof(t_lines[index].lines[l++]);
+		v->turning_angle = atof(t_lines[index].lines[l++]);
+		v->missile_life = atoi(t_lines[index].lines[l++]);
+		v->missile_damage = atoi(t_lines[index].lines[l++]);
+		v->missile_reload_time = atoi(t_lines[index].lines[l++]);
+		v->frames_till_fire_missile = atoi(t_lines[index].lines[l++]);
+		v->missile_generation_time = atoi(t_lines[index].lines[l++]);
+		v->frames_till_new_missile = atoi(t_lines[index].lines[l++]);
+		v->max_missile_storage = atoi(t_lines[index].lines[l++]);
+		v->missiles_stored = atoi(t_lines[index].lines[l++]);
+
+		v->max_projectiles = atoi(t_lines[index].lines[l++]);
+
+		v->max_hitpoints = atoi(t_lines[index].lines[l++]);
+		v->current_hitpoints = atoi(t_lines[index].lines[l++]);
+
+		v->ramming_active = atoi(t_lines[index].lines[l++]);
+		v->ramming_damage = atoi(t_lines[index].lines[l++]);
+
+		v->double_lasers_active = atoi(t_lines[index].lines[l++]);
+
+		v->mine_reload_time = atoi(t_lines[index].lines[l++]);
+		v->mine_damage = atoi(t_lines[index].lines[l++]);
+		v->mine_life = atoi(t_lines[index].lines[l++]);
+
+		v->cs_missile_reload_time = atoi(t_lines[index].lines[l++]);
+		v->cs_missile_life = atoi(t_lines[index].lines[l++]);
+		v->cs_missile_speed = atof(t_lines[index].lines[l++]);
+
+		v->controls_scrambled = atoi(t_lines[index].lines[l++]);
+		v->frames_till_unscramble = atoi(t_lines[index].lines[l++]);
+		v->scramble_life = atoi(t_lines[index].lines[l++]);
+
+		v->traitor_missile_reload_time = atoi(t_lines[index].lines[l++]);
+		v->traitor_missile_life = atoi(t_lines[index].lines[l++]);
+		v->traitor_missile_speed = atof(t_lines[index].lines[l++]);
+
+		v->traitor_life = atoi(t_lines[index].lines[l++]);
+		v->traitor_active = atoi(t_lines[index].lines[l++]);
+		v->frames_till_traitor_deactivate = atoi(t_lines[index].lines[l++]);
+
+		v->anti_missile_active = atoi(t_lines[index].lines[l++]);
+
+		v->cloaking_active = atoi(t_lines[index].lines[l++]);
+		v->cloak_reload_time = atoi(t_lines[index].lines[l++]);
+		v->frames_till_cloak = atoi(t_lines[index].lines[l++]);
+		v->cloak_time = atoi(t_lines[index].lines[l++]);
+		v->frames_till_cloak_suck = atoi(t_lines[index].lines[l++]);
+
+		v->decoy_life = atoi(t_lines[index].lines[l++]);
+		v->decoy_reload_time = atoi(t_lines[index].lines[l++]);
+	}
+	
+	free(t_lines);
+	free(buffer);
+}
 
 void init_vehicle_gradient( Vehicle *tank )
 {

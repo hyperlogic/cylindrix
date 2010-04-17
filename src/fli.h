@@ -20,6 +20,7 @@
 #define FLI_H
 
 #include <stdlib.h>
+#include <stdint.h>
 #include "prim.h"
 /* #include "pc.h" */
 #include "keys.h"
@@ -36,52 +37,52 @@
 
 typedef struct
     {
-     unsigned long  file_size        PACKED_STRUCT; /* Total size of the file       */
-     unsigned short file_id          PACKED_STRUCT; /* File format indicator        */
-     unsigned short number_of_frames PACKED_STRUCT; /* Total number of frames       */
-     unsigned short width            PACKED_STRUCT; /* Screen width in pixels       */
-     unsigned short height           PACKED_STRUCT; /* Screen height in pixels      */
-     unsigned short pixel_depth      PACKED_STRUCT; /* Number of bits per pixel (8) */
-     unsigned short flags            PACKED_STRUCT; /* Set to 0x03                  */
-     unsigned long  frame_delay      PACKED_STRUCT; /* Time delay between frames    */
-     unsigned short reserved1        PACKED_STRUCT; /* Not used ( set to 0x00 )     */
+     uint32_t file_size        PACKED_STRUCT; /* Total size of the file       */
+     uint16_t file_id          PACKED_STRUCT; /* File format indicator        */
+     uint16_t number_of_frames PACKED_STRUCT; /* Total number of frames       */
+     uint16_t width            PACKED_STRUCT; /* Screen width in pixels       */
+     uint16_t height           PACKED_STRUCT; /* Screen height in pixels      */
+     uint16_t pixel_depth      PACKED_STRUCT; /* Number of bits per pixel (8) */
+     uint16_t flags            PACKED_STRUCT; /* Set to 0x03                  */
+     uint32_t frame_delay      PACKED_STRUCT; /* Time delay between frames    */
+     uint16_t reserved1        PACKED_STRUCT; /* Not used ( set to 0x00 )     */
   
      /* The following fields are set to zero in a .fli file */
      
-     unsigned long  date_created  PACKED_STRUCT; /* Time/date file was created      */
-     unsigned long  creator_sn    PACKED_STRUCT; /* Serial number of the program    */
-     unsigned long  last_updated  PACKED_STRUCT; /* Time/date file was last changed */
-     unsigned long  updater_sn    PACKED_STRUCT; /* Serial number of updater prog   */
-     unsigned short x_aspect      PACKED_STRUCT; /* X of display aspect ratio       */
-     unsigned short y_aspect      PACKED_STRUCT; /* Y of display aspect ratio       */
-     char           reserved2[38] PACKED_STRUCT; /* Not used (set to 0x00)          */
-     unsigned long  frame1_offset PACKED_STRUCT; /* Offset of first frame           */
-     unsigned long  frame2_offset PACKED_STRUCT; /* Offset of second frame          */
-     char           reserved3[40] PACKED_STRUCT; /* Not used (set to 0x00)          */
+     uint32_t date_created  PACKED_STRUCT; /* Time/date file was created      */
+     uint32_t creator_sn    PACKED_STRUCT; /* Serial number of the program    */
+     uint32_t last_updated  PACKED_STRUCT; /* Time/date file was last changed */
+     uint32_t updater_sn    PACKED_STRUCT; /* Serial number of updater prog   */
+     uint16_t x_aspect      PACKED_STRUCT; /* X of display aspect ratio       */
+     uint16_t y_aspect      PACKED_STRUCT; /* Y of display aspect ratio       */
+     uint8_t  reserved2[38] PACKED_STRUCT; /* Not used (set to 0x00)          */
+     uint32_t frame1_offset PACKED_STRUCT; /* Offset of first frame           */
+     uint32_t frame2_offset PACKED_STRUCT; /* Offset of second frame          */
+     uint8_t  reserved3[40] PACKED_STRUCT; /* Not used (set to 0x00)          */
     } flic_header;
 
 
 typedef struct
     {
-     unsigned long  chunk_size       PACKED_STRUCT; /* Total size of the chunk */
-     unsigned short chunk_type       PACKED_STRUCT; /* Chunk identifier */
-     unsigned short number_of_chunks PACKED_STRUCT; /* Number of subchunks in this chunk */
-     char           reserved[8]      PACKED_STRUCT; /* Not used (set to 0x00 ) */
+     uint32_t chunk_size       PACKED_STRUCT; /* Total size of the chunk */
+     uint16_t chunk_type       PACKED_STRUCT; /* Chunk identifier */
+     uint16_t number_of_chunks PACKED_STRUCT; /* Number of subchunks in this chunk */
+     uint8_t  reserved[8]      PACKED_STRUCT; /* Not used (set to 0x00 ) */
     } chunk_header;
 
 typedef struct
     {
-     unsigned long  chunk_size PACKED_STRUCT; /* Total size of the chunk */
-     unsigned short chunk_type PACKED_STRUCT; /* Chunk identifier */
+     uint32_t chunk_size PACKED_STRUCT; /* Total size of the chunk */
+     uint16_t chunk_type PACKED_STRUCT; /* Chunk identifier */
     } sub_chunk_header;
 
 
 typedef struct
     {
-     unsigned char *file_buffer;
-     unsigned long file_length;
-     unsigned long file_pos;
-     unsigned long first_frame;
+     uint8_t *file_buffer;
+     uint32_t file_length;
+     uint32_t file_pos;
+     uint32_t first_frame;
     } fli_file_type;
 
 void PlayFliEnter( const char* filename );

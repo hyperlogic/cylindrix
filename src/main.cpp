@@ -604,8 +604,6 @@ void init_red_team( Player *p )
     p[0].team = RED_TEAM;
     p[0].leader = TRUE;
 
-    Load_Tank( &p[0].tank, (VehicleType)game_configuration.red0_vehicle );
-
     /* initialize tanks orientation with values from the level file */
 
     p[0].tank.orient.position[X] = level.vehicle_orientations[0].position[X];
@@ -628,8 +626,6 @@ void init_red_team( Player *p )
     p[1].team = RED_TEAM;
     p[1].leader = FALSE;
 
-    Load_Tank( &p[1].tank, (VehicleType)game_configuration.red1_vehicle );
-
     /* initialize tanks orientation (later to be loaded from .lvl file) */
 
     p[1].tank.orient.position[X] = level.vehicle_orientations[1].position[X];
@@ -651,8 +647,6 @@ void init_red_team( Player *p )
     p[2].tank.vtype = (VehicleType)game_configuration.red2_vehicle;
     p[2].team = RED_TEAM;
     p[2].leader = FALSE;
-
-    Load_Tank( &p[2].tank, (VehicleType)game_configuration.red2_vehicle );
 
     /* initialize tanks orientation (later to be loaded from .lvl file) */
 
@@ -690,8 +684,6 @@ void init_blue_team( Player *p )
     p[3].team = BLUE_TEAM;
     p[3].leader = TRUE;
 
-    Load_Tank( &p[3].tank, (VehicleType)game_configuration.blue0_vehicle );
-
     /* initialize tanks orientation (later to be loaded from .lvl file) */
 
     p[3].tank.orient.position[X] = level.vehicle_orientations[3].position[X];
@@ -714,8 +706,6 @@ void init_blue_team( Player *p )
     p[4].team = BLUE_TEAM;
     p[4].leader = TRUE;
 
-    Load_Tank( &p[4].tank, (VehicleType)game_configuration.blue1_vehicle );
-
     /* initialize tanks orientation (later to be loaded from .lvl file) */
 
     p[4].tank.orient.position[X] = level.vehicle_orientations[4].position[X];
@@ -737,8 +727,6 @@ void init_blue_team( Player *p )
     p[5].tank.vtype = (VehicleType)game_configuration.blue2_vehicle;
     p[5].team = BLUE_TEAM;
     p[5].leader = TRUE;
-
-    Load_Tank( &p[5].tank, (VehicleType)game_configuration.blue2_vehicle );
 
     /* initialize tanks orientation (later to be loaded from .lvl file) */
 
@@ -1171,7 +1159,8 @@ void init_world_stuff( WorldStuff *world_stuff )
     world_stuff->blue_radar_base.world_turret_obj = NULL;
     world_stuff->blue_radar_base.world_union_obj = NULL;
 
-    /* init actual players vehicle */
+    /* load in all the tanks */
+	Load_Tanks(world_stuff->player_array, &game_configuration);
 
     if( game_configuration.game_type == TournamentGame ) {
         tournament_init_print( "INIT_RED_TEAM() ENERGIZED" );

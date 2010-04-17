@@ -30,38 +30,38 @@ extern boolean ceiling_on;           /* */
 
 int current_frame;
 
-unsigned long first_frame = 0;
-unsigned long file_length = 0;
+uint32_t first_frame = 0;
+uint32_t file_length = 0;
 
 /* Delta chunk is the most common type of chunk...
    it contains the changes in the image from the last
    frame */
 void Delta_Chunk( FILE *fp )
     {
-     unsigned long line_index;       /* Number of lines processed  */
-     unsigned long pixel_index = 0;  /* Number of pixels processed */
-     unsigned long pos;              /* Position in file           */
+     uint32_t line_index;       /* Number of lines processed  */
+     uint32_t pixel_index = 0;  /* Number of pixels processed */
+     uint32_t pos;              /* Position in file           */
      
-     short lines_to_skip;           /* Number of lines to skip    */
-     unsigned short number_lines;   /* Number of lines encoded for frame */
+     int16_t lines_to_skip;           /* Number of lines to skip    */
+     uint16_t number_lines;   /* Number of lines encoded for frame */
      
-     unsigned char num_packets;     /* Number of packets in line  */
+     uint8_t num_packets;     /* Number of packets in line  */
      
-     unsigned long packet_index;     /* Index for loop             */
-     unsigned char skip_count;      /* Number of xpixels to skip  */
-     char packet_type;              /* Type of delta encoding     */
+     uint32_t packet_index;     /* Index for loop             */
+     uint8_t skip_count;      /* Number of xpixels to skip  */
+     int8_t packet_type;              /* Type of delta encoding     */
      
-     unsigned char pixel_data;      /* One pixel to put on screen */
-     unsigned long byte_count;       /* Index for loop             */
-     long x, y;
+     uint8_t pixel_data;      /* One pixel to put on screen */
+     uint32_t byte_count;       /* Index for loop             */
+     int32_t x, y;
 
 
      pos = ftell( fp ); /* Record our position in the file */
 
      /* Get the y position we start on */ 
-     fread( &lines_to_skip, sizeof( short ), 1, fp );  
+     fread( &lines_to_skip, sizeof(int16_t), 1, fp );  
      /* Get the number of lines encoded */
-     fread( &number_lines,  sizeof( short ), 1, fp );
+     fread( &number_lines,  sizeof(int16_t), 1, fp );
      
      x = y = 0;
 
@@ -85,7 +85,7 @@ void Delta_Chunk( FILE *fp )
                   number of pixels from the file to the screen... */
                if( packet_type > 0 )
                    {
-                    for( byte_count = 0; byte_count < (unsigned long)packet_type; byte_count++ ) 
+                    for( byte_count = 0; byte_count < (uint32_t)packet_type; byte_count++ ) 
                         {
                          fread( &pixel_data, sizeof( char ), 1, fp );
                          pixel_index++;
@@ -101,7 +101,7 @@ void Delta_Chunk( FILE *fp )
                     packet_type = -packet_type;
                     fread( &pixel_data, sizeof(char), 1, fp );
 
-                    for( byte_count = 0; byte_count < (unsigned long)packet_type; byte_count++ )
+                    for( byte_count = 0; byte_count < (uint32_t)packet_type; byte_count++ )
                         {
                          pixel_index++;
                          DB_Fast_Pixel( x, y, pixel_data ); 
@@ -122,17 +122,17 @@ void Delta_Chunk( FILE *fp )
 
 void Color_Chunk( FILE *fp )
     {
-     unsigned short num_packets; 
+     uint16_t num_packets; 
      RGB_color color;
 
      /* Packet */
-     unsigned char skip_count;
-     unsigned char color_count;
-     unsigned char color_index = 0; /* Index into 256 palette */
-     unsigned char r,g,b;
-     long i, j;
+     uint8_t skip_count;
+     uint8_t color_count;
+     uint8_t color_index = 0; /* Index into 256 palette */
+     uint8_t r,g,b;
+     int32_t i, j;
      
-     fread( &num_packets, sizeof( unsigned short ), 1, fp );     
+     fread( &num_packets, sizeof(uint16_t), 1, fp );     
 
 
      for( i = 0; i < num_packets; i++ )
@@ -180,7 +180,7 @@ void Color_Chunk( FILE *fp )
 
 void Copy_Chunk( FILE *fp )  
     {
-     long x, y;
+     uint32_t x, y;
      unsigned char pixel_data;
 
      /* A copy chunk just has 64000 bytes of data to pop
@@ -200,9 +200,9 @@ void Copy_Chunk( FILE *fp )
 
 void Byte_Run_Chunk( FILE *fp )
     {
-     long i, index;
+     int32_t i, index;
      char temp_char, temp_char_two;
-     long x, y;
+     int32_t x, y;
 
      x = y = 0;
      index = 0;
@@ -257,8 +257,8 @@ void Byte_Run_Chunk( FILE *fp )
 int Read_Sub_Chunk( FILE *fp ) {
      sub_chunk_header header;
      
-     fread( &header.chunk_size, sizeof( unsigned long ), 1, fp );     
-     fread( &header.chunk_type, sizeof( unsigned short ), 1, fp );
+     fread( &header.chunk_size, sizeof( uint32_t ), 1, fp );     
+     fread( &header.chunk_type, sizeof( uint16_t ), 1, fp );
 
      if( header.chunk_type == 0xC )
          {
@@ -282,10 +282,6 @@ int Read_Sub_Chunk( FILE *fp ) {
           fprintf(stderr, "Subchunk is bad type  %x\n", header.chunk_type); 
           
 		  return(0); //Johnm 12/2/20001 - made return 0 on error
-
-// AJT
-//		  Get_Keypress();
-//          exit_gracefully();
          }
 	return(1);
 }
@@ -294,8 +290,7 @@ int Read_Sub_Chunk( FILE *fp ) {
 long Read_Chunk( FILE *fp )
     {
      chunk_header header;
-     long i;
-     long pos;
+     int32_t i, pos;
 
      /* Read in frame chunk header */
      fread( &header, sizeof( chunk_header ), 1, fp );
@@ -340,7 +335,7 @@ void Play_Fli( const char *filename )
 	FILE *fp;               /* Pointer to opened .fli file */
 	unsigned char exit = 0; /* Flag for the loop           */
 	char newfilename[512];
-	unsigned long time;
+	uint32_t time;
 
 	sprintf(newfilename,"%s%s",g_DataPath,filename);
 
@@ -386,7 +381,7 @@ void Play_Fli( const char *filename )
 
 
 
-void Delta_Chunk_Ram( unsigned char *file_buffer, unsigned long *file_pos )
+void Delta_Chunk_Ram( uint8_t *file_buffer, uint32_t *file_pos )
     {
      unsigned long line_index;       /* Number of lines processed  */
      unsigned long pixel_index = 0;  /* Number of pixels processed */
@@ -474,7 +469,7 @@ void Delta_Chunk_Ram( unsigned char *file_buffer, unsigned long *file_pos )
     } /* End of Delta_Chunk_Ram() */
 
 
-void Color_Chunk_Ram( unsigned char *file_buffer, unsigned long *file_pos )
+void Color_Chunk_Ram( uint8_t *file_buffer, uint32_t *file_pos )
     {
      unsigned short num_packets; 
      RGB_color color;
@@ -490,7 +485,7 @@ void Color_Chunk_Ram( unsigned char *file_buffer, unsigned long *file_pos )
      
 
      temp_buffer = (unsigned char *)&num_packets;
-     for( i = 0; i < sizeof( unsigned short ); i++ )
+     for( i = 0; i < sizeof( uint16_t ); i++ )
          {
           temp_buffer[i] = file_buffer[ (*file_pos)++ ];
          }
@@ -539,7 +534,7 @@ void Color_Chunk_Ram( unsigned char *file_buffer, unsigned long *file_pos )
     } /* End of Color_Chunk_Ram() */
  
 
-void Copy_Chunk_Ram( unsigned char *file_buffer, unsigned long *file_pos  )  
+void Copy_Chunk_Ram( uint8_t *file_buffer, uint32_t *file_pos  )  
     {
      long x, y;
      unsigned char pixel_data;
@@ -559,7 +554,7 @@ void Copy_Chunk_Ram( unsigned char *file_buffer, unsigned long *file_pos  )
 
 
 
-void Byte_Run_Chunk_Ram( unsigned char *file_buffer, unsigned long *file_pos )
+void Byte_Run_Chunk_Ram( uint8_t *file_buffer, uint32_t *file_pos )
     {
      long i, index;
      char temp_char, temp_char_two;
@@ -621,7 +616,7 @@ void Byte_Run_Chunk_Ram( unsigned char *file_buffer, unsigned long *file_pos )
 
 /* Read a sub chunk and branch to the appropriate
    function for each type of chunk */
-int Read_Sub_Chunk_Ram( unsigned char *file_buffer, unsigned long *file_pos )
+int Read_Sub_Chunk_Ram( uint8_t *file_buffer, uint32_t *file_pos )
     {
      sub_chunk_header header;
      long i;
@@ -668,7 +663,7 @@ int Read_Sub_Chunk_Ram( unsigned char *file_buffer, unsigned long *file_pos )
 } /* End of Read_Sub_Chunk_Ram() */
 
 /* Process one frame chunk */
-long Read_Chunk_Ram( unsigned char *file_buffer, unsigned long *file_pos )
+long Read_Chunk_Ram( uint8_t *file_buffer, uint32_t *file_pos )
     {
      chunk_header header;
      long i;
@@ -721,7 +716,7 @@ void Play_Fli_Ram( char *filename )
      FILE *fp;               /* Pointer to opened .fli file */
      unsigned char exit = 0; /* Flag for the loop           */
      unsigned char *file_buffer;
-     unsigned long file_pos = 0;
+     uint32_t file_pos = 0;
      long temp;
      long i;
      unsigned char *temp_buffer;
@@ -942,7 +937,7 @@ void Play_Fli_Buffered( char *filename )
      FILE *fp;
      unsigned char *buffer_one, *buffer_two, *current_buffer, *old_buffer;
      flic_header header;
-     unsigned long file_pos = 0;
+     uint32_t file_pos = 0;
      int flip = 0;
      unsigned long bytes_left = 0;
      unsigned long end_file_pos, current_file_pos;

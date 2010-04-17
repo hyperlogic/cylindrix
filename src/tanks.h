@@ -23,9 +23,8 @@
 #include "types.h"
 
 
-void Load_Tank( Vehicle *tank, enum VehicleType tank_type );
+void Load_Tanks(Player* player, const game_configuration_type* gc);
 void Init_Tank( Vehicle *tank, enum VehicleType tank_type, team_type team );
-
 
 
 #endif

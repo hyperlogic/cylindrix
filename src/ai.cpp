@@ -45,52 +45,6 @@ void Init_AI( WorldStuff *world_stuff )
     Init_Pylon_Grid(world_stuff);    /* For 2d paths */
     Init_Centers_Array(world_stuff); /* For 2d paths */
 
-
-
-
-    /* Temporary test thing */
-#if 0
-    if( test_samples )
-    for( i = 0; i < 37; i++ )
-        {
-         Load_AI( &character, "new_people.dat", i );
-
-         Play_Voice( character.samples[GREETING] );
-         while( !Is_Voice_Done() ) if( Jon_Kbhit() ){done = 1;goto poo;}
-         Play_Voice( character.samples[AFFIRMATION] );
-         while( !Is_Voice_Done() ) if( Jon_Kbhit() ){done = 1;goto poo;}
-         Play_Voice( character.samples[NEGATION] );
-         while( !Is_Voice_Done() ) if( Jon_Kbhit() ){done = 1;goto poo;}
-         Play_Voice( character.samples[GLOAT] );
-         while( !Is_Voice_Done() ) if( Jon_Kbhit() ){done = 1;goto poo;}
-         Play_Voice( character.samples[DESPAIR] );
-         while( !Is_Voice_Done() ) if( Jon_Kbhit() ){done = 1;goto poo;}
-         Play_Voice( character.samples[DEATH] );
-         while( !Is_Voice_Done() ) if( Jon_Kbhit() ){done = 1;goto poo;}
-         Play_Voice( character.samples[VICTORY] );
-         while( !Is_Voice_Done() ) if( Jon_Kbhit() ){done = 1;goto poo;}
-
-         poo:
-
-         while( !Is_Voice_Done() ){}
-
-         sb_free_sample( character.samples[GREETING] );
-         sb_free_sample( character.samples[AFFIRMATION] );
-         sb_free_sample( character.samples[NEGATION] );
-         sb_free_sample( character.samples[GLOAT] );
-         sb_free_sample( character.samples[DESPAIR] );
-         sb_free_sample( character.samples[DEATH] );
-         sb_free_sample( character.samples[VICTORY] );
-
-         /* fprintf(stderr, "character %d is done \n", i); */
-
-         if( done )
-             break;
-
-        }
-#endif
-    /* End of temporary test thing */
-
     if (game_configuration.game_type == TournamentGame )
         tournament_init_print("G3DRPCAIE : FUSING NEURONS FOR AI");
     else
@@ -106,75 +60,6 @@ void Init_AI( WorldStuff *world_stuff )
 	ai_indices[5] = game_configuration.blue2_ai;
 	Load_All_AI((Player*)world_stuff->player_array, "gamedata/new_people.dat", ai_indices);
 
-#if 0
-    Load_AI( &world_stuff->player_array[0].character, "new_people.dat",
-             game_configuration.red0_ai );
-
-    if( game_configuration.game_type == TournamentGame ) {
-        tournament_init_print( "G3DRPCAIE : FUSING NEURONS FOR AI 0" );
-    }
-    else {
-        cylindrix_init_print( "G3DRPCAIE : FUSING NEURONS FOR AI 0" );
-    }
-
-    /* load red1 ai */
-
-    Load_AI( &world_stuff->player_array[1].character, "new_people.dat",
-             game_configuration.red1_ai );
-    
-    if( game_configuration.game_type == TournamentGame ) {
-        tournament_init_print( "G3DRPCAIE : FUSING NEURONS FOR AI 1" );
-    }
-    else {
-        cylindrix_init_print( "G3DRPCAIE : FUSING NEURONS FOR AI 1" );
-    }    
-
-
-    /* load red2 ai */
-
-    Load_AI( &world_stuff->player_array[2].character, "new_people.dat",
-             game_configuration.red2_ai );
-
-    if( game_configuration.game_type == TournamentGame ) {
-        tournament_init_print( "G3DRPCAIE : FUSING NEURONS FOR AI 2" );    
-    }
-    else {
-        cylindrix_init_print( "G3DRPCAIE : FUSING NEURONS FOR AI 2" );    
-    }
-
-
-    /* load blue0 ai */
-
-    Load_AI( &world_stuff->player_array[3].character, "new_people.dat",
-             game_configuration.blue0_ai );
-
-    if( game_configuration.game_type == TournamentGame ) {
-        tournament_init_print( "G3DRPCAIE : FUSING NEURONS FOR AI 3" );
-    }
-    else {
-        cylindrix_init_print( "G3DRPCAIE : FUSING NEURONS FOR AI 3" );
-    }
-
-
-    /* load blue1 ai */
-
-    Load_AI( &world_stuff->player_array[4].character, "new_people.dat",
-             game_configuration.blue1_ai );
-
-    if( game_configuration.game_type == TournamentGame ) {
-        tournament_init_print( "G3DRPCAIE : FUSING NEURONS FOR AI 4" );
-    }
-    else {
-        cylindrix_init_print( "G3DRPCAIE : FUSING NEURONS FOR AI 4" );
-    }
-
-
-    /* load blue2 ai */
-
-    Load_AI( &world_stuff->player_array[5].character, "people.dat\0",
-             game_configuration.blue2_ai );
-#endif
-             
     if (game_configuration.game_type == TournamentGame)
         tournament_init_print( "G3DRPCAIE : SYNAPSE PARSING ENABLED" );     
     else
@@ -218,50 +103,6 @@ void Init_AI( WorldStuff *world_stuff )
  
 } /* End of Init_AI */
 
-
-/* Load the ai file filename, and load in the ai_number'th character
-   and store it in character */
-#if 0
-void Load_AI( character_type *character, char *filename, int ai_number )
-    {
-     FILE *fp;
-	char newfilename[512];
-
-	sprintf(newfilename,"%s%s",g_DataPath,filename);
-
-     if( (fp = fopen( newfilename, "rb" )) == NULL ) /* Open input file */
-          SYS_Error("Error loading AI \n");
-
-     /* Move to the ai_number'th character in the file */
-     fseek( fp, sizeof( character_type ) * ai_number, SEEK_SET );
-      
-     /* Read the data into character */
-     fread( character, sizeof( character_type ), 1, fp );
-
-     fclose( fp );
-
-          /* Load the samples for this ai */
-          
-          
-          character->samples[GREETING]    = SYS_LoadSound( character->sample_filenames[GREETING] );
-          character->samples[AFFIRMATION] = SYS_LoadSound( character->sample_filenames[AFFIRMATION] );
-          character->samples[NEGATION]    = SYS_LoadSound(character->sample_filenames[NEGATION] );
-          character->samples[GLOAT]       = SYS_LoadSound(character->sample_filenames[GLOAT] );
-          character->samples[DESPAIR]     = SYS_LoadSound(character->sample_filenames[DESPAIR] );
-          character->samples[DEATH]       = SYS_LoadSound(character->sample_filenames[DEATH] );
-          character->samples[VICTORY]     = SYS_LoadSound(character->sample_filenames[VICTORY] );
-         
-//Johnm 12/2/2001 - Allow game to continue even with no sounds loaded
-/*
-          if( character->samples[GREETING] == NULL || character->samples[AFFIRMATION] == NULL ||
-              character->samples[NEGATION] == NULL || character->samples[GLOAT] == NULL ||
-              character->samples[DESPAIR]  == NULL || character->samples[DEATH] == NULL ||
-              character->samples[VICTORY]  == NULL )              
-               SYS_Error("Bad AI sound .wav filename \n");
-*/
-
-    } /* End of Load_AI */
-#endif
 
 static const int NUM_LINES_PER_CHARACTER = 18;
 static const int NUM_CHARACTERS = 50;
