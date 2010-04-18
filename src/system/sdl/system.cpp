@@ -183,6 +183,8 @@ int main( int argc, char* argv[] )
 	if ( SDL_Init( SDL_INIT_VIDEO ) < 0 )
 		SYS_Error( "Couldn't init SDL!\n" );
 
+	SDL_WM_SetCaption("cylindrix", "cylindrix");
+
 	putenv("__GL_SYNC_TO_VBLANK=1");
 	bool fullscreen = false;
 
@@ -230,10 +232,13 @@ int main( int argc, char* argv[] )
 					break;
 
 				case SDL_VIDEORESIZE:
-					g_width = event.resize.w;
-					g_height = event.resize.h;
-					glViewport(0, 0, g_width, g_height);
-					screen = SDL_SetVideoMode( event.resize.w, event.resize.h, bpp, SDL_HWSURFACE | SDL_RESIZABLE | SDL_OPENGL );
+					if (!fullscreen)
+					{
+						g_width = event.resize.w;
+						g_height = event.resize.h;
+						glViewport(0, 0, g_width, g_height);
+						screen = SDL_SetVideoMode( event.resize.w, event.resize.h, bpp, SDL_HWSURFACE | SDL_RESIZABLE | SDL_OPENGL );
+					}
 					break;
 			}
 		}
