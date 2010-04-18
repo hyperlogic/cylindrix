@@ -1461,6 +1461,7 @@ void move_decoy_projectile( Projectile *p, Vehicle *v, Player player_array[] )
     /* copy a bunch of shit from v into temp_vehicle so the movement functions
        will work */
 
+	temp_vehicle.alive = TRUE;
     temp_vehicle.surface_rad = v->surface_rad;
 
     temp_vehicle.air_forward_speed = v->air_forward_speed;
@@ -1705,7 +1706,6 @@ void move_decoy_projectile( Projectile *p, Vehicle *v, Player player_array[] )
     }
 
     /* move temp_vehicle forward */
-
     move_vehicle_forward( &temp_vehicle );
 
     /* increase temp_vehicles forward thrust */

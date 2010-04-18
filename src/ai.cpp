@@ -111,6 +111,17 @@ struct character_lines
 	char* lines[NUM_LINES_PER_CHARACTER];
 };
 
+static void space_to_null(char* str)
+{
+	char* p = str;
+	while (*p)
+	{
+		if (*p == ' ')
+			*p = 0;
+		p++;
+	}
+}
+
 void Load_All_AI(Player* players, const char* filename, int* ai_indices)
 {
 	// append path to front of filename.
@@ -154,10 +165,18 @@ void Load_All_AI(Player* players, const char* filename, int* ai_indices)
 	{
 		character_type* c = &players[i].character;
 		memset(c, 0, sizeof(character_type));
+		space_to_null(c_lines[ai_indices[i]].lines[0]);
 		strcpy(c->name, c_lines[ai_indices[i]].lines[0]);
+		space_to_null(c_lines[ai_indices[i]].lines[1]);
 		strcpy(c->filename, c_lines[ai_indices[i]].lines[1]);
 		for (j = 0; j < NUMBER_CHARACTER_SOUNDS; ++j)
+		{
+			space_to_null(c_lines[ai_indices[i]].lines[j+2]);
 			strcpy(c->sample_filenames[j], c_lines[ai_indices[i]].lines[j+2]);
+
+			// actually load the sample here.
+			c->samples[j] = SYS_LoadSound(c->sample_filenames[j]);
+		}
 		c->passive_aggressive = atoi(c_lines[ai_indices[i]].lines[9]);
 		c->bravery_cowardice = atoi(c_lines[ai_indices[i]].lines[10]);
 		c->aerial_ground = atoi(c_lines[ai_indices[i]].lines[11]);
