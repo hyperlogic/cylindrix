@@ -37,6 +37,8 @@ static float fadeAlpha = 0.0;
 
 extern unsigned char *double_buffer; // from prim.c
 
+extern int g_width, g_height;
+
 // converts the 8-bit double_buffer into the 32-bit rgbaFrameBuffer.
 void makeFrameBuffer( unsigned char* double_buffer )
 {
@@ -120,7 +122,8 @@ static void GL_RenderBuffer()
 
 	glMatrixMode( GL_PROJECTION );
 	glLoadIdentity();	
-	glOrtho( 0.0, 1.0, 0.0, 1.0, -1.0, 1.0 );
+	float aspect = (float)g_width/g_height;
+	glOrtho(-aspect, aspect, -1, 1, -1, 1);
 
 	glMatrixMode( GL_MODELVIEW );	
 	glLoadIdentity();
@@ -131,20 +134,21 @@ static void GL_RenderBuffer()
 	glEnable(GL_TEXTURE_2D);
 	glDisable(GL_LIGHTING);	
 
+	float orig_aspect = 1.33333f; // 4:3
 	glBegin( GL_POLYGON );
 	glColor3f( fadeAlpha, fadeAlpha, fadeAlpha );
 	
 	glTexCoord2f( 0, FBV );	
-	glVertex3f( 0, 0, 0 );
+	glVertex3f( -orig_aspect, -1, 0 );
 
 	glTexCoord2f( FBU, FBV );	
-	glVertex3f( 1, 0, 0 );
+	glVertex3f( orig_aspect, -1, 0 );
 
 	glTexCoord2f( FBU, 0 );	
-	glVertex3f( 1, 1, 0 );
+	glVertex3f( orig_aspect, 1, 0 );
 
 	glTexCoord2f( 0, 0 );	
-	glVertex3f( 0, 1, 0 );
+	glVertex3f( -orig_aspect, 1, 0 );
 	
 	glEnd();
 
@@ -277,7 +281,8 @@ void GL_DrawTube( WorldStuff* worldStuff, enum TubeType tubeType )
     glMatrixMode( GL_PROJECTION );
     glLoadIdentity();
 
-	gluPerspective( 90.5f, 1.4f, 0.1f, 50.0f );
+	float aspect = (float)g_width/g_height;
+	gluPerspective( 90.5f, aspect, 0.1f, 50.0f );
 
 	// AJT: todo take tubeType into account.	
 
@@ -436,7 +441,8 @@ void GL_SwapBuffers()
 
     glMatrixMode( GL_PROJECTION );
     glLoadIdentity();	
-    glOrtho( 0.0, 1.0, 0.0, 1.0, -1.0, 1.0 );
+	float aspect = (float)g_width/g_height;
+	glOrtho(-aspect, aspect, -1, 1, -1, 1);
 
     glMatrixMode( GL_MODELVIEW );	
     glLoadIdentity();
@@ -452,20 +458,21 @@ void GL_SwapBuffers()
 	glEnable( GL_BLEND );
 	glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
 	
+	float orig_aspect = 1.33333f; // 4:3
     glBegin( GL_POLYGON );
 	glColor4f( 1, 1, 1, 1 );
 	
 	glTexCoord2f( 0, FBV );	
-	glVertex3f( 0, 0, 0 );
+	glVertex3f( -orig_aspect, -1, 0 );
 
 	glTexCoord2f( FBU, FBV );	
-	glVertex3f( 1, 0, 0 );
+	glVertex3f( orig_aspect, -1, 0 );
 
 	glTexCoord2f( FBU, 0 );	
-	glVertex3f( 1, 1, 0 );
+	glVertex3f( orig_aspect, 1, 0 );
 
 	glTexCoord2f( 0, 0 );	
-	glVertex3f( 0, 1, 0 );
+	glVertex3f( -orig_aspect, 1, 0 );
 
 	glEnd();
 

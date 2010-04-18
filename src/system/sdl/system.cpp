@@ -166,12 +166,37 @@ static bool process()
 	return done;
 }
 
+int g_width = 0;
+int g_height = 0;
+
 int main( int argc, char* argv[] )
 {
 	if ( SDL_Init( SDL_INIT_VIDEO ) < 0 )
 		SYS_Error( "Couldn't init SDL!\n" );
 
-	SDL_Surface* screen = SDL_SetVideoMode( 800, 600, 32, SDL_HWSURFACE | SDL_RESIZABLE | SDL_OPENGL );
+	bool fullscreen = false;
+
+	// Get the current desktop width & height
+	const SDL_VideoInfo* videoInfo = SDL_GetVideoInfo();
+
+	int bpp;
+	SDL_Surface* screen;
+	if (fullscreen)
+	{
+		// fullscreen but dont change video mode.
+		g_width = videoInfo->current_w;
+		g_height = videoInfo->current_h;
+		bpp = videoInfo->vfmt->BitsPerPixel;
+		screen = SDL_SetVideoMode(g_width, g_height, bpp, SDL_HWSURFACE | SDL_OPENGL | SDL_FULLSCREEN);
+	}
+	else
+	{
+		// TODO: get this from a config file or something...
+//		g_width = 1024; g_height = 768;  // 4:3
+		g_width = 1280; g_height = 720;  // 16:9
+		bpp = videoInfo->vfmt->BitsPerPixel;
+		screen = SDL_SetVideoMode(g_width, g_height, bpp, SDL_HWSURFACE | SDL_OPENGL);
+	}
 
 	if ( !screen )
 		SYS_Error( "Couldn't create SDL screen!\n" );
