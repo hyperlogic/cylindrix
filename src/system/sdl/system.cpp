@@ -200,9 +200,6 @@ int main( int argc, char* argv[] )
 		g_height = videoInfo->current_h;
 		bpp = videoInfo->vfmt->BitsPerPixel;
 
-// HACK
-//		g_width /= 2;
-//		g_height /= 2;
 		screen = SDL_SetVideoMode(g_width, g_height, bpp, SDL_HWSURFACE | SDL_OPENGL | SDL_FULLSCREEN | SDL_DOUBLEBUF);
 	}
 	else
