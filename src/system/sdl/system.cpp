@@ -8,6 +8,15 @@
 #include "../system.h"
 #include <stdarg.h>
 
+#ifdef DARWIN
+#include <OpenGL/gl.h>
+#include <OpenGL/glu.h>
+#include <GLUT/glut.h>
+#else
+#include <GL/gl.h>
+#include <GL/glu.h>
+#endif
+
 unsigned char keysDown[255];
 unsigned char keysPressed[255];
 
@@ -24,8 +33,8 @@ void SYS_TimerInit()
 
 float SYS_GetTimeSeconds()
 {
-	clock_t t = clock();
-	return (float)t / (float)CLOCKS_PER_SEC;
+	unsigned int now = SDL_GetTicks();  // milliseconds
+	return now / 1000.0f;	// convert to seconds.
 }
 
 unsigned long SYS_GetTimeMS()
@@ -174,6 +183,7 @@ int main( int argc, char* argv[] )
 	if ( SDL_Init( SDL_INIT_VIDEO ) < 0 )
 		SYS_Error( "Couldn't init SDL!\n" );
 
+	putenv("__GL_SYNC_TO_VBLANK=1");
 	bool fullscreen = false;
 
 	// Get the current desktop width & height
@@ -187,7 +197,11 @@ int main( int argc, char* argv[] )
 		g_width = videoInfo->current_w;
 		g_height = videoInfo->current_h;
 		bpp = videoInfo->vfmt->BitsPerPixel;
-		screen = SDL_SetVideoMode(g_width, g_height, bpp, SDL_HWSURFACE | SDL_OPENGL | SDL_FULLSCREEN);
+
+// HACK
+//		g_width /= 2;
+//		g_height /= 2;
+		screen = SDL_SetVideoMode(g_width, g_height, bpp, SDL_HWSURFACE | SDL_OPENGL | SDL_FULLSCREEN | SDL_DOUBLEBUF);
 	}
 	else
 	{
@@ -195,7 +209,7 @@ int main( int argc, char* argv[] )
 //		g_width = 1024; g_height = 768;  // 4:3
 		g_width = 1280; g_height = 720;  // 16:9
 		bpp = videoInfo->vfmt->BitsPerPixel;
-		screen = SDL_SetVideoMode(g_width, g_height, bpp, SDL_HWSURFACE | SDL_OPENGL);
+		screen = SDL_SetVideoMode(g_width, g_height, bpp, SDL_HWSURFACE | SDL_OPENGL | SDL_DOUBLEBUF | SDL_RESIZABLE);
 	}
 
 	if ( !screen )
@@ -216,7 +230,10 @@ int main( int argc, char* argv[] )
 					break;
 
 				case SDL_VIDEORESIZE:
-					screen = SDL_SetVideoMode( event.resize.w, event.resize.h, 32, SDL_HWSURFACE | SDL_RESIZABLE | SDL_OPENGL );
+					g_width = event.resize.w;
+					g_height = event.resize.h;
+					glViewport(0, 0, g_width, g_height);
+					screen = SDL_SetVideoMode( event.resize.w, event.resize.h, bpp, SDL_HWSURFACE | SDL_RESIZABLE | SDL_OPENGL );
 					break;
 			}
 		}

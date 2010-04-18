@@ -188,7 +188,7 @@ void IntroProcess()
 	const float fade_time = 0.5f;
 	const float wait_time = 2.0f;
 	const float exit_fade_rate = 2.0f;
-	float fade = 1.0f;		
+	float fade = 1.0f;
 
 	switch ( intro_sub_state )
 	{
