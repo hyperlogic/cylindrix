@@ -216,6 +216,11 @@ int main( int argc, char* argv[] )
 
 	GameInit( argc, const_cast<const char**>(argv) );
 
+	// report sdl errors
+	const char* error = SDL_GetError();
+	if (error[0] != 0)
+		printf("SDL_Error = %s\n", error);
+
 	bool done = false;
 	while ( !done )
 	{
@@ -236,12 +241,19 @@ int main( int argc, char* argv[] )
 						glViewport(0, 0, g_width, g_height);
 						screen = SDL_SetVideoMode( event.resize.w, event.resize.h, bpp, SDL_HWSURFACE | SDL_RESIZABLE | SDL_OPENGL );
 					}
+					printf("SDL_VIDEORESIZE: (%d, %d)\n", event.resize.w, event.resize.h);
 					break;
 			}
 		}
 
 		if ( !done )
 			done = process();
+
+		// report sdl errors
+		const char* error = SDL_GetError();
+		if (error[0] != 0)
+			printf("SDL_Error = %s\n", error);
+		
 	}
 
 	GameShutdown();

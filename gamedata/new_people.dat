@@ -1,703 +1,703 @@
-Capn_Hardgeus                                # Name
-cap.pcx                                      # Pcx file
-wav_data/races/human/capgrt.wav              # Greeting
-wav_data/races/human/capgrt.wav              # Affirmation
-wav_data/races/human/capgrt.wav              # Negation
-wav_data/races/human/capgrt.wav              # Gloat
-wav_data/races/human/capgrt.wav              # Despair
-wav_data/races/human/capgrt.wav              # Death
-wav_data/races/human/capgrt.wav              # Victory
-51                                           # Passive Agressive
-55                                           # Bravery Cowardice
-59                                           # Aerial Ground
-50                                           # Obedience Disobedience
-52                                           # Pylon Grab
-53                                           # Radar Kill
-50                                           # Radar Protect
-3                                            # Skill Level
-0                                            # Preferred Vehicle
-
-Major_Flowers                                # Name
-maj.pcx                                      # Pcx file
-wav_data/races/human/majgrt.wav              # Greeting
-wav_data/races/human/majgrt.wav              # Affirmation
-wav_data/races/human/majgrt.wav              # Negation
-wav_data/races/human/majgrt.wav              # Gloat
-wav_data/races/human/majgrt.wav              # Despair
-wav_data/races/human/majgrt.wav              # Death
-wav_data/races/human/majgrt.wav              # Victory
-50                                           # Passive Agressive
-50                                           # Bravery Cowardice
-45                                           # Aerial Ground
-50                                           # Obedience Disobedience
-59                                           # Pylon Grab
-50                                           # Radar Kill
-50                                           # Radar Protect
-2                                            # Skill Level
-0                                            # Preferred Vehicle
-
-Richard_Stryker                              # Name
-ric.pcx                                      # Pcx file
-wav_data/races/human/ricgrt.wav              # Greeting
-wav_data/races/human/ricgrt.wav              # Affirmation
-wav_data/races/human/ricgrt.wav              # Negation
-wav_data/races/human/ricgrt.wav              # Gloat
-wav_data/races/human/ricgrt.wav              # Despair
-wav_data/races/human/ricgrt.wav              # Death
-wav_data/races/human/ricgrt.wav              # Victory
-52                                           # Passive Agressive
-50                                           # Bravery Cowardice
-45                                           # Aerial Ground
-50                                           # Obedience Disobedience
-50                                           # Pylon Grab
-56                                           # Radar Kill
-50                                           # Radar Protect
-3                                            # Skill Level
-0                                            # Preferred Vehicle
-
-Cindy_Vicious                                # Name
-cin.pcx                                      # Pcx file
-wav_data/races/human/cingrt.wav              # Greeting
-wav_data/races/human/cingrt.wav              # Affirmation
-wav_data/races/human/cingrt.wav              # Negation
-wav_data/races/human/cingrt.wav              # Gloat
-wav_data/races/human/cingrt.wav              # Despair
-wav_data/races/human/cingrt.wav              # Death
-wav_data/races/human/cingrt.wav              # Victory
-55                                           # Passive Agressive
-50                                           # Bravery Cowardice
-55                                           # Aerial Ground
-50                                           # Obedience Disobedience
-50                                           # Pylon Grab
-50                                           # Radar Kill
-50                                           # Radar Protect
-3                                            # Skill Level
-0                                            # Preferred Vehicle
-
-Preacher                                     # Name
-pre.pcx                                      # Pcx file
-wav_data/races/human/pregrt.wav              # Greeting
-wav_data/races/human/pregrt.wav              # Affirmation
-wav_data/races/human/pregrt.wav              # Negation
-wav_data/races/human/pregrt.wav              # Gloat
-wav_data/races/human/pregrt.wav              # Despair
-wav_data/races/human/pregrt.wav              # Death
-wav_data/races/human/pregrt.wav              # Victory
-49                                           # Passive Agressive
-50                                           # Bravery Cowardice
-45                                           # Aerial Ground
-50                                           # Obedience Disobedience
-52                                           # Pylon Grab
-45                                           # Radar Kill
-51                                           # Radar Protect
-1                                            # Skill Level
-0                                            # Preferred Vehicle
-
-Mr_Kent                                      # Name
-mrk.pcx                                      # Pcx file
-wav_data/races/human/mrkgrt.wav              # Greeting
-wav_data/races/human/mrkgrt.wav              # Affirmation
-wav_data/races/human/mrkgrt.wav              # Negation
-wav_data/races/human/mrkgrt.wav              # Gloat
-wav_data/races/human/mrkgrt.wav              # Despair
-wav_data/races/human/mrkgrt.wav              # Death
-wav_data/races/human/mrkgrt.wav              # Victory
-53                                           # Passive Agressive
-50                                           # Bravery Cowardice
-35                                           # Aerial Ground
-50                                           # Obedience Disobedience
-50                                           # Pylon Grab
-50                                           # Radar Kill
-50                                           # Radar Protect
-1                                            # Skill Level
-0                                            # Preferred Vehicle
-
-Kristen_Masters                              # Name
-kri.pcx                                      # Pcx file
-wav_data/races/human/krigrt.wav              # Greeting
-wav_data/races/human/krigrt.wav              # Affirmation
-wav_data/races/human/krigrt.wav              # Negation
-wav_data/races/human/krigrt.wav              # Gloat
-wav_data/races/human/krigrt.wav              # Despair
-wav_data/races/human/krigrt.wav              # Death
-wav_data/races/human/krigrt.wav              # Victory
-50                                           # Passive Agressive
-50                                           # Bravery Cowardice
-50                                           # Aerial Ground
-50                                           # Obedience Disobedience
-50                                           # Pylon Grab
-55                                           # Radar Kill
-50                                           # Radar Protect
-3                                            # Skill Level
-0                                            # Preferred Vehicle
-
-Shana_Blake                                  # Name
-sha.pcx                                      # Pcx file
-wav_data/races/human/shagrt.wav              # Greeting
-wav_data/races/human/shagrt.wav              # Affirmation
-wav_data/races/human/shagrt.wav              # Negation
-wav_data/races/human/shagrt.wav              # Gloat
-wav_data/races/human/shagrt.wav              # Despair
-wav_data/races/human/shagrt.wav              # Death
-wav_data/races/human/shagrt.wav              # Victory
-80                                           # Passive Agressive
-50                                           # Bravery Cowardice
-50                                           # Aerial Ground
-50                                           # Obedience Disobedience
-50                                           # Pylon Grab
-50                                           # Radar Kill
-50                                           # Radar Protect
-3                                            # Skill Level
-0                                            # Preferred Vehicle
-
-Kelly_Sanders                                # Name
-kel.pcx                                      # Pcx file
-wav_data/races/human/kelgrt.wav              # Greeting
-wav_data/races/human/kelgrt.wav              # Affirmation
-wav_data/races/human/kelgrt.wav              # Negation
-wav_data/races/human/kelgrt.wav              # Gloat
-wav_data/races/human/kelgrt.wav              # Despair
-wav_data/races/human/kelgrt.wav              # Death
-wav_data/races/human/kelgrt.wav              # Victory
-45                                           # Passive Agressive
-50                                           # Bravery Cowardice
-50                                           # Aerial Ground
-50                                           # Obedience Disobedience
-45                                           # Pylon Grab
-60                                           # Radar Kill
-50                                           # Radar Protect
-3                                            # Skill Level
-0                                            # Preferred Vehicle
-
-Megan_Hunter                                 # Name
-meg.pcx                                      # Pcx file
-wav_data/races/human/meggrt.wav              # Greeting
-wav_data/races/human/meggrt.wav              # Affirmation
-wav_data/races/human/meggrt.wav              # Negation
-wav_data/races/human/meggrt.wav              # Gloat
-wav_data/races/human/meggrt.wav              # Despair
-wav_data/races/human/meggrt.wav              # Death
-wav_data/races/human/meggrt.wav              # Victory
-50                                           # Passive Agressive
-50                                           # Bravery Cowardice
-52                                           # Aerial Ground
-50                                           # Obedience Disobedience
-59                                           # Pylon Grab
-50                                           # Radar Kill
-50                                           # Radar Protect
-3                                            # Skill Level
-0                                            # Preferred Vehicle
-
-Bok                                          # Name
-bok.pcx                                      # Pcx file
-wav_data/races/bok/bokgrt.wav                # Greeting
-wav_data/races/bok/bokgrt.wav                # Affirmation
-wav_data/races/bok/bokgrt.wav                # Negation
-wav_data/races/bok/bokgrt.wav                # Gloat
-wav_data/races/bok/bokgrt.wav                # Despair
-wav_data/races/bok/bokgrt.wav                # Death
-wav_data/races/bok/bokgrt.wav                # Victory
-48                                           # Passive Agressive
-50                                           # Bravery Cowardice
-55                                           # Aerial Ground
-50                                           # Obedience Disobedience
-59                                           # Pylon Grab
-50                                           # Radar Kill
-50                                           # Radar Protect
-1                                            # Skill Level
-0                                            # Preferred Vehicle
-
-N'Bok                                        # Name
-nbo.pcx                                      # Pcx file
-wav_data/races/bok/nbogrt.wav                # Greeting
-wav_data/races/bok/nbogrt.wav                # Affirmation
-wav_data/races/bok/nbogrt.wav                # Negation
-wav_data/races/bok/nbogrt.wav                # Gloat
-wav_data/races/bok/nbogrt.wav                # Despair
-wav_data/races/bok/nbogrt.wav                # Death
-wav_data/races/bok/nbogrt.wav                # Victory
-49                                           # Passive Agressive
-50                                           # Bravery Cowardice
-45                                           # Aerial Ground
-50                                           # Obedience Disobedience
-55                                           # Pylon Grab
-50                                           # Radar Kill
-50                                           # Radar Protect
-1                                            # Skill Level
-0                                            # Preferred Vehicle
-
-T'Bok                                        # Name
-tbo.pcx                                      # Pcx file
-wav_data/races/bok/tbogrt.wav                # Greeting
-wav_data/races/bok/tbogrt.wav                # Affirmation
-wav_data/races/bok/tbogrt.wav                # Negation
-wav_data/races/bok/tbogrt.wav                # Gloat
-wav_data/races/bok/tbogrt.wav                # Despair
-wav_data/races/bok/tbogrt.wav                # Death
-wav_data/races/bok/tbogrt.wav                # Victory
-50                                           # Passive Agressive
-55                                           # Bravery Cowardice
-55                                           # Aerial Ground
-50                                           # Obedience Disobedience
-55                                           # Pylon Grab
-50                                           # Radar Kill
-50                                           # Radar Protect
-1                                            # Skill Level
-0                                            # Preferred Vehicle
-
-Pubert                                       # Name
-pub.pcx                                      # Pcx file
-wav_data/races/slar/pubgrt.wav               # Greeting
-wav_data/races/slar/pubgrt.wav               # Affirmation
-wav_data/races/slar/pubgrt.wav               # Negation
-wav_data/races/slar/pubgrt.wav               # Gloat
-wav_data/races/slar/pubgrt.wav               # Despair
-wav_data/races/slar/pubgrt.wav               # Death
-wav_data/races/slar/pubgrt.wav               # Victory
-57                                           # Passive Agressive
-50                                           # Bravery Cowardice
-55                                           # Aerial Ground
-50                                           # Obedience Disobedience
-50                                           # Pylon Grab
-55                                           # Radar Kill
-50                                           # Radar Protect
-3                                            # Skill Level
-0                                            # Preferred Vehicle
-
-Gall                                         # Name
-gal.pcx                                      # Pcx file
-wav_data/races/slar/galgrt.wav               # Greeting
-wav_data/races/slar/galgrt.wav               # Affirmation
-wav_data/races/slar/galgrt.wav               # Negation
-wav_data/races/slar/galgrt.wav               # Gloat
-wav_data/races/slar/galgrt.wav               # Despair
-wav_data/races/slar/galgrt.wav               # Death
-wav_data/races/slar/galgrt.wav               # Victory
-55                                           # Passive Agressive
-50                                           # Bravery Cowardice
-55                                           # Aerial Ground
-50                                           # Obedience Disobedience
-50                                           # Pylon Grab
-50                                           # Radar Kill
-50                                           # Radar Protect
-3                                            # Skill Level
-0                                            # Preferred Vehicle
-
-Septic                                       # Name
-sep.pcx                                      # Pcx file
-wav_data/races/slar/sepgrt.wav               # Greeting
-wav_data/races/slar/sepgrt.wav               # Affirmation
-wav_data/races/slar/sepgrt.wav               # Negation
-wav_data/races/slar/sepgrt.wav               # Gloat
-wav_data/races/slar/sepgrt.wav               # Despair
-wav_data/races/slar/sepgrt.wav               # Death
-wav_data/races/slar/sepgrt.wav               # Victory
-55                                           # Passive Agressive
-50                                           # Bravery Cowardice
-55                                           # Aerial Ground
-50                                           # Obedience Disobedience
-50                                           # Pylon Grab
-50                                           # Radar Kill
-50                                           # Radar Protect
-3                                            # Skill Level
-0                                            # Preferred Vehicle
-
-Hotwire                                      # Name
-hot.pcx                                      # Pcx file
-wav_data/races/scavenge/hotgrt.wav           # Greeting
-wav_data/races/scavenge/hotgrt.wav           # Affirmation
-wav_data/races/scavenge/hotgrt.wav           # Negation
-wav_data/races/scavenge/hotgrt.wav           # Gloat
-wav_data/races/scavenge/hotgrt.wav           # Despair
-wav_data/races/scavenge/hotgrt.wav           # Death
-wav_data/races/scavenge/hotgrt.wav           # Victory
-50                                           # Passive Agressive
-50                                           # Bravery Cowardice
-45                                           # Aerial Ground
-50                                           # Obedience Disobedience
-55                                           # Pylon Grab
-50                                           # Radar Kill
-50                                           # Radar Protect
-0                                            # Skill Level
-0                                            # Preferred Vehicle
-
-Crusty                                       # Name
-cru.pcx                                      # Pcx file
-wav_data/races/scavenge/crugrt.wav           # Greeting
-wav_data/races/scavenge/crugrt.wav           # Affirmation
-wav_data/races/scavenge/crugrt.wav           # Negation
-wav_data/races/scavenge/crugrt.wav           # Gloat
-wav_data/races/scavenge/crugrt.wav           # Despair
-wav_data/races/scavenge/crugrt.wav           # Death
-wav_data/races/scavenge/crugrt.wav           # Victory
-55                                           # Passive Agressive
-50                                           # Bravery Cowardice
-55                                           # Aerial Ground
-50                                           # Obedience Disobedience
-50                                           # Pylon Grab
-50                                           # Radar Kill
-50                                           # Radar Protect
-0                                            # Skill Level
-0                                            # Preferred Vehicle
-
-Greko                                        # Name
-gre.pcx                                      # Pcx file
-wav_data/races/scavenge/gregrt.wav           # Greeting
-wav_data/races/scavenge/gregrt.wav           # Affirmation
-wav_data/races/scavenge/gregrt.wav           # Negation
-wav_data/races/scavenge/gregrt.wav           # Gloat
-wav_data/races/scavenge/gregrt.wav           # Despair
-wav_data/races/scavenge/gregrt.wav           # Death
-wav_data/races/scavenge/gregrt.wav           # Victory
-55                                           # Passive Agressive
-50                                           # Bravery Cowardice
-45                                           # Aerial Ground
-50                                           # Obedience Disobedience
-50                                           # Pylon Grab
-50                                           # Radar Kill
-50                                           # Radar Protect
-1                                            # Skill Level
-0                                            # Preferred Vehicle
-
-Crystal                                      # Name
-cry.pcx                                      # Pcx file
-wav_data/races/succubi/crygrt.wav            # Greeting
-wav_data/races/succubi/crygrt.wav            # Affirmation
-wav_data/races/succubi/crygrt.wav            # Negation
-wav_data/races/succubi/crygrt.wav            # Gloat
-wav_data/races/succubi/crygrt.wav            # Despair
-wav_data/races/succubi/crygrt.wav            # Death
-wav_data/races/succubi/crygrt.wav            # Victory
-50                                           # Passive Agressive
-50                                           # Bravery Cowardice
-55                                           # Aerial Ground
-50                                           # Obedience Disobedience
-55                                           # Pylon Grab
-50                                           # Radar Kill
-50                                           # Radar Protect
-2                                            # Skill Level
-0                                            # Preferred Vehicle
-
-Glacia                                       # Name
-gla.pcx                                      # Pcx file
-wav_data/races/succubi/glagrt.wav            # Greeting
-wav_data/races/succubi/glagrt.wav            # Affirmation
-wav_data/races/succubi/glagrt.wav            # Negation
-wav_data/races/succubi/glagrt.wav            # Gloat
-wav_data/races/succubi/glagrt.wav            # Despair
-wav_data/races/succubi/glagrt.wav            # Death
-wav_data/races/succubi/glagrt.wav            # Victory
-55                                           # Passive Agressive
-50                                           # Bravery Cowardice
-55                                           # Aerial Ground
-50                                           # Obedience Disobedience
-50                                           # Pylon Grab
-50                                           # Radar Kill
-50                                           # Radar Protect
-1                                            # Skill Level
-0                                            # Preferred Vehicle
-
-Azuria                                       # Name
-azu.pcx                                      # Pcx file
-wav_data/races/succubi/azugrt.wav            # Greeting
-wav_data/races/succubi/azugrt.wav            # Affirmation
-wav_data/races/succubi/azugrt.wav            # Negation
-wav_data/races/succubi/azugrt.wav            # Gloat
-wav_data/races/succubi/azugrt.wav            # Despair
-wav_data/races/succubi/azugrt.wav            # Death
-wav_data/races/succubi/azugrt.wav            # Victory
-55                                           # Passive Agressive
-50                                           # Bravery Cowardice
-45                                           # Aerial Ground
-50                                           # Obedience Disobedience
-50                                           # Pylon Grab
-50                                           # Radar Kill
-50                                           # Radar Protect
-2                                            # Skill Level
-0                                            # Preferred Vehicle
-
-Baal                                         # Name
-baa.pcx                                      # Pcx file
-wav_data/races/overlord/baagrt.wav           # Greeting
-wav_data/races/overlord/baagrt.wav           # Affirmation
-wav_data/races/overlord/baagrt.wav           # Negation
-wav_data/races/overlord/baagrt.wav           # Gloat
-wav_data/races/overlord/baagrt.wav           # Despair
-wav_data/races/overlord/baagrt.wav           # Death
-wav_data/races/overlord/baagrt.wav           # Victory
-55                                           # Passive Agressive
-50                                           # Bravery Cowardice
-55                                           # Aerial Ground
-50                                           # Obedience Disobedience
-50                                           # Pylon Grab
-50                                           # Radar Kill
-50                                           # Radar Protect
-3                                            # Skill Level
-0                                            # Preferred Vehicle
-
-Mephisto                                     # Name
-mep.pcx                                      # Pcx file
-wav_data/races/overlord/mepgrt.wav           # Greeting
-wav_data/races/overlord/mepgrt.wav           # Affirmation
-wav_data/races/overlord/mepgrt.wav           # Negation
-wav_data/races/overlord/mepgrt.wav           # Gloat
-wav_data/races/overlord/mepgrt.wav           # Despair
-wav_data/races/overlord/mepgrt.wav           # Death
-wav_data/races/overlord/mepgrt.wav           # Victory
-55                                           # Passive Agressive
-50                                           # Bravery Cowardice
-55                                           # Aerial Ground
-50                                           # Obedience Disobedience
-54                                           # Pylon Grab
-55                                           # Radar Kill
-50                                           # Radar Protect
-3                                            # Skill Level
-0                                            # Preferred Vehicle
-
-Malfator                                     # Name
-mal.pcx                                      # Pcx file
-wav_data/races/overlord/malgrt.wav           # Greeting
-wav_data/races/overlord/malgrt.wav           # Affirmation
-wav_data/races/overlord/malgrt.wav           # Negation
-wav_data/races/overlord/malgrt.wav           # Gloat
-wav_data/races/overlord/malgrt.wav           # Despair
-wav_data/races/overlord/malgrt.wav           # Death
-wav_data/races/overlord/malgrt.wav           # Victory
-55                                           # Passive Agressive
-50                                           # Bravery Cowardice
-55                                           # Aerial Ground
-50                                           # Obedience Disobedience
-50                                           # Pylon Grab
-55                                           # Radar Kill
-50                                           # Radar Protect
-3                                            # Skill Level
-0                                            # Preferred Vehicle
-
-Anubis                                       # Name
-anu.pcx                                      # Pcx file
-wav_data/races/pharoah/anugrt.wav            # Greeting
-wav_data/races/pharoah/anugrt.wav            # Affirmation
-wav_data/races/pharoah/anugrt.wav            # Negation
-wav_data/races/pharoah/anugrt.wav            # Gloat
-wav_data/races/pharoah/anugrt.wav            # Despair
-wav_data/races/pharoah/anugrt.wav            # Death
-wav_data/races/pharoah/anugrt.wav            # Victory
-56                                           # Passive Agressive
-50                                           # Bravery Cowardice
-55                                           # Aerial Ground
-50                                           # Obedience Disobedience
-53                                           # Pylon Grab
-51                                           # Radar Kill
-50                                           # Radar Protect
-3                                            # Skill Level
-0                                            # Preferred Vehicle
-
-Bast                                         # Name
-bas.pcx                                      # Pcx file
-wav_data/races/pharoah/basgrt.wav            # Greeting
-wav_data/races/pharoah/basgrt.wav            # Affirmation
-wav_data/races/pharoah/basgrt.wav            # Negation
-wav_data/races/pharoah/basgrt.wav            # Gloat
-wav_data/races/pharoah/basgrt.wav            # Despair
-wav_data/races/pharoah/basgrt.wav            # Death
-wav_data/races/pharoah/basgrt.wav            # Victory
-56                                           # Passive Agressive
-50                                           # Bravery Cowardice
-55                                           # Aerial Ground
-50                                           # Obedience Disobedience
-53                                           # Pylon Grab
-51                                           # Radar Kill
-50                                           # Radar Protect
-3                                            # Skill Level
-0                                            # Preferred Vehicle
-
-Horus                                        # Name
-hor.pcx                                      # Pcx file
-wav_data/races/pharoah/horgrt.wav            # Greeting
-wav_data/races/pharoah/horgrt.wav            # Affirmation
-wav_data/races/pharoah/horgrt.wav            # Negation
-wav_data/races/pharoah/horgrt.wav            # Gloat
-wav_data/races/pharoah/horgrt.wav            # Despair
-wav_data/races/pharoah/horgrt.wav            # Death
-wav_data/races/pharoah/horgrt.wav            # Victory
-56                                           # Passive Agressive
-50                                           # Bravery Cowardice
-55                                           # Aerial Ground
-50                                           # Obedience Disobedience
-53                                           # Pylon Grab
-51                                           # Radar Kill
-50                                           # Radar Protect
-3                                            # Skill Level
-0                                            # Preferred Vehicle
-
-Nebula                                       # Name
-neb.pcx                                      # Pcx file
-wav_data/races/watchers/nebgrt.wav           # Greeting
-wav_data/races/watchers/nebgrt.wav           # Affirmation
-wav_data/races/watchers/nebgrt.wav           # Negation
-wav_data/races/watchers/nebgrt.wav           # Gloat
-wav_data/races/watchers/nebgrt.wav           # Despair
-wav_data/races/watchers/nebgrt.wav           # Death
-wav_data/races/watchers/nebgrt.wav           # Victory
-50                                           # Passive Agressive
-50                                           # Bravery Cowardice
-45                                           # Aerial Ground
-50                                           # Obedience Disobedience
-55                                           # Pylon Grab
-55                                           # Radar Kill
-50                                           # Radar Protect
-3                                            # Skill Level
-0                                            # Preferred Vehicle
-
-Polaris                                      # Name
-pol.pcx                                      # Pcx file
-wav_data/races/watchers/polgrt.wav           # Greeting
-wav_data/races/watchers/polgrt.wav           # Affirmation
-wav_data/races/watchers/polgrt.wav           # Negation
-wav_data/races/watchers/polgrt.wav           # Gloat
-wav_data/races/watchers/polgrt.wav           # Despair
-wav_data/races/watchers/polgrt.wav           # Death
-wav_data/races/watchers/polgrt.wav           # Victory
-49                                           # Passive Agressive
-50                                           # Bravery Cowardice
-45                                           # Aerial Ground
-50                                           # Obedience Disobedience
-52                                           # Pylon Grab
-55                                           # Radar Kill
-50                                           # Radar Protect
-1                                            # Skill Level
-0                                            # Preferred Vehicle
-
-Quasar                                       # Name
-qua.pcx                                      # Pcx file
-wav_data/races/watchers/quagrt.wav           # Greeting
-wav_data/races/watchers/quagrt.wav           # Affirmation
-wav_data/races/watchers/quagrt.wav           # Negation
-wav_data/races/watchers/quagrt.wav           # Gloat
-wav_data/races/watchers/quagrt.wav           # Despair
-wav_data/races/watchers/quagrt.wav           # Death
-wav_data/races/watchers/quagrt.wav           # Victory
-45                                           # Passive Agressive
-50                                           # Bravery Cowardice
-45                                           # Aerial Ground
-50                                           # Obedience Disobedience
-60                                           # Pylon Grab
-50                                           # Radar Kill
-50                                           # Radar Protect
-1                                            # Skill Level
-0                                            # Preferred Vehicle
-
-R                                            # Name
-r.pcx                                        # Pcx file
-wav_data/races/sentry/rgrt.wav               # Greeting
-wav_data/races/sentry/rgrt.wav               # Affirmation
-wav_data/races/sentry/rgrt.wav               # Negation
-wav_data/races/sentry/rgrt.wav               # Gloat
-wav_data/races/sentry/rgrt.wav               # Despair
-wav_data/races/sentry/rgrt.wav               # Death
-wav_data/races/sentry/rgrt.wav               # Victory
-50                                           # Passive Agressive
-50                                           # Bravery Cowardice
-55                                           # Aerial Ground
-50                                           # Obedience Disobedience
-50                                           # Pylon Grab
-50                                           # Radar Kill
-50                                           # Radar Protect
-2                                            # Skill Level
-0                                            # Preferred Vehicle
-
-G                                            # Name
-g.pcx                                        # Pcx file
-wav_data/races/sentry/ggrt.wav               # Greeting
-wav_data/races/sentry/ggrt.wav               # Affirmation
-wav_data/races/sentry/ggrt.wav               # Negation
-wav_data/races/sentry/ggrt.wav               # Gloat
-wav_data/races/sentry/ggrt.wav               # Despair
-wav_data/races/sentry/ggrt.wav               # Death
-wav_data/races/sentry/ggrt.wav               # Victory
-50                                           # Passive Agressive
-50                                           # Bravery Cowardice
-55                                           # Aerial Ground
-50                                           # Obedience Disobedience
-55                                           # Pylon Grab
-50                                           # Radar Kill
-50                                           # Radar Protect
-2                                            # Skill Level
-0                                            # Preferred Vehicle
-
-B                                            # Name
-b.pcx                                        # Pcx file
-wav_data/races/sentry/bgrt.wav               # Greeting
-wav_data/races/sentry/bgrt.wav               # Affirmation
-wav_data/races/sentry/bgrt.wav               # Negation
-wav_data/races/sentry/bgrt.wav               # Gloat
-wav_data/races/sentry/bgrt.wav               # Despair
-wav_data/races/sentry/bgrt.wav               # Death
-wav_data/races/sentry/bgrt.wav               # Victory
-50                                           # Passive Agressive
-50                                           # Bravery Cowardice
-55                                           # Aerial Ground
-50                                           # Obedience Disobedience
-50                                           # Pylon Grab
-55                                           # Radar Kill
-50                                           # Radar Protect
-2                                            # Skill Level
-0                                            # Preferred Vehicle
-
-B00B                                         # Name
-b00b.pcx                                     # Pcx file
-wav_data/races/biomech/b00grt.wav            # Greeting
-wav_data/races/biomech/b00grt.wav            # Affirmation
-wav_data/races/biomech/b00grt.wav            # Negation
-wav_data/races/biomech/b00grt.wav            # Gloat
-wav_data/races/biomech/b00grt.wav            # Despair
-wav_data/races/biomech/b00grt.wav            # Death
-wav_data/races/biomech/b00grt.wav            # Victory
-55                                           # Passive Agressive
-50                                           # Bravery Cowardice
-55                                           # Aerial Ground
-50                                           # Obedience Disobedience
-50                                           # Pylon Grab
-52                                           # Radar Kill
-50                                           # Radar Protect
-3                                            # Skill Level
-0                                            # Preferred Vehicle
-
-D23B6M                                       # Name
-d23b6m.pcx                                   # Pcx file
-wav_data/races/biomech/d23grt.wav            # Greeting
-wav_data/races/biomech/d23grt.wav            # Affirmation
-wav_data/races/biomech/d23grt.wav            # Negation
-wav_data/races/biomech/d23grt.wav            # Gloat
-wav_data/races/biomech/d23grt.wav            # Despair
-wav_data/races/biomech/d23grt.wav            # Death
-wav_data/races/biomech/d23grt.wav            # Victory
-55                                           # Passive Agressive
-50                                           # Bravery Cowardice
-55                                           # Aerial Ground
-50                                           # Obedience Disobedience
-50                                           # Pylon Grab
-55                                           # Radar Kill
-50                                           # Radar Protect
-3                                            # Skill Level
-0                                            # Preferred Vehicle
-
-JLDV8                                        # Name
-jldv8.pcx                                    # Pcx file
-wav_data/races/biomech/jldgrt.wav            # Greeting
-wav_data/races/biomech/jldgrt.wav            # Affirmation
-wav_data/races/biomech/jldgrt.wav            # Negation
-wav_data/races/biomech/jldgrt.wav            # Gloat
-wav_data/races/biomech/jldgrt.wav            # Despair
-wav_data/races/biomech/jldgrt.wav            # Death
-wav_data/races/biomech/jldgrt.wav            # Victory
-50                                           # Passive Agressive
-50                                           # Bravery Cowardice
-45                                           # Aerial Ground
-50                                           # Obedience Disobedience
-55                                           # Pylon Grab
-53                                           # Radar Kill
-50                                           # Radar Protect
-3                                            # Skill Level
-0                                            # Preferred Vehicle
-
+name:Capn_Hardgeus
+pcx_file:cap.pcx
+greeting:wav_data/races/human/capgrt.wav
+affirmation:wav_data/races/human/capyes.wav
+negation:wav_data/races/human/capnop.wav
+gloat:wav_data/races/human/capglt.wav
+despair:wav_data/races/human/capdes.wav
+death:wav_data/races/human/capdie.wav
+victory:wav_data/races/human/capkil.wav
+passive_aggressive:51
+bravery_cowardice:55
+aerial_ground:59
+obedience_disobedience:50
+pylon_grab:52
+radar_kill:53
+radar_protect:50
+skill_level:3
+preferred_vehicle:0
+%
+name:Major_Flowers
+pcx_file:maj.pcx
+greeting:wav_data/races/human/majgrt.wav
+affirmation:wav_data/races/human/majyes.wav
+negation:wav_data/races/human/majnop.wav
+gloat:wav_data/races/human/majglt.wav
+despair:wav_data/races/human/majdes.wav
+death:wav_data/races/human/majdie.wav
+victory:wav_data/races/human/majkil.wav
+passive_aggressive:50
+bravery_cowardice:50
+aerial_ground:45
+obedience_disobedience:50
+pylon_grab:59
+radar_kill:50
+radar_protect:50
+skill_level:2
+preferred_vehicle:0
+%
+name:Richard_Stryker
+pcx_file:ric.pcx
+greeting:wav_data/races/human/ricgrt.wav
+affirmation:wav_data/races/human/ricyes.wav
+negation:wav_data/races/human/ricnop.wav
+gloat:wav_data/races/human/ricglt.wav
+despair:wav_data/races/human/ricdes.wav
+death:wav_data/races/human/ricdie.wav
+victory:wav_data/races/human/rickil.wav
+passive_aggressive:52
+bravery_cowardice:50
+aerial_ground:45
+obedience_disobedience:50
+pylon_grab:50
+radar_kill:56
+radar_protect:50
+skill_level:3
+preferred_vehicle:0
+%
+name:Cindy_Vicious
+pcx_file:cin.pcx
+greeting:wav_data/races/human/cingrt.wav
+affirmation:wav_data/races/human/cinyes.wav
+negation:wav_data/races/human/cinnop.wav
+gloat:wav_data/races/human/cinglt.wav
+despair:wav_data/races/human/cindes.wav
+death:wav_data/races/human/cindie.wav
+victory:wav_data/races/human/cinkil.wav
+passive_aggressive:55
+bravery_cowardice:50
+aerial_ground:55
+obedience_disobedience:50
+pylon_grab:50
+radar_kill:50
+radar_protect:50
+skill_level:3
+preferred_vehicle:0
+%
+name:Preacher
+pcx_file:pre.pcx
+greeting:wav_data/races/human/pregrt.wav
+affirmation:wav_data/races/human/preyes.wav
+negation:wav_data/races/human/prenop.wav
+gloat:wav_data/races/human/preglt.wav
+despair:wav_data/races/human/predes.wav
+death:wav_data/races/human/predie.wav
+victory:wav_data/races/human/prekil.wav
+passive_aggressive:49
+bravery_cowardice:50
+aerial_ground:45
+obedience_disobedience:50
+pylon_grab:52
+radar_kill:45
+radar_protect:51
+skill_level:1
+preferred_vehicle:0
+%
+name:Mr_Kent
+pcx_file:mrk.pcx
+greeting:wav_data/races/human/mrkgrt.wav
+affirmation:wav_data/races/human/mrkyes.wav
+negation:wav_data/races/human/mrknop.wav
+gloat:wav_data/races/human/mrkglt.wav
+despair:wav_data/races/human/mrkdes.wav
+death:wav_data/races/human/mrkdie.wav
+victory:wav_data/races/human/mrkkil.wav
+passive_aggressive:53
+bravery_cowardice:50
+aerial_ground:35
+obedience_disobedience:50
+pylon_grab:50
+radar_kill:50
+radar_protect:50
+skill_level:1
+preferred_vehicle:0
+%
+name:Kristen_Masters
+pcx_file:kri.pcx
+greeting:wav_data/races/human/krigrt.wav
+affirmation:wav_data/races/human/kriyes.wav
+negation:wav_data/races/human/krinop.wav
+gloat:wav_data/races/human/kriglt.wav
+despair:wav_data/races/human/krides.wav
+death:wav_data/races/human/kridie.wav
+victory:wav_data/races/human/krikil.wav
+passive_aggressive:50
+bravery_cowardice:50
+aerial_ground:50
+obedience_disobedience:50
+pylon_grab:50
+radar_kill:55
+radar_protect:50
+skill_level:3
+preferred_vehicle:0
+%
+name:Shana_Blake
+pcx_file:sha.pcx
+greeting:wav_data/races/human/shagrt.wav
+affirmation:wav_data/races/human/shayes.wav
+negation:wav_data/races/human/shanop.wav
+gloat:wav_data/races/human/shaglt.wav
+despair:wav_data/races/human/shades.wav
+death:wav_data/races/human/shadie.wav
+victory:wav_data/races/human/shakil.wav
+passive_aggressive:80
+bravery_cowardice:50
+aerial_ground:50
+obedience_disobedience:50
+pylon_grab:50
+radar_kill:50
+radar_protect:50
+skill_level:3
+preferred_vehicle:0
+%
+name:Kelly_Sanders
+pcx_file:kel.pcx
+greeting:wav_data/races/human/kelgrt.wav
+affirmation:wav_data/races/human/kelyes.wav
+negation:wav_data/races/human/kelnop.wav
+gloat:wav_data/races/human/kelglt.wav
+despair:wav_data/races/human/keldes.wav
+death:wav_data/races/human/keldie.wav
+victory:wav_data/races/human/kelkil.wav
+passive_aggressive:45
+bravery_cowardice:50
+aerial_ground:50
+obedience_disobedience:50
+pylon_grab:45
+radar_kill:60
+radar_protect:50
+skill_level:3
+preferred_vehicle:0
+%
+name:Megan_Hunter
+pcx_file:meg.pcx
+greeting:wav_data/races/human/meggrt.wav
+affirmation:wav_data/races/human/megyes.wav
+negation:wav_data/races/human/megnop.wav
+gloat:wav_data/races/human/megglt.wav
+despair:wav_data/races/human/megdes.wav
+death:wav_data/races/human/megdie.wav
+victory:wav_data/races/human/megkil.wav
+passive_aggressive:50
+bravery_cowardice:50
+aerial_ground:52
+obedience_disobedience:50
+pylon_grab:59
+radar_kill:50
+radar_protect:50
+skill_level:3
+preferred_vehicle:0
+%
+name:Bok
+pcx_file:bok.pcx
+greeting:wav_data/races/bok/bokgrt.wav
+affirmation:wav_data/races/bok/bokyes.wav
+negation:wav_data/races/bok/boknop.wav
+gloat:wav_data/races/bok/bokglt.wav
+despair:wav_data/races/bok/bokdes.wav
+death:wav_data/races/bok/bokdie.wav
+victory:wav_data/races/bok/bokkil.wav
+passive_aggressive:48
+bravery_cowardice:50
+aerial_ground:55
+obedience_disobedience:50
+pylon_grab:59
+radar_kill:50
+radar_protect:50
+skill_level:1
+preferred_vehicle:0
+%
+name:N'Bok
+pcx_file:nbo.pcx
+greeting:wav_data/races/bok/nbogrt.wav
+affirmation:wav_data/races/bok/nboyes.wav
+negation:wav_data/races/bok/nbonop.wav
+gloat:wav_data/races/bok/nboglt.wav
+despair:wav_data/races/bok/nbodes.wav
+death:wav_data/races/bok/nbodie.wav
+victory:wav_data/races/bok/nbokil.wav
+passive_aggressive:49
+bravery_cowardice:50
+aerial_ground:45
+obedience_disobedience:50
+pylon_grab:55
+radar_kill:50
+radar_protect:50
+skill_level:1
+preferred_vehicle:0
+%
+name:T'Bok
+pcx_file:tbo.pcx
+greeting:wav_data/races/bok/tbogrt.wav
+affirmation:wav_data/races/bok/tboyes.wav
+negation:wav_data/races/bok/tbonop.wav
+gloat:wav_data/races/bok/tboglt.wav
+despair:wav_data/races/bok/tbodes.wav
+death:wav_data/races/bok/tbodie.wav
+victory:wav_data/races/bok/tbokil.wav
+passive_aggressive:50
+bravery_cowardice:55
+aerial_ground:55
+obedience_disobedience:50
+pylon_grab:55
+radar_kill:50
+radar_protect:50
+skill_level:1
+preferred_vehicle:0
+%
+name:Pubert
+pcx_file:pub.pcx
+greeting:wav_data/races/slar/pubgrt.wav
+affirmation:wav_data/races/slar/pubyes.wav
+negation:wav_data/races/slar/pubnop.wav
+gloat:wav_data/races/slar/pubglt.wav
+despair:wav_data/races/slar/pubdes.wav
+death:wav_data/races/slar/pubdie.wav
+victory:wav_data/races/slar/pubkil.wav
+passive_aggressive:57
+bravery_cowardice:50
+aerial_ground:55
+obedience_disobedience:50
+pylon_grab:50
+radar_kill:55
+radar_protect:50
+skill_level:3
+preferred_vehicle:0
+%
+name:Gall
+pcx_file:gal.pcx
+greeting:wav_data/races/slar/galgrt.wav
+affirmation:wav_data/races/slar/galyes.wav
+negation:wav_data/races/slar/galnop.wav
+gloat:wav_data/races/slar/galglt.wav
+despair:wav_data/races/slar/galdes.wav
+death:wav_data/races/slar/galdie.wav
+victory:wav_data/races/slar/galkil.wav
+passive_aggressive:55
+bravery_cowardice:50
+aerial_ground:55
+obedience_disobedience:50
+pylon_grab:50
+radar_kill:50
+radar_protect:50
+skill_level:3
+preferred_vehicle:0
+%
+name:Septic
+pcx_file:sep.pcx
+greeting:wav_data/races/slar/sepgrt.wav
+affirmation:wav_data/races/slar/sepyes.wav
+negation:wav_data/races/slar/sepnop.wav
+gloat:wav_data/races/slar/sepglt.wav
+despair:wav_data/races/slar/sepdes.wav
+death:wav_data/races/slar/sepdie.wav
+victory:wav_data/races/slar/sepkil.wav
+passive_aggressive:55
+bravery_cowardice:50
+aerial_ground:55
+obedience_disobedience:50
+pylon_grab:50
+radar_kill:50
+radar_protect:50
+skill_level:3
+preferred_vehicle:0
+%
+name:Hotwire
+pcx_file:hot.pcx
+greeting:wav_data/races/scavenge/hotgrt.wav
+affirmation:wav_data/races/scavenge/hotyes.wav
+negation:wav_data/races/scavenge/hotnop.wav
+gloat:wav_data/races/scavenge/hotglt.wav
+despair:wav_data/races/scavenge/hotdes.wav
+death:wav_data/races/scavenge/hotdie.wav
+victory:wav_data/races/scavenge/hotkil.wav
+passive_aggressive:50
+bravery_cowardice:50
+aerial_ground:45
+obedience_disobedience:50
+pylon_grab:55
+radar_kill:50
+radar_protect:50
+skill_level:0
+preferred_vehicle:0
+%
+name:Crusty
+pcx_file:cru.pcx
+greeting:wav_data/races/scavenge/crugrt.wav
+affirmation:wav_data/races/scavenge/cruyes.wav
+negation:wav_data/races/scavenge/crunop.wav
+gloat:wav_data/races/scavenge/cruglt.wav
+despair:wav_data/races/scavenge/crudes.wav
+death:wav_data/races/scavenge/crudie.wav
+victory:wav_data/races/scavenge/crukil.wav
+passive_aggressive:55
+bravery_cowardice:50
+aerial_ground:55
+obedience_disobedience:50
+pylon_grab:50
+radar_kill:50
+radar_protect:50
+skill_level:0
+preferred_vehicle:0
+%
+name:Greko
+pcx_file:gre.pcx
+greeting:wav_data/races/scavenge/gregrt.wav
+affirmation:wav_data/races/scavenge/greyes.wav
+negation:wav_data/races/scavenge/grenop.wav
+gloat:wav_data/races/scavenge/greglt.wav
+despair:wav_data/races/scavenge/gredes.wav
+death:wav_data/races/scavenge/gredie.wav
+victory:wav_data/races/scavenge/grekil.wav
+passive_aggressive:55
+bravery_cowardice:50
+aerial_ground:45
+obedience_disobedience:50
+pylon_grab:50
+radar_kill:50
+radar_protect:50
+skill_level:1
+preferred_vehicle:0
+%
+name:Crystal
+pcx_file:cry.pcx
+greeting:wav_data/races/succubi/crygrt.wav
+affirmation:wav_data/races/succubi/cryyes.wav
+negation:wav_data/races/succubi/crynop.wav
+gloat:wav_data/races/succubi/cryglt.wav
+despair:wav_data/races/succubi/crydes.wav
+death:wav_data/races/succubi/crydie.wav
+victory:wav_data/races/succubi/crykil.wav
+passive_aggressive:50
+bravery_cowardice:50
+aerial_ground:55
+obedience_disobedience:50
+pylon_grab:55
+radar_kill:50
+radar_protect:50
+skill_level:2
+preferred_vehicle:0
+%
+name:Glacia
+pcx_file:gla.pcx
+greeting:wav_data/races/succubi/glagrt.wav
+affirmation:wav_data/races/succubi/glayes.wav
+negation:wav_data/races/succubi/glanop.wav
+gloat:wav_data/races/succubi/glaglt.wav
+despair:wav_data/races/succubi/glades.wav
+death:wav_data/races/succubi/gladie.wav
+victory:wav_data/races/succubi/glakil.wav
+passive_aggressive:55
+bravery_cowardice:50
+aerial_ground:55
+obedience_disobedience:50
+pylon_grab:50
+radar_kill:50
+radar_protect:50
+skill_level:1
+preferred_vehicle:0
+%
+name:Azuria
+pcx_file:azu.pcx
+greeting:wav_data/races/succubi/azugrt.wav
+affirmation:wav_data/races/succubi/azuyes.wav
+negation:wav_data/races/succubi/azunop.wav
+gloat:wav_data/races/succubi/azuglt.wav
+despair:wav_data/races/succubi/azudes.wav
+death:wav_data/races/succubi/azudie.wav
+victory:wav_data/races/succubi/azukil.wav
+passive_aggressive:55
+bravery_cowardice:50
+aerial_ground:45
+obedience_disobedience:50
+pylon_grab:50
+radar_kill:50
+radar_protect:50
+skill_level:2
+preferred_vehicle:0
+%
+name:Baal
+pcx_file:baa.pcx
+greeting:wav_data/races/overlord/baagrt.wav
+affirmation:wav_data/races/overlord/baayes.wav
+negation:wav_data/races/overlord/baanop.wav
+gloat:wav_data/races/overlord/baaglt.wav
+despair:wav_data/races/overlord/baades.wav
+death:wav_data/races/overlord/baadie.wav
+victory:wav_data/races/overlord/baakil.wav
+passive_aggressive:55
+bravery_cowardice:50
+aerial_ground:55
+obedience_disobedience:50
+pylon_grab:50
+radar_kill:50
+radar_protect:50
+skill_level:3
+preferred_vehicle:0
+%
+name:Mephisto
+pcx_file:mep.pcx
+greeting:wav_data/races/overlord/mepgrt.wav
+affirmation:wav_data/races/overlord/mepyes.wav
+negation:wav_data/races/overlord/mepnop.wav
+gloat:wav_data/races/overlord/mepglt.wav
+despair:wav_data/races/overlord/mepdes.wav
+death:wav_data/races/overlord/mepdie.wav
+victory:wav_data/races/overlord/mepkil.wav
+passive_aggressive:55
+bravery_cowardice:50
+aerial_ground:55
+obedience_disobedience:50
+pylon_grab:54
+radar_kill:55
+radar_protect:50
+skill_level:3
+preferred_vehicle:0
+%
+name:Malfator
+pcx_file:mal.pcx
+greeting:wav_data/races/overlord/malgrt.wav
+affirmation:wav_data/races/overlord/malyes.wav
+negation:wav_data/races/overlord/malnop.wav
+gloat:wav_data/races/overlord/malglt.wav
+despair:wav_data/races/overlord/maldes.wav
+death:wav_data/races/overlord/maldie.wav
+victory:wav_data/races/overlord/malkil.wav
+passive_aggressive:55
+bravery_cowardice:50
+aerial_ground:55
+obedience_disobedience:50
+pylon_grab:50
+radar_kill:55
+radar_protect:50
+skill_level:3
+preferred_vehicle:0
+%
+name:Anubis
+pcx_file:anu.pcx
+greeting:wav_data/races/pharoah/anugrt.wav
+affirmation:wav_data/races/pharoah/anuyes.wav
+negation:wav_data/races/pharoah/anunop.wav
+gloat:wav_data/races/pharoah/anuglt.wav
+despair:wav_data/races/pharoah/anudes.wav
+death:wav_data/races/pharoah/anudie.wav
+victory:wav_data/races/pharoah/anukil.wav
+passive_aggressive:56
+bravery_cowardice:50
+aerial_ground:55
+obedience_disobedience:50
+pylon_grab:53
+radar_kill:51
+radar_protect:50
+skill_level:3
+preferred_vehicle:0
+%
+name:Bast
+pcx_file:bas.pcx
+greeting:wav_data/races/pharoah/basgrt.wav
+affirmation:wav_data/races/pharoah/basyes.wav
+negation:wav_data/races/pharoah/basnop.wav
+gloat:wav_data/races/pharoah/basglt.wav
+despair:wav_data/races/pharoah/basdes.wav
+death:wav_data/races/pharoah/basdie.wav
+victory:wav_data/races/pharoah/baskil.wav
+passive_aggressive:56
+bravery_cowardice:50
+aerial_ground:55
+obedience_disobedience:50
+pylon_grab:53
+radar_kill:51
+radar_protect:50
+skill_level:3
+preferred_vehicle:0
+%
+name:Horus
+pcx_file:hor.pcx
+greeting:wav_data/races/pharoah/horgrt.wav
+affirmation:wav_data/races/pharoah/horyes.wav
+negation:wav_data/races/pharoah/hornop.wav
+gloat:wav_data/races/pharoah/horglt.wav
+despair:wav_data/races/pharoah/hordes.wav
+death:wav_data/races/pharoah/hordie.wav
+victory:wav_data/races/pharoah/horkil.wav
+passive_aggressive:56
+bravery_cowardice:50
+aerial_ground:55
+obedience_disobedience:50
+pylon_grab:53
+radar_kill:51
+radar_protect:50
+skill_level:3
+preferred_vehicle:0
+%
+name:Nebula
+pcx_file:neb.pcx
+greeting:wav_data/races/watchers/nebgrt.wav
+affirmation:wav_data/races/watchers/nebyes.wav
+negation:wav_data/races/watchers/nebnop.wav
+gloat:wav_data/races/watchers/nebglt.wav
+despair:wav_data/races/watchers/nebdes.wav
+death:wav_data/races/watchers/nebdie.wav
+victory:wav_data/races/watchers/nebkil.wav
+passive_aggressive:50
+bravery_cowardice:50
+aerial_ground:45
+obedience_disobedience:50
+pylon_grab:55
+radar_kill:55
+radar_protect:50
+skill_level:3
+preferred_vehicle:0
+%
+name:Polaris
+pcx_file:pol.pcx
+greeting:wav_data/races/watchers/polgrt.wav
+affirmation:wav_data/races/watchers/polyes.wav
+negation:wav_data/races/watchers/polnop.wav
+gloat:wav_data/races/watchers/polglt.wav
+despair:wav_data/races/watchers/poldes.wav
+death:wav_data/races/watchers/poldie.wav
+victory:wav_data/races/watchers/polkil.wav
+passive_aggressive:49
+bravery_cowardice:50
+aerial_ground:45
+obedience_disobedience:50
+pylon_grab:52
+radar_kill:55
+radar_protect:50
+skill_level:1
+preferred_vehicle:0
+%
+name:Quasar
+pcx_file:qua.pcx
+greeting:wav_data/races/watchers/quagrt.wav
+affirmation:wav_data/races/watchers/quayes.wav
+negation:wav_data/races/watchers/quanop.wav
+gloat:wav_data/races/watchers/quaglt.wav
+despair:wav_data/races/watchers/quades.wav
+death:wav_data/races/watchers/quadie.wav
+victory:wav_data/races/watchers/quakil.wav
+passive_aggressive:45
+bravery_cowardice:50
+aerial_ground:45
+obedience_disobedience:50
+pylon_grab:60
+radar_kill:50
+radar_protect:50
+skill_level:1
+preferred_vehicle:0
+%
+name:R
+pcx_file:r.pcx
+greeting:wav_data/races/sentry/rgrt.wav
+affirmation:wav_data/races/sentry/ryes.wav
+negation:wav_data/races/sentry/rnop.wav
+gloat:wav_data/races/sentry/rglt.wav
+despair:wav_data/races/sentry/rdes.wav
+death:wav_data/races/sentry/rdie.wav
+victory:wav_data/races/sentry/rkil.wav
+passive_aggressive:50
+bravery_cowardice:50
+aerial_ground:55
+obedience_disobedience:50
+pylon_grab:50
+radar_kill:50
+radar_protect:50
+skill_level:2
+preferred_vehicle:0
+%
+name:G
+pcx_file:g.pcx
+greeting:wav_data/races/sentry/ggrt.wav
+affirmation:wav_data/races/sentry/gyes.wav
+negation:wav_data/races/sentry/gnop.wav
+gloat:wav_data/races/sentry/gglt.wav
+despair:wav_data/races/sentry/gdes.wav
+death:wav_data/races/sentry/gdie.wav
+victory:wav_data/races/sentry/gkil.wav
+passive_aggressive:50
+bravery_cowardice:50
+aerial_ground:55
+obedience_disobedience:50
+pylon_grab:55
+radar_kill:50
+radar_protect:50
+skill_level:2
+preferred_vehicle:0
+%
+name:B
+pcx_file:b.pcx
+greeting:wav_data/races/sentry/bgrt.wav
+affirmation:wav_data/races/sentry/byes.wav
+negation:wav_data/races/sentry/bnop.wav
+gloat:wav_data/races/sentry/bglt.wav
+despair:wav_data/races/sentry/bdes.wav
+death:wav_data/races/sentry/bdie.wav
+victory:wav_data/races/sentry/bkil.wav
+passive_aggressive:50
+bravery_cowardice:50
+aerial_ground:55
+obedience_disobedience:50
+pylon_grab:50
+radar_kill:55
+radar_protect:50
+skill_level:2
+preferred_vehicle:0
+%
+name:B00B
+pcx_file:b00b.pcx
+greeting:wav_data/races/biomech/b00grt.wav
+affirmation:wav_data/races/biomech/b00yes.wav
+negation:wav_data/races/biomech/b00nop.wav
+gloat:wav_data/races/biomech/b00glt.wav
+despair:wav_data/races/biomech/b00des.wav
+death:wav_data/races/biomech/b00die.wav
+victory:wav_data/races/biomech/b00kil.wav
+passive_aggressive:55
+bravery_cowardice:50
+aerial_ground:55
+obedience_disobedience:50
+pylon_grab:50
+radar_kill:52
+radar_protect:50
+skill_level:3
+preferred_vehicle:0
+%
+name:D23B6M
+pcx_file:d23b6m.pcx
+greeting:wav_data/races/biomech/d23grt.wav
+affirmation:wav_data/races/biomech/d23yes.wav
+negation:wav_data/races/biomech/d23nop.wav
+gloat:wav_data/races/biomech/d23glt.wav
+despair:wav_data/races/biomech/d23des.wav
+death:wav_data/races/biomech/d23die.wav
+victory:wav_data/races/biomech/d23kil.wav
+passive_aggressive:55
+bravery_cowardice:50
+aerial_ground:55
+obedience_disobedience:50
+pylon_grab:50
+radar_kill:55
+radar_protect:50
+skill_level:3
+preferred_vehicle:0
+%
+name:JLDV8
+pcx_file:jldv8.pcx
+greeting:wav_data/races/biomech/jldgrt.wav
+affirmation:wav_data/races/biomech/jldyes.wav
+negation:wav_data/races/biomech/jldnop.wav
+gloat:wav_data/races/biomech/jldglt.wav
+despair:wav_data/races/biomech/jlddes.wav
+death:wav_data/races/biomech/jlddie.wav
+victory:wav_data/races/biomech/jldkil.wav
+passive_aggressive:50
+bravery_cowardice:50
+aerial_ground:45
+obedience_disobedience:50
+pylon_grab:55
+radar_kill:53
+radar_protect:50
+skill_level:3
+preferred_vehicle:0
+%

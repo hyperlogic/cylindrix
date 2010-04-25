@@ -17,6 +17,7 @@
 */
 
 #include "ai.h"
+#include "record.h"
 
 extern const char* g_DataPath;
 
@@ -122,17 +123,59 @@ static void space_to_null(char* str)
 	}
 }
 
+static char* s_sample_keys[] = {
+	"greeting",
+	"affirmation",
+	"negation",
+	"gloat",
+	"despair",
+	"death",
+	"victory"
+};
+
 void Load_All_AI(Player* players, const char* filename, int* ai_indices)
 {
 	// append path to front of filename.
 	char newfilename[512];
 	sprintf(newfilename, "%s%s",g_DataPath, filename);
-	FILE* fp = fopen(newfilename, "rb");
+	FILE* fp = fopen(newfilename, "r");
 	if (!fp)
 		SYS_Error("Error loading AI\n");
 
 	struct character_lines* c_lines = (struct character_lines*)malloc(sizeof(struct character_lines) * NUM_CHARACTERS);
 
+	RecordNode* people = record_read(fp);
+	int i, j;
+	for (i = 0; i < 6; ++i)
+	{
+		const RecordNode* person = record_by_index(people, ai_indices[i]);
+
+		character_type* c = &players[i].character;
+		memset(c, 0, sizeof(character_type));
+
+		strcpy(c->name, record_lookup_value(person, "name"));
+		strcpy(c->filename, record_lookup_value(person, "name"));
+
+		for (j = 0; j < NUMBER_CHARACTER_SOUNDS; ++j)
+		{
+			strcpy(c->sample_filenames[j], record_lookup_value(person, s_sample_keys[j]));
+
+			// actually load the sample here.
+			c->samples[j] = SYS_LoadSound(c->sample_filenames[j]);
+		}
+		c->passive_aggressive = atoi(record_lookup_value(person, "passive_aggressive"));
+		c->bravery_cowardice = atoi(record_lookup_value(person, "bravery_cowardice"));
+		c->aerial_ground = atoi(record_lookup_value(person, "aerial_ground"));
+		c->obedience_disobedience = atoi(record_lookup_value(person, "obedience_disobedience"));
+		c->pylon_grab = atoi(record_lookup_value(person, "pylon_grab"));
+		c->radar_kill = atoi(record_lookup_value(person, "radar_kill"));
+		c->radar_protect = atoi(record_lookup_value(person, "radar_protect"));
+		c->skill_level = atoi(record_lookup_value(person, "skill_level"));
+		c->preferred_vehicle = atoi(record_lookup_value(person, "preferred_vehicle"));
+	}
+	record_free(people);
+
+/*
 	// load in the WHOLE thing.
 	fseek(fp, 0, SEEK_END);
 	int size = ftell(fp);
@@ -190,6 +233,7 @@ void Load_All_AI(Player* players, const char* filename, int* ai_indices)
 	
 	free(c_lines);
 	free(buffer);
+*/
 }
 
 

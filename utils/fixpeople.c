@@ -1,6 +1,6 @@
 /* Reads in the cooked binary people.dat file and converts it to
    a text file.
-   Note: the reason this exists is so cylindrix will run on 64 bit and big endian platforms.
+   Note: This is so cylindrix will run on 64 bit and big endian platforms.
 */
 #include <stdio.h>
 #include <stdlib.h>
@@ -33,16 +33,12 @@ struct character_t
 
 int s_count;
 
-#define DUMP_ITEM(fmt, item, comment)							\
+#define DUMP_ITEM(fmt, value, field_name)						\
 	do															\
     {															\
-		s_count = fprintf(file_out, #fmt , item);				\
-		while (s_count < 45)									\
-		{														\
-			fprintf(file_out, " ");								\
-			s_count++;											\
-		}														\
-		fprintf(file_out, "%s%s\n", "# ", #comment );			\
+		fprintf(file_out, "%s:", field_name);					\
+		fprintf(file_out, #fmt, value);							\
+		fprintf(file_out, "\n");								\
 	} while(0)													\
 
 void main(int argc, char* argv[])
@@ -65,29 +61,29 @@ void main(int argc, char* argv[])
 	struct character_t* c = characters;
 	while (fread(c, sizeof(struct character_t), 1, file_in) > 0)
 	{
-		DUMP_ITEM(%s, c->name, Name);
-		DUMP_ITEM(%s, c->filename, Pcx file);
+		DUMP_ITEM(%s, c->name, "name");
+		DUMP_ITEM(%s, c->filename, "pcx_file");
 
-		DUMP_ITEM(%s, c->sample_filenames[0], Greeting);
-		DUMP_ITEM(%s, c->sample_filenames[0], Affirmation);
-		DUMP_ITEM(%s, c->sample_filenames[0], Negation);
-		DUMP_ITEM(%s, c->sample_filenames[0], Gloat);
-		DUMP_ITEM(%s, c->sample_filenames[0], Despair);
-		DUMP_ITEM(%s, c->sample_filenames[0], Death);
-		DUMP_ITEM(%s, c->sample_filenames[0], Victory);
+		DUMP_ITEM(%s, c->sample_filenames[0], "greeting");
+		DUMP_ITEM(%s, c->sample_filenames[1], "affirmation");
+		DUMP_ITEM(%s, c->sample_filenames[2], "negation");
+		DUMP_ITEM(%s, c->sample_filenames[3], "gloat");
+		DUMP_ITEM(%s, c->sample_filenames[4], "despair");
+		DUMP_ITEM(%s, c->sample_filenames[5], "death");
+		DUMP_ITEM(%s, c->sample_filenames[6], "victory");
 
-		DUMP_ITEM(%hhd, c->passive_aggressive, Passive Agressive);
+		DUMP_ITEM(%hhd, c->passive_aggressive, "passive_aggressive");
 
-		DUMP_ITEM(%hhd, c->bravery_cowardice, Bravery Cowardice);
-		DUMP_ITEM(%hhd, c->aerial_ground, Aerial Ground);
-		DUMP_ITEM(%hhd, c->obedience_disobedience, Obedience Disobedience);
-		DUMP_ITEM(%hhd, c->pylon_grab, Pylon Grab);
-		DUMP_ITEM(%hhd, c->radar_kill, Radar Kill);
-		DUMP_ITEM(%hhd, c->radar_protect, Radar Protect);
-		DUMP_ITEM(%hhd, c->skill_level, Skill Level);
-		DUMP_ITEM(%hhd, c->preferred_vehicle, Preferred Vehicle);
+		DUMP_ITEM(%hhd, c->bravery_cowardice, "bravery_cowardice");
+		DUMP_ITEM(%hhd, c->aerial_ground, "aerial_ground");
+		DUMP_ITEM(%hhd, c->obedience_disobedience, "obedience_disobedience");
+		DUMP_ITEM(%hhd, c->pylon_grab, "pylon_grab");
+		DUMP_ITEM(%hhd, c->radar_kill, "radar_kill");
+		DUMP_ITEM(%hhd, c->radar_protect, "radar_protect");
+		DUMP_ITEM(%hhd, c->skill_level, "skill_level");
+		DUMP_ITEM(%hhd, c->preferred_vehicle, "preferred_vehicle");
 
-		fprintf(file_out, "\n");
+		fprintf(file_out, "%%\n");
 		
 		c++;
 	}
