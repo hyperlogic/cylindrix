@@ -1,5 +1,5 @@
 /* Reads in the cooked binary tanks.tbf file and converts it to
-   a text file.
+   a text YAML file.
    Note: the reason this exists is so cylindrix will run on 64 bit and big endian platforms.
 */
 #include <stdio.h>
@@ -161,15 +161,16 @@ typedef struct {
 
 int s_count;
 #define DUMP_ITEM(fmt, item, comment)							\
-	do															\
-    {															\
-		s_count = fprintf(file_out, #fmt , v->item);			\
-		while (s_count < 40)									\
-		{														\
-			fprintf(file_out, " ");								\
-			s_count++;											\
-		}														\
-		fprintf(file_out, "%s%s\n", "# ", #comment );			\
+	do							                                \
+    {                                                           \
+        s_count = fprintf(file_out, "  %s: ", #item);			\
+        s_count += fprintf(file_out, fmt, v->item);             \
+        while (s_count < 40)                                    \
+        {                                                       \
+            fprintf(file_out, " ");                             \
+            s_count++;                                          \
+        }                                                       \
+        fprintf(file_out, "# %s\n", comment);       			\
 	} while(0)													\
 
 void main(int argc, char* argv[])
@@ -181,10 +182,10 @@ void main(int argc, char* argv[])
 		exit(1);
 	}
 
-	FILE* file_out = fopen("new_tanks.dat", "w");
+	FILE* file_out = fopen("new_tanks.yaml", "w");
 	if (!file_out)
 	{
-		fprintf(stderr, "failed to open file \"new_tanks.dat\"\n", argv[1]);
+		fprintf(stderr, "failed to open file \"new_tanks.yaml\"\n", argv[1]);
 		exit(1);
 	}
 
@@ -220,85 +221,86 @@ void main(int argc, char* argv[])
 
 	while (fread(v, sizeof(Vehicle), 1, file_in) > 0)
 	{
-		DUMP_ITEM(%d, vtype, type of vehicle);
-		DUMP_ITEM(%.5f, surface_rad, radius at which vehicle skims the surface);
+		fprintf(file_out, "-\n");
+		DUMP_ITEM("%d", vtype, "type of vehicle");
+		DUMP_ITEM("%.5f", surface_rad, "radius at which vehicle skims the surface");
 
-		DUMP_ITEM(%.5f, air_forward_speed, current air speed (units per frame));
-		DUMP_ITEM(%.5f, air_max_forward_speed, maximum air speed (units per frame));
-		DUMP_ITEM(%.5f, air_inc_forward_speed, incremental forward thrust);
-		DUMP_ITEM(%.5f, air_max_sidestep_speed, maximum sidesteping speed);
-		DUMP_ITEM(%.5f, air_inc_sidestep_speed, incremental sidesteping speed);
-   		DUMP_ITEM(%.5f, air_rise_rot_speed, current rotation speed about the right axis);
-   		DUMP_ITEM(%.5f, air_spin_rot_speed, current rotation speed about the front axis);
-   		DUMP_ITEM(%.5f, air_inc_rot_speed, incremental rotation speed);
-   		DUMP_ITEM(%.5f, air_max_rot_speed, rotation speed (radians per frame));
+		DUMP_ITEM("%.5f", air_forward_speed, "current air speed (units per frame)");
+		DUMP_ITEM("%.5f", air_max_forward_speed, "maximum air speed (units per frame)");
+		DUMP_ITEM("%.5f", air_inc_forward_speed, "incremental forward thrust");
+		DUMP_ITEM("%.5f", air_max_sidestep_speed, "maximum sidesteping speed");
+		DUMP_ITEM("%.5f", air_inc_sidestep_speed, "incremental sidesteping speed");
+   		DUMP_ITEM("%.5f", air_rise_rot_speed, "current rotation speed about the right axis");
+   		DUMP_ITEM("%.5f", air_spin_rot_speed, "current rotation speed about the front axis");
+   		DUMP_ITEM("%.5f", air_inc_rot_speed, "incremental rotation speed");
+   		DUMP_ITEM("%.5f", air_max_rot_speed, "rotation speed (radians per frame)");
 
-		DUMP_ITEM(%.5f, surface_max_speed, max surface speed of vehicle (units per frame));
-   		DUMP_ITEM(%.5f, surface_inc_speed, incremental surface speed);
-   		DUMP_ITEM(%.5f, surface_inc_sidestep_speed, incremental sidesteping speed);
+		DUMP_ITEM("%.5f", surface_max_speed, "max surface speed of vehicle (units per frame)");
+   		DUMP_ITEM("%.5f", surface_inc_speed, "incremental surface speed");
+   		DUMP_ITEM("%.5f", surface_inc_sidestep_speed, "incremental sidesteping speed");
 
-   		DUMP_ITEM(%.5f, surface_rot_speed, current rotation speed);
-   		DUMP_ITEM(%.5f, surface_inc_rot_speed, incremental rotation speed);
-   		DUMP_ITEM(%.5f, surface_max_rot_speed, max surface rotation speed (radians per frame));
+   		DUMP_ITEM("%.5f", surface_rot_speed, "current rotation speed");
+   		DUMP_ITEM("%.5f", surface_inc_rot_speed, "incremental rotation speed");
+   		DUMP_ITEM("%.5f", surface_max_rot_speed, "max surface rotation speed (radians per frame)");
 		
 
-   		DUMP_ITEM(%.5f, laser_speed, speed of lasers);
-		DUMP_ITEM(%hd, laser_life, frames a laser remains active);
-		DUMP_ITEM(%hd, laser_damage, Number of hit points each laser takes off);
-		DUMP_ITEM(%hd, laser_reload_time, time it takes to reload in frames);
-		DUMP_ITEM(%hd, frames_till_fire_laser, number of frames until we can shoot);
+   		DUMP_ITEM("%.5f", laser_speed, "speed of lasers");
+		DUMP_ITEM("%hd", laser_life, "frames a laser remains active");
+		DUMP_ITEM("%hd", laser_damage, "Number of hit points each laser takes off");
+		DUMP_ITEM("%hd", laser_reload_time, "time it takes to reload in frames");
+		DUMP_ITEM("%hd", frames_till_fire_laser, "number of frames until we can shoot");
 
-		DUMP_ITEM(%.5f, missile_speed, speed of missiles);
-		DUMP_ITEM(%.5f, turning_angle, radians that a missile can turn per frame);
-		DUMP_ITEM(%hd, missile_life, frames that a missile remains active);
-		DUMP_ITEM(%hd, missile_damage, damage done on collision in hitpoints);
-		DUMP_ITEM(%hd, missile_reload_time, time it takes a missile to be reloaded);
-		DUMP_ITEM(%hd, frames_till_fire_missile, time till we can fire another missile);
-		DUMP_ITEM(%hd, missile_generation_time, time it takes a missile to be created);
-		DUMP_ITEM(%hd, frames_till_new_missile, time left until a new missile is generated);
-		DUMP_ITEM(%hd, max_missile_storage, maximum number of missiles that can be held);
-		DUMP_ITEM(%hd, missiles_stored, current number of stored missiles);
+		DUMP_ITEM("%.5f", missile_speed, "speed of missiles");
+		DUMP_ITEM("%.5f", turning_angle, "radians that a missile can turn per frame");
+		DUMP_ITEM("%hd", missile_life, "frames that a missile remains active");
+		DUMP_ITEM("%hd", missile_damage, "damage done on collision in hitpoints");
+		DUMP_ITEM("%hd", missile_reload_time, "time it takes a missile to be reloaded");
+		DUMP_ITEM("%hd", frames_till_fire_missile, "time till we can fire another missile");
+		DUMP_ITEM("%hd", missile_generation_time, "time it takes a missile to be created");
+		DUMP_ITEM("%hd", frames_till_new_missile, "time left until a new missile is generated");
+		DUMP_ITEM("%hd", max_missile_storage, "maximum number of missiles that can be held");
+		DUMP_ITEM("%hd", missiles_stored, "current number of stored missiles");
 
-		DUMP_ITEM(%hd, max_projectiles, max number of active projectiles);
+		DUMP_ITEM("%hd", max_projectiles, "max number of active projectiles");
 
-		DUMP_ITEM(%d, max_hitpoints, maximum hitpoints allowed);
-		DUMP_ITEM(%d, current_hitpoints, current number of hitpoints);
+		DUMP_ITEM("%d", max_hitpoints, "maximum hitpoints allowed");
+		DUMP_ITEM("%d", current_hitpoints, "current number of hitpoints");
 
-		DUMP_ITEM(%hd, ramming_active, ramming on indicator);
-		DUMP_ITEM(%hd, ramming_damage, hitpoints of damage resulting from one ram);
+		DUMP_ITEM("%hd", ramming_active, "ramming on indicator");
+		DUMP_ITEM("%hd", ramming_damage, "hitpoints of damage resulting from one ram");
 
-		DUMP_ITEM(%hd, double_lasers_active, does this vehicle shoot two lasers?);
+		DUMP_ITEM("%hd", double_lasers_active, "does this vehicle shoot two lasers?");
 
-		DUMP_ITEM(%hd, mine_reload_time, time it takes to reload a mine);
-		DUMP_ITEM(%hd, mine_damage, amount of damage a mine will inflect);
-		DUMP_ITEM(%hd, mine_life, number of frames a mine will remain active);
+		DUMP_ITEM("%hd", mine_reload_time, "time it takes to reload a mine");
+		DUMP_ITEM("%hd", mine_damage, "amount of damage a mine will inflect");
+		DUMP_ITEM("%hd", mine_life, "number of frames a mine will remain active");
 
-		DUMP_ITEM(%hd, cs_missile_reload_time, time to reload a cs_missile);
-		DUMP_ITEM(%hd, cs_missile_life, time a cs_missile remains active);
-		DUMP_ITEM(%.5f, cs_missile_speed, speed of a cs_missile in units per frame);
+		DUMP_ITEM("%hd", cs_missile_reload_time, "time to reload a cs_missile");
+		DUMP_ITEM("%hd", cs_missile_life, "time a cs_missile remains active");
+		DUMP_ITEM("%.5f", cs_missile_speed, "speed of a cs_missile in units per frame");
 
-		DUMP_ITEM(%hd, controls_scrambled, true when hit by a cs_missile);
-		DUMP_ITEM(%hd, frames_till_unscramble, number of frames till controls will be normal);
-		DUMP_ITEM(%hd, scramble_life, total number of frames controls will be scrambled);
+		DUMP_ITEM("%hd", controls_scrambled, "true when hit by a cs_missile");
+		DUMP_ITEM("%hd", frames_till_unscramble, "number of frames till controls will be normal");
+		DUMP_ITEM("%hd", scramble_life, "total number of frames controls will be scrambled");
 
-		DUMP_ITEM(%hd, traitor_missile_reload_time, time to reload a traitor_missile);
-		DUMP_ITEM(%hd, traitor_missile_life, time a traitor_missile remains active);
-		DUMP_ITEM(%.5f, traitor_missile_speed, speed of a traitor_missile);
+		DUMP_ITEM("%hd", traitor_missile_reload_time, "time to reload a traitor_missile");
+		DUMP_ITEM("%hd", traitor_missile_life, "time a traitor_missile remains active");
+		DUMP_ITEM("%.5f", traitor_missile_speed, "speed of a traitor_missile");
 
-		DUMP_ITEM(%hd, traitor_life, amount of time a vehicle is a traitor);
-		DUMP_ITEM(%hd, traitor_active, true when hit by a traitor_missile);
-		DUMP_ITEM(%hd, frames_till_traitor_deactivate, frames left for this vehicle to be a traitor);
+		DUMP_ITEM("%hd", traitor_life, "amount of time a vehicle is a traitor");
+		DUMP_ITEM("%hd", traitor_active, "true when hit by a traitor_missile");
+		DUMP_ITEM("%hd", frames_till_traitor_deactivate, "frames left for this vehicle to be a traitor");
 
-		DUMP_ITEM(%hd, anti_missile_active, TRUE if anti-missile system is on);
+		DUMP_ITEM("%hd", anti_missile_active, "TRUE if anti-missile system is on");
 
-		DUMP_ITEM(%hd, cloaking_active, TRUE if clocking is enabled);
-		DUMP_ITEM(%hd, cloak_reload_time, number of frames till x key becomes active again);
-		DUMP_ITEM(%hd, frames_till_cloak, number of frames till x key becomes active again (decrements every frame));
-		DUMP_ITEM(%hd, cloak_time, number of frames cloaking remains active until you suck another missile);
-		DUMP_ITEM(%hd, frames_till_cloak_suck, number of frames until cloak will suck a missile (decrements every frame));
+		DUMP_ITEM("%hd", cloaking_active, "TRUE if clocking is enabled");
+		DUMP_ITEM("%hd", cloak_reload_time, "number of frames till x key becomes active again");
+		DUMP_ITEM("%hd", frames_till_cloak, "number of frames till x key becomes active again (decrements every frame)");
+		DUMP_ITEM("%hd", cloak_time, "number of frames cloaking remains active until you suck another missile");
+		DUMP_ITEM("%hd", frames_till_cloak_suck, "number of frames until cloak will suck a missile (decrements every frame)");
 
-		DUMP_ITEM(%hd, decoy_life, time a decoy ships remains active);
-    	DUMP_ITEM(%hd, decoy_reload_time, number of frames till you can shoot a missile or another decoy);
+		DUMP_ITEM("%hd", decoy_life, "time a decoy ships remains active");
+    	DUMP_ITEM("%hd", decoy_reload_time, "number of frames till you can shoot a missile or another decoy");
 
 		fprintf(file_out, "\n");
 		v++;
