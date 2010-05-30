@@ -17,7 +17,6 @@
 */
 
 #include "ai.h"
-#include "record.h"
 #include <yaml.h>
 
 extern const char* g_DataPath;
@@ -105,35 +104,6 @@ void Init_AI( WorldStuff *world_stuff )
  
 } /* End of Init_AI */
 
-
-static const int NUM_LINES_PER_CHARACTER = 18;
-static const int NUM_CHARACTERS = 50;
-struct character_lines
-{
-	char* lines[NUM_LINES_PER_CHARACTER];
-};
-
-static void space_to_null(char* str)
-{
-	char* p = str;
-	while (*p)
-	{
-		if (*p == ' ')
-			*p = 0;
-		p++;
-	}
-}
-
-static char* s_sample_keys[] = {
-	"greeting",
-	"affirmation",
-	"negation",
-	"gloat",
-	"despair",
-	"death",
-	"victory"
-};
-
 #define HANDLER_LIST													\
 	DEF_HANDLER("name", strcpy(c->name, value);)						\
     DEF_HANDLER("pcx_file", strcpy(c->filename, value);)				\
@@ -181,7 +151,7 @@ void Load_All_AI(Player* players, const char* filename, int* ai_indices)
 	yaml_parser_initialize(&parser);
 	yaml_parser_set_input_file(&parser, fp);
 
-	// NOTE: file is a sequence of mappings.
+	// NOTE: YAML file is expected to contain a sequence of mappings.
 	// One mapping per character.
 	int done = 0;
 	int character_index = 0;
