@@ -18,6 +18,7 @@
 
 #include "ai.h"
 #include "record.h"
+#include <yaml.h>
 
 extern const char* g_DataPath;
 
@@ -59,7 +60,7 @@ void Init_AI( WorldStuff *world_stuff )
 	ai_indices[3] = game_configuration.blue0_ai;
 	ai_indices[4] = game_configuration.blue1_ai;
 	ai_indices[5] = game_configuration.blue2_ai;
-	Load_All_AI((Player*)world_stuff->player_array, "gamedata/new_people.dat", ai_indices);
+	Load_All_AI((Player*)world_stuff->player_array, "gamedata/people.yaml", ai_indices);
 
     if (game_configuration.game_type == TournamentGame)
         tournament_init_print( "G3DRPCAIE : SYNAPSE PARSING ENABLED" );     
@@ -133,6 +134,39 @@ static char* s_sample_keys[] = {
 	"victory"
 };
 
+#define HANDLER_LIST													\
+	DEF_HANDLER("name", strcpy(c->name, value);)						\
+    DEF_HANDLER("pcx_file", strcpy(c->filename, value);)				\
+    DEF_HANDLER("greeting", strcpy(c->sample_filenames[0], value);)		\
+	DEF_HANDLER("affirmation", strcpy(c->sample_filenames[1], value);)	\
+    DEF_HANDLER("negation", strcpy(c->sample_filenames[2], value);)		\
+    DEF_HANDLER("gloat", strcpy(c->sample_filenames[3], value);)		\
+    DEF_HANDLER("despair", strcpy(c->sample_filenames[4], value);)		\
+    DEF_HANDLER("death", strcpy(c->sample_filenames[5], value);)		\
+    DEF_HANDLER("victory", strcpy(c->sample_filenames[6], value);)		\
+    DEF_HANDLER("passive_aggressive", c->passive_aggressive = atoi(value);) \
+    DEF_HANDLER("bravery_cowardice", c->bravery_cowardice = atoi(value);) \
+    DEF_HANDLER("aerial_ground", c->aerial_ground = atoi(value);)		\
+    DEF_HANDLER("obedience_disobedience", c->obedience_disobedience = atoi(value);) \
+    DEF_HANDLER("pylon_grab", c->pylon_grab = atoi(value);)				\
+    DEF_HANDLER("radar_kill", c->radar_kill = atoi(value);)				\
+	DEF_HANDLER("radar_protect", c->radar_protect = atoi(value);)		\
+	DEF_HANDLER("skill_level", c->skill_level = atoi(value);)			\
+	DEF_HANDLER("preferred_vehicle", c->preferred_vehicle = atoi(value);)
+
+void Character_Set(character_type* c, const char* key, const char* value)
+{
+#define DEF_HANDLER(str, action)				\
+	if (strcmp(str, key) == 0)					\
+	{											\
+	    action									\
+		return;	    							\
+	}
+
+	HANDLER_LIST
+#undef DEF_HANDLER
+}
+
 void Load_All_AI(Player* players, const char* filename, int* ai_indices)
 {
 	// append path to front of filename.
@@ -142,98 +176,88 @@ void Load_All_AI(Player* players, const char* filename, int* ai_indices)
 	if (!fp)
 		SYS_Error("Error loading AI\n");
 
-	struct character_lines* c_lines = (struct character_lines*)malloc(sizeof(struct character_lines) * NUM_CHARACTERS);
+	// open the YAML file
+	yaml_parser_t parser;
+	yaml_parser_initialize(&parser);
+	yaml_parser_set_input_file(&parser, fp);
 
-	RecordNode* people = record_read(fp);
-	int i, j;
-	for (i = 0; i < 6; ++i)
+	// NOTE: file is a sequence of mappings.
+	// One mapping per character.
+	int done = 0;
+	int character_index = 0;
+	int ai_index = 0;
+	char key[128];
+	bool read_character = false;
+	bool read_key = false;
+	while (!done)
 	{
-		const RecordNode* person = record_by_index(people, ai_indices[i]);
+		yaml_event_t event;
 
+		// get the next event
+		if (!yaml_parser_parse(&parser, &event))
+		{
+			SYS_Error("error parsing YAML file \"%s\"\n", newfilename);
+		}
+		else
+		{
+			// process the event
+			switch (event.type)
+			{
+			case YAML_MAPPING_START_EVENT:
+				read_character = false;
+				for (int i = 0; i < 6; ++i)
+				{
+					if (character_index == ai_indices[i])
+					{
+						ai_index = i;
+						read_character = true;
+						read_key = true;
+					}
+				}
+				break;
+
+			case YAML_SCALAR_EVENT:
+				if (read_character)
+				{
+					if (read_key)
+						strcpy(key, (char*)event.data.scalar.value);
+					else
+						Character_Set(&players[ai_index].character, key, (char*)event.data.scalar.value);
+					read_key = !read_key;
+				}
+				break;
+
+			case YAML_MAPPING_END_EVENT:
+				character_index++;
+				read_character = false;
+				break;
+
+			case YAML_NO_EVENT:
+			case YAML_STREAM_START_EVENT:
+			case YAML_STREAM_END_EVENT:
+			case YAML_DOCUMENT_START_EVENT:
+			case YAML_DOCUMENT_END_EVENT:
+			case YAML_ALIAS_EVENT:
+			case YAML_SEQUENCE_START_EVENT:
+			case YAML_SEQUENCE_END_EVENT:
+			default:
+				break;
+			}
+
+			done = (event.type == YAML_STREAM_END_EVENT);
+			yaml_event_delete(&event);
+		}
+	}
+
+	yaml_parser_delete(&parser);
+
+	// load each player's sound fx.
+	for (int i = 0; i < 6; ++i)
+	{
 		character_type* c = &players[i].character;
-		memset(c, 0, sizeof(character_type));
-
-		strcpy(c->name, record_lookup_value(person, "name"));
-		strcpy(c->filename, record_lookup_value(person, "name"));
-
-		for (j = 0; j < NUMBER_CHARACTER_SOUNDS; ++j)
-		{
-			strcpy(c->sample_filenames[j], record_lookup_value(person, s_sample_keys[j]));
-
-			// actually load the sample here.
+		for (int j = 0; j < NUMBER_CHARACTER_SOUNDS; ++j)
 			c->samples[j] = SYS_LoadSound(c->sample_filenames[j]);
-		}
-		c->passive_aggressive = atoi(record_lookup_value(person, "passive_aggressive"));
-		c->bravery_cowardice = atoi(record_lookup_value(person, "bravery_cowardice"));
-		c->aerial_ground = atoi(record_lookup_value(person, "aerial_ground"));
-		c->obedience_disobedience = atoi(record_lookup_value(person, "obedience_disobedience"));
-		c->pylon_grab = atoi(record_lookup_value(person, "pylon_grab"));
-		c->radar_kill = atoi(record_lookup_value(person, "radar_kill"));
-		c->radar_protect = atoi(record_lookup_value(person, "radar_protect"));
-		c->skill_level = atoi(record_lookup_value(person, "skill_level"));
-		c->preferred_vehicle = atoi(record_lookup_value(person, "preferred_vehicle"));
 	}
-	record_free(people);
-
-/*
-	// load in the WHOLE thing.
-	fseek(fp, 0, SEEK_END);
-	int size = ftell(fp);
-	char* buffer = (char*)malloc(sizeof(char) * (size + 1));
-	fseek(fp, 0, SEEK_SET);
-	fread(buffer, sizeof(char), size, fp);
-
-	int line_count = 0;
-	int c_count = 0;
-	char* line = strtok(buffer, "\n");
-	while (line)
-	{
-		// skip comment lines
-		if (line[0] == '#')
-			continue;
-
-		c_lines[c_count].lines[line_count++] = line;
-
-		// move on to next character.
-		if (line_count == NUM_LINES_PER_CHARACTER)
-		{
-			line_count = 0;
-			c_count++;
-		}
-		line = strtok(0, "\n");
-	}
-
-	int i, j;
-	for (i = 0; i < 6; i++)
-	{
-		character_type* c = &players[i].character;
-		memset(c, 0, sizeof(character_type));
-		space_to_null(c_lines[ai_indices[i]].lines[0]);
-		strcpy(c->name, c_lines[ai_indices[i]].lines[0]);
-		space_to_null(c_lines[ai_indices[i]].lines[1]);
-		strcpy(c->filename, c_lines[ai_indices[i]].lines[1]);
-		for (j = 0; j < NUMBER_CHARACTER_SOUNDS; ++j)
-		{
-			space_to_null(c_lines[ai_indices[i]].lines[j+2]);
-			strcpy(c->sample_filenames[j], c_lines[ai_indices[i]].lines[j+2]);
-
-			// actually load the sample here.
-			c->samples[j] = SYS_LoadSound(c->sample_filenames[j]);
-		}
-		c->passive_aggressive = atoi(c_lines[ai_indices[i]].lines[9]);
-		c->bravery_cowardice = atoi(c_lines[ai_indices[i]].lines[10]);
-		c->aerial_ground = atoi(c_lines[ai_indices[i]].lines[11]);
-		c->obedience_disobedience = atoi(c_lines[ai_indices[i]].lines[12]);
-		c->pylon_grab = atoi(c_lines[ai_indices[i]].lines[13]);
-		c->radar_kill = atoi(c_lines[ai_indices[i]].lines[14]);
-		c->radar_protect = atoi(c_lines[ai_indices[i]].lines[15]);
-		c->skill_level = atoi(c_lines[ai_indices[i]].lines[16]);
-		c->preferred_vehicle = atoi(c_lines[ai_indices[i]].lines[17]);
-	}
-	
-	free(c_lines);
-	free(buffer);
-*/
 }
 
 

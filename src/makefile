@@ -10,7 +10,7 @@ PLATFORM = $(shell uname)
 ifeq ($(PLATFORM),Darwin)
 GCC = g++
 CFLAGS = -Wall -D GLCYLINDRIX -O3 -D DARWIN -I /Developer/SDKs/MacOSX10.4u.sdk/System/Library/Frameworks/OpenGL.framework/Headers -I /Developer/SDKs/MacOSX10.4u.sdk/System/Library/Frameworks/GLUT.framework/Headers -I /Library/Frameworks/SDL.framework/Headers
-LFLAGS = -framework Cocoa -framework OpenGL -framework GLUT -framework SDL -framework OpenAL -lstdc++ -lmpg123
+LFLAGS = -framework Cocoa -framework OpenGL -framework GLUT -framework SDL -framework OpenAL -lstdc++ -lmpg123 -lyaml
 endif
 
 # SDL Linux
@@ -18,14 +18,14 @@ ifeq ($(PLATFORM),Linux)
 GCC = g++
 #CFLAGS = -Wall -D GLCYLINDRIX -O3
 CFLAGS = -Wall -D GLCYLINDRIX -g
-LFLAGS = -lGL -lGLU -lSDL -lc -lmpg123 -lopenal
+LFLAGS = -lGL -lGLU -lSDL -lc -lmpg123 -lopenal -lyaml
 endif
 
 # SDL Microsoft Windows using MINGW
 ifeq ($(PLATFORM),MinGW)
 GCC = g++
 CFLAGS = -Wall -D GLCYLINDRIX -O3 -I/msys/1.0/include -I/msys/1.0/local/include -I/code/OpenAL-1.1/include
-LFLAGS = -lmingw32 -lSDLmain -lSDL -lOpenGL32 -lGlu32 -lmpg123 -lopenal32 -L/msys/1.0/lib -L/msys/1.0/local/lib -L/code/OpenAL-1.1/libs/Win32
+LFLAGS = -lmingw32 -lSDLmain -lSDL -lOpenGL32 -lGlu32 -lmpg123 -lopenal32 -lyaml -L/msys/1.0/lib -L/msys/1.0/local/lib -L/code/OpenAL-1.1/libs/Win32
 endif
 
 OBJ = ai.o ai_move.o ai_util.o base.o clipping.o collide.o commands.o \
