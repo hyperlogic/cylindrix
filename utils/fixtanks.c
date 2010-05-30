@@ -302,7 +302,6 @@ void main(int argc, char* argv[])
 		DUMP_ITEM("%hd", decoy_life, "time a decoy ships remains active");
     	DUMP_ITEM("%hd", decoy_reload_time, "number of frames till you can shoot a missile or another decoy");
 
-		fprintf(file_out, "\n");
 		v++;
 	}
 }
