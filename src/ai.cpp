@@ -17,6 +17,7 @@
 */
 
 #include "ai.h"
+#include <assert.h>
 #include <yaml.h>
 
 extern const char* g_DataPath;
@@ -137,6 +138,8 @@ void Character_Set(character_type* c, const char* key, const char* value)
 #undef DEF_HANDLER
 }
 
+#define MAX_AIS 50
+
 void Load_All_AI(Player* players, const char* filename, int* ai_indices)
 {
 	// append path to front of filename.
@@ -146,18 +149,20 @@ void Load_All_AI(Player* players, const char* filename, int* ai_indices)
 	if (!fp)
 		SYS_Error("Error loading AI\n");
 
+	// pre allocate the maximum number of characters
+	character_type* ais = (character_type*)malloc(sizeof(character_type) * MAX_AIS);
+	memset(ais, 0, sizeof(character_type) * MAX_AIS);
+
 	// open the YAML file
 	yaml_parser_t parser;
 	yaml_parser_initialize(&parser);
 	yaml_parser_set_input_file(&parser, fp);
 
-	// NOTE: YAML file is expected to contain a sequence of mappings.
-	// One mapping per character.
+	// NOTE: YAML file is expected to contain a sequence of maps.
+	// One map per character.
 	int done = 0;
-	int character_index = 0;
 	int ai_index = 0;
 	char key[128];
-	bool read_character = false;
 	bool read_key = false;
 	while (!done)
 	{
@@ -167,56 +172,43 @@ void Load_All_AI(Player* players, const char* filename, int* ai_indices)
 		if (!yaml_parser_parse(&parser, &event))
 		{
 			SYS_Error("error parsing YAML file \"%s\"\n", newfilename);
+			return;
 		}
-		else
+
+		// process the event
+		switch (event.type)
 		{
-			// process the event
-			switch (event.type)
-			{
-			case YAML_MAPPING_START_EVENT:
-				read_character = false;
-				for (int i = 0; i < 6; ++i)
-				{
-					if (character_index == ai_indices[i])
-					{
-						ai_index = i;
-						read_character = true;
-						read_key = true;
-					}
-				}
-				break;
+		case YAML_MAPPING_START_EVENT:
+			read_key = true;
+			break;
 
-			case YAML_SCALAR_EVENT:
-				if (read_character)
-				{
-					if (read_key)
-						strcpy(key, (char*)event.data.scalar.value);
-					else
-						Character_Set(&players[ai_index].character, key, (char*)event.data.scalar.value);
-					read_key = !read_key;
-				}
-				break;
+		case YAML_SCALAR_EVENT:
+			if (read_key)
+				strcpy(key, (char*)event.data.scalar.value);
+			else
+				Character_Set(&ais[ai_index], key, (char*)event.data.scalar.value);
+			read_key = !read_key;
+			break;
 
-			case YAML_MAPPING_END_EVENT:
-				character_index++;
-				read_character = false;
-				break;
+		case YAML_MAPPING_END_EVENT:
+			assert(ai_index < MAX_AIS);  // too many ais in yaml file.
+			ai_index++;
+			break;
 
-			case YAML_NO_EVENT:
-			case YAML_STREAM_START_EVENT:
-			case YAML_STREAM_END_EVENT:
-			case YAML_DOCUMENT_START_EVENT:
-			case YAML_DOCUMENT_END_EVENT:
-			case YAML_ALIAS_EVENT:
-			case YAML_SEQUENCE_START_EVENT:
-			case YAML_SEQUENCE_END_EVENT:
-			default:
-				break;
-			}
-
-			done = (event.type == YAML_STREAM_END_EVENT);
-			yaml_event_delete(&event);
+		case YAML_NO_EVENT:
+		case YAML_STREAM_START_EVENT:
+		case YAML_STREAM_END_EVENT:
+		case YAML_DOCUMENT_START_EVENT:
+		case YAML_DOCUMENT_END_EVENT:
+		case YAML_ALIAS_EVENT:
+		case YAML_SEQUENCE_START_EVENT:
+		case YAML_SEQUENCE_END_EVENT:
+		default:
+			break;
 		}
+
+		done = (event.type == YAML_STREAM_END_EVENT);
+		yaml_event_delete(&event);
 	}
 
 	yaml_parser_delete(&parser);
@@ -225,9 +217,12 @@ void Load_All_AI(Player* players, const char* filename, int* ai_indices)
 	for (int i = 0; i < 6; ++i)
 	{
 		character_type* c = &players[i].character;
+		memcpy(c, &ais[ai_indices[i]], sizeof(character_type));
 		for (int j = 0; j < NUMBER_CHARACTER_SOUNDS; ++j)
 			c->samples[j] = SYS_LoadSound(c->sample_filenames[j]);
 	}
+
+	free(ais);
 }
 
 

@@ -20,59 +20,163 @@
 #include "tanks.h"
 #include "object.h"
 #include "collide.h"
+#include "assert.h"
+#include <yaml.h>
 
 extern const char* g_DataPath;
 
-static const int NUM_LINES_PER_TANK = 61;
-static const int NUM_TANKS = 10;
-struct tank_lines
+#define HANDLER_LIST													\
+	DEF_HANDLER(vtype, (VehicleType)atoi)								\
+	DEF_HANDLER(surface_rad, atof)										\
+	DEF_HANDLER(air_forward_speed,atof)									\
+	DEF_HANDLER(air_max_forward_speed, atof)							\
+	DEF_HANDLER(air_inc_forward_speed, atof)							\
+	DEF_HANDLER(air_max_sidestep_speed, atof)							\
+	DEF_HANDLER(air_inc_sidestep_speed, atof)							\
+	DEF_HANDLER(air_rise_rot_speed, atof)								\
+	DEF_HANDLER(air_spin_rot_speed, atof)								\
+	DEF_HANDLER(air_inc_rot_speed, atof)								\
+	DEF_HANDLER(air_max_rot_speed, atof)								\
+	DEF_HANDLER(surface_max_speed, atof)								\
+	DEF_HANDLER(surface_inc_speed, atof)								\
+	DEF_HANDLER(surface_inc_sidestep_speed, atof)						\
+	DEF_HANDLER(surface_rot_speed, atof)								\
+	DEF_HANDLER(surface_inc_rot_speed, atof)							\
+	DEF_HANDLER(surface_max_rot_speed, atof)							\
+	DEF_HANDLER(laser_speed, atof)										\
+	DEF_HANDLER(laser_life, atoi)										\
+	DEF_HANDLER(laser_damage, atoi)										\
+	DEF_HANDLER(laser_reload_time, atoi)								\
+	DEF_HANDLER(frames_till_fire_laser, atoi)							\
+	DEF_HANDLER(missile_speed, atof)									\
+	DEF_HANDLER(turning_angle, atof)									\
+	DEF_HANDLER(missile_life, atoi)										\
+	DEF_HANDLER(missile_damage, atoi)									\
+	DEF_HANDLER(missile_reload_time, atoi)								\
+	DEF_HANDLER(frames_till_fire_missile, atoi)							\
+	DEF_HANDLER(missile_generation_time, atoi)							\
+	DEF_HANDLER(frames_till_new_missile, atoi)							\
+	DEF_HANDLER(max_missile_storage, atoi)								\
+	DEF_HANDLER(missiles_stored, atoi)									\
+	DEF_HANDLER(max_projectiles, atoi)									\
+	DEF_HANDLER(max_hitpoints, atoi)									\
+	DEF_HANDLER(current_hitpoints, atoi)								\
+	DEF_HANDLER(ramming_active, atoi)									\
+	DEF_HANDLER(ramming_damage, atoi)									\
+	DEF_HANDLER(double_lasers_active, atoi)								\
+	DEF_HANDLER(mine_reload_time, atoi)									\
+	DEF_HANDLER(mine_damage, atoi)										\
+	DEF_HANDLER(mine_life, atoi)										\
+	DEF_HANDLER(cs_missile_reload_time, atoi)							\
+	DEF_HANDLER(cs_missile_life, atoi)									\
+	DEF_HANDLER(cs_missile_speed, atof)									\
+	DEF_HANDLER(controls_scrambled, atoi)								\
+	DEF_HANDLER(frames_till_unscramble, atoi)							\
+	DEF_HANDLER(scramble_life, atoi)									\
+	DEF_HANDLER(traitor_missile_reload_time, atoi)						\
+	DEF_HANDLER(traitor_missile_life, atoi)								\
+	DEF_HANDLER(traitor_missile_speed, atof)							\
+	DEF_HANDLER(traitor_life, atoi)										\
+	DEF_HANDLER(traitor_active, atoi)									\
+	DEF_HANDLER(frames_till_traitor_deactivate, atoi)					\
+	DEF_HANDLER(anti_missile_active, atoi)								\
+	DEF_HANDLER(cloaking_active, atoi)									\
+	DEF_HANDLER(cloak_reload_time, atoi)								\
+	DEF_HANDLER(frames_till_cloak, atoi)								\
+	DEF_HANDLER(cloak_time, atoi)										\
+	DEF_HANDLER(frames_till_cloak_suck, atoi)							\
+	DEF_HANDLER(decoy_life, atoi)										\
+	DEF_HANDLER(decoy_reload_time, atoi)
+
+void Vehicle_Set(Vehicle* v, const char* key, const char* value)
 {
-	char* lines[NUM_LINES_PER_TANK];
-};
+#define DEF_HANDLER(field, func)					\
+	if (strcmp(#field, key) == 0)					\
+	{												\
+		v->field = func(value);						\
+		return;										\
+	}
+
+	HANDLER_LIST
+}
+
+#define MAX_TANKS 10
 
 void Load_Tanks(Player* player, const game_configuration_type* gc)
 {
 	// append path to front of filename.
 	char newfilename[512];
-	sprintf(newfilename, "%sgamedata/new_tanks.dat", g_DataPath);
+	sprintf(newfilename, "%sgamedata/tanks.yaml", g_DataPath);
 	FILE* fp = fopen(newfilename, "rb");
 	if (!fp)
 		SYS_Error("Error loading Tanks!\n");
 
-	struct tank_lines* t_lines = (struct tank_lines*)malloc(sizeof(struct tank_lines) * NUM_TANKS);
+	// pre allocate the maximum number of tanks.
+	Vehicle* tanks = (Vehicle*)malloc(sizeof(Vehicle) * MAX_TANKS);
+	memset(tanks, 0, sizeof(Vehicle) * MAX_TANKS);
 
-	// load in the WHOLE thing.
-	fseek(fp, 0, SEEK_END);
-	int size = ftell(fp);
-	char* buffer = (char*)malloc(sizeof(char) * (size + 1));
-	fseek(fp, 0, SEEK_SET);
-	fread(buffer, sizeof(char), size, fp);
+	yaml_parser_t parser;
+	yaml_parser_initialize(&parser);
+	yaml_parser_set_input_file(&parser, fp);
 
-	int line_count = 0;
-	int t_count = 0;
-	char* line = strtok(buffer, "\n");
-	while (line)
+	// NOTE: YAML file is expected to contain a sequence of maps.
+	// One map per vehicle type.
+	int done = 0;
+	int tank_index = 0;
+	char key[128];
+	bool read_key = false;
+
+	while (!done)
 	{
-		// skip comment lines
-		if (line[0] == '#')
-			continue;
-
-		t_lines[t_count].lines[line_count++] = line;
-
-		// move on to next tank
-		if (line_count == NUM_LINES_PER_TANK)
+		yaml_event_t event;
+		
+		// get the next event
+		if (!yaml_parser_parse(&parser, &event))
 		{
-			line_count = 0;
-			t_count++;
+			SYS_Error("error parsing YAML file \"%s\"\n", newfilename);
+			return;
 		}
-		line = strtok(0, "\n");
+
+		// process the event
+		switch (event.type)
+		{
+		case YAML_MAPPING_START_EVENT:
+			read_key = true;
+			break;
+
+		case YAML_SCALAR_EVENT:
+			if (read_key)
+				strcpy(key, (char*)event.data.scalar.value);
+			else
+				Vehicle_Set(&tanks[tank_index], key, (char*)event.data.scalar.value);
+			read_key = !read_key;
+			break;
+
+		case YAML_MAPPING_END_EVENT:
+			assert(tank_index < MAX_TANKS);  // too many tanks in yaml file!
+			tank_index++;
+			break;
+
+		case YAML_NO_EVENT:
+		case YAML_STREAM_START_EVENT:
+		case YAML_STREAM_END_EVENT:
+		case YAML_DOCUMENT_START_EVENT:
+		case YAML_DOCUMENT_END_EVENT:
+		case YAML_ALIAS_EVENT:
+		case YAML_SEQUENCE_START_EVENT:
+		case YAML_SEQUENCE_END_EVENT:
+		default:
+			break;
+		}
+
+		done = (event.type == YAML_STREAM_END_EVENT);
+		yaml_event_delete(&event);
 	}
 
-	int i, j;
-	for (i = 0; i < 6; i++)
+	yaml_parser_delete(&parser);
+
+	for (int i = 0; i < 6; ++i)
 	{
-		Vehicle* v = &player[i].tank;
-		memset(v, 0, sizeof(Vehicle));
 		int index;
 		switch(i)
 		{
@@ -83,89 +187,10 @@ void Load_Tanks(Player* player, const game_configuration_type* gc)
 		case 4: index = gc->blue1_vehicle; break;
 		case 5: index = gc->blue2_vehicle; break;
 		}
-		int l = 0;
-		v->vtype = (VehicleType)atoi(t_lines[index].lines[l++]);
-		v->surface_rad = atof(t_lines[index].lines[l++]);
-
-		v->air_forward_speed = atof(t_lines[index].lines[l++]);
-		v->air_max_forward_speed = atof(t_lines[index].lines[l++]);
-		v->air_inc_forward_speed = atof(t_lines[index].lines[l++]);
-		v->air_max_sidestep_speed = atof(t_lines[index].lines[l++]);
-		v->air_inc_sidestep_speed = atof(t_lines[index].lines[l++]);
-
-		v->air_rise_rot_speed = atof(t_lines[index].lines[l++]);
-		v->air_spin_rot_speed = atof(t_lines[index].lines[l++]);
-		v->air_inc_rot_speed = atof(t_lines[index].lines[l++]);
-		v->air_max_rot_speed = atof(t_lines[index].lines[l++]);
-		v->surface_max_speed = atof(t_lines[index].lines[l++]);
-		v->surface_inc_speed = atof(t_lines[index].lines[l++]);
-		v->surface_inc_sidestep_speed = atof(t_lines[index].lines[l++]);
-
-		v->surface_rot_speed = atof(t_lines[index].lines[l++]);
-		v->surface_inc_rot_speed = atof(t_lines[index].lines[l++]);
-		v->surface_max_rot_speed = atof(t_lines[index].lines[l++]);
-
-		v->laser_speed = atof(t_lines[index].lines[l++]);
-		v->laser_life = atoi(t_lines[index].lines[l++]);
-		v->laser_damage = atoi(t_lines[index].lines[l++]);
-		v->laser_reload_time = atoi(t_lines[index].lines[l++]);
-		v->frames_till_fire_laser = atoi(t_lines[index].lines[l++]);
-
-		v->missile_speed = atof(t_lines[index].lines[l++]);
-		v->turning_angle = atof(t_lines[index].lines[l++]);
-		v->missile_life = atoi(t_lines[index].lines[l++]);
-		v->missile_damage = atoi(t_lines[index].lines[l++]);
-		v->missile_reload_time = atoi(t_lines[index].lines[l++]);
-		v->frames_till_fire_missile = atoi(t_lines[index].lines[l++]);
-		v->missile_generation_time = atoi(t_lines[index].lines[l++]);
-		v->frames_till_new_missile = atoi(t_lines[index].lines[l++]);
-		v->max_missile_storage = atoi(t_lines[index].lines[l++]);
-		v->missiles_stored = atoi(t_lines[index].lines[l++]);
-
-		v->max_projectiles = atoi(t_lines[index].lines[l++]);
-
-		v->max_hitpoints = atoi(t_lines[index].lines[l++]);
-		v->current_hitpoints = atoi(t_lines[index].lines[l++]);
-
-		v->ramming_active = atoi(t_lines[index].lines[l++]);
-		v->ramming_damage = atoi(t_lines[index].lines[l++]);
-
-		v->double_lasers_active = atoi(t_lines[index].lines[l++]);
-
-		v->mine_reload_time = atoi(t_lines[index].lines[l++]);
-		v->mine_damage = atoi(t_lines[index].lines[l++]);
-		v->mine_life = atoi(t_lines[index].lines[l++]);
-
-		v->cs_missile_reload_time = atoi(t_lines[index].lines[l++]);
-		v->cs_missile_life = atoi(t_lines[index].lines[l++]);
-		v->cs_missile_speed = atof(t_lines[index].lines[l++]);
-
-		v->controls_scrambled = atoi(t_lines[index].lines[l++]);
-		v->frames_till_unscramble = atoi(t_lines[index].lines[l++]);
-		v->scramble_life = atoi(t_lines[index].lines[l++]);
-
-		v->traitor_missile_reload_time = atoi(t_lines[index].lines[l++]);
-		v->traitor_missile_life = atoi(t_lines[index].lines[l++]);
-		v->traitor_missile_speed = atof(t_lines[index].lines[l++]);
-
-		v->traitor_life = atoi(t_lines[index].lines[l++]);
-		v->traitor_active = atoi(t_lines[index].lines[l++]);
-		v->frames_till_traitor_deactivate = atoi(t_lines[index].lines[l++]);
-
-		v->anti_missile_active = atoi(t_lines[index].lines[l++]);
-
-		v->cloaking_active = atoi(t_lines[index].lines[l++]);
-		v->cloak_reload_time = atoi(t_lines[index].lines[l++]);
-		v->frames_till_cloak = atoi(t_lines[index].lines[l++]);
-		v->cloak_time = atoi(t_lines[index].lines[l++]);
-		v->frames_till_cloak_suck = atoi(t_lines[index].lines[l++]);
-
-		v->decoy_life = atoi(t_lines[index].lines[l++]);
-		v->decoy_reload_time = atoi(t_lines[index].lines[l++]);
+		memcpy(&player[i].tank, &tanks[index], sizeof(Vehicle));
 	}
-	
-	free(t_lines);
-	free(buffer);
+
+	free(tanks);
 }
 
 void init_vehicle_gradient( Vehicle *tank )
