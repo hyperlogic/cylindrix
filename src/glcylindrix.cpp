@@ -80,7 +80,7 @@ static void GL_FrameBufferTextureInit()
     glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
     glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
 	glPixelStorei( GL_UNPACK_ALIGNMENT, 1 );
-	glTexImage2D( GL_TEXTURE_2D, 0, 4, 512, 256, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0 );	
+	glTexImage2D( GL_TEXTURE_2D, 0, 4, 512, 256, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0 );
 }
 
 // creates a 1x256 texture that we will use to subload the current 8-bit palette into.
@@ -89,10 +89,10 @@ static void GL_PalletteTextureInit()
     // create the pallete texture
     glGenTextures( 1, &paletteTexture );
     glBindTexture( GL_TEXTURE_2D, paletteTexture );
-    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );	
-    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );	
+    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
+    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
 	glPixelStorei( GL_UNPACK_ALIGNMENT, 1 );
-	glTexImage2D( GL_TEXTURE_2D, 0, 4, 1, 256, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0 );	
+	glTexImage2D( GL_TEXTURE_2D, 0, 4, 1, 256, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0 );
 }
 
 // renders the frameBufferTexture on a quad that fills the screen.
@@ -105,7 +105,7 @@ static void GL_RenderBuffer()
 		fadeFrames--;
 	}
 	else
-	{				
+	{
 		fadeAlpha = 1.0f;
 	}
 
@@ -113,47 +113,46 @@ static void GL_RenderBuffer()
 	if ( fadeAlpha < 0 )
 		fadeAlpha = 0;
 	else if ( fadeAlpha > 1 )
-		fadeAlpha = 1;	
-	
+		fadeAlpha = 1;
+
 	// Clear all pixels.
 	glClearColor( 0.0, 0.0, 0.0, 0.0 );
-	
+
 	glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 
 	glMatrixMode( GL_PROJECTION );
-	glLoadIdentity();	
+	glLoadIdentity();
 	float aspect = (float)g_width/g_height;
 	glOrtho(-aspect, aspect, -1, 1, -1, 1);
 
-	glMatrixMode( GL_MODELVIEW );	
+	glMatrixMode( GL_MODELVIEW );
 	glLoadIdentity();
 
 	glBindTexture( GL_TEXTURE_2D, frameBufferTexture );
-	glTexEnvf( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE );	
+	glTexEnvf( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE );
 
 	glEnable(GL_TEXTURE_2D);
-	glDisable(GL_LIGHTING);	
+	glDisable(GL_LIGHTING);
 
 	float orig_aspect = 1.33333f; // 4:3
 	glBegin( GL_POLYGON );
 	glColor3f( fadeAlpha, fadeAlpha, fadeAlpha );
-	
-	glTexCoord2f( 0, FBV );	
+
+	glTexCoord2f( 0, FBV );
 	glVertex3f( -orig_aspect, -1, 0 );
 
-	glTexCoord2f( FBU, FBV );	
+	glTexCoord2f( FBU, FBV );
 	glVertex3f( orig_aspect, -1, 0 );
 
-	glTexCoord2f( FBU, 0 );	
+	glTexCoord2f( FBU, 0 );
 	glVertex3f( orig_aspect, 1, 0 );
 
-	glTexCoord2f( 0, 0 );	
+	glTexCoord2f( 0, 0 );
 	glVertex3f( -orig_aspect, 1, 0 );
-	
+
 	glEnd();
 
 	glDisable(GL_TEXTURE_2D);
-	glFlush();
 
 	SYS_SwapBuffers();
 
@@ -165,7 +164,7 @@ void GL_SubloadAndSwapBuffer()
 {
 	makeFrameBuffer( double_buffer );
 
-	glBindTexture(GL_TEXTURE_2D, frameBufferTexture);	
+	glBindTexture(GL_TEXTURE_2D, frameBufferTexture);
 	glTexSubImage2D( GL_TEXTURE_2D, 0, 0, 0, 320, 200, GL_RGBA, GL_UNSIGNED_BYTE, rgbaFrameBuffer );
 
 	GL_RenderBuffer();
@@ -175,7 +174,7 @@ void GL_SubloadAndSwapBuffer()
 void GL_SubloadPaletteTexture()
 {
 	glBindTexture( GL_TEXTURE_2D, paletteTexture );
-	glTexSubImage2D( GL_TEXTURE_2D, 0, 0, 0, 1, 256, GL_RGBA, GL_UNSIGNED_BYTE, palette );	
+	glTexSubImage2D( GL_TEXTURE_2D, 0, 0, 0, 1, 256, GL_RGBA, GL_UNSIGNED_BYTE, palette );
 }
 
 // AJT: depencency issue
@@ -196,7 +195,7 @@ void GL_SetFrameBufferPalette( PALETTE paletteIn )
 void GL_FadeOutFrameBuffer( int frames )
 {
 	fadeFrames = frames;
-	fadeDelta = -1.0f / (float)frames; 
+	fadeDelta = -1.0f / (float)frames;
 }
 
 // sets up a palette fade
@@ -213,7 +212,7 @@ void GL_Cylindrix_Init()
 	GL_FrameBufferTextureInit();
 
 	// init the palette texture
-	GL_PalletteTextureInit();	
+	GL_PalletteTextureInit();
 }
 
 void GL_Cylindrix_Shutdown()
@@ -245,11 +244,11 @@ float GL_IntensityToPaletteTexCoord( WorldStuff* worldStuff, float intensity, Gr
 {
 	// look up gradient properties.
     unsigned char num_colors = worldStuff->color_info.gradient[gradient].num_colors;
-    unsigned char offset = worldStuff->color_info.gradient[gradient].first;	
+    unsigned char offset = worldStuff->color_info.gradient[gradient].first;
     unsigned int shade;
-	
+
 	// clamp intensity
-	if ( intensity < 0 )	
+	if ( intensity < 0 )
 		intensity = 0;
 	else if ( intensity > 1 )
 		intensity = 1;
@@ -262,7 +261,7 @@ float GL_IntensityToPaletteTexCoord( WorldStuff* worldStuff, float intensity, Gr
 		shade = offset;
 	else if ( shade > offset + (num_colors - 1) )
 		shade = offset + (num_colors - 1);
-	
+
 	return ((float)shade + 0.5f) / 255.0f;
 }
 
@@ -284,7 +283,7 @@ void GL_DrawTube( WorldStuff* worldStuff, enum TubeType tubeType )
 	float aspect = (float)g_width/g_height;
 	gluPerspective( 90.5f, aspect, 0.1f, 50.0f );
 
-	// AJT: todo take tubeType into account.	
+	// AJT: todo take tubeType into account.
 
 	glEnable( GL_CULL_FACE );
 	glCullFace( GL_FRONT );
@@ -294,8 +293,8 @@ void GL_DrawTube( WorldStuff* worldStuff, enum TubeType tubeType )
 	glLoadIdentity();
 
 	gluLookAt( worldStuff->view_orientation.position[0], worldStuff->view_orientation.position[1], worldStuff->view_orientation.position[2],
-			   worldStuff->view_orientation.position[0] + worldStuff->view_orientation.front[0], 
-			   worldStuff->view_orientation.position[1] + worldStuff->view_orientation.front[1], 
+			   worldStuff->view_orientation.position[0] + worldStuff->view_orientation.front[0],
+			   worldStuff->view_orientation.position[1] + worldStuff->view_orientation.front[1],
 			   worldStuff->view_orientation.position[2] + worldStuff->view_orientation.front[2],
 			   worldStuff->view_orientation.up[0], worldStuff->view_orientation.up[1], worldStuff->view_orientation.up[2] );
 
@@ -303,7 +302,7 @@ void GL_DrawTube( WorldStuff* worldStuff, enum TubeType tubeType )
 	glEnable( GL_TEXTURE_2D );
 	glDisable( GL_LIGHTING );
 	glColor3f( 1, 1, 1 );
-	
+
 	pos[0] = worldStuff->view_orientation.position[0];
 	pos[1] = worldStuff->view_orientation.position[1];
 	pos[2] = worldStuff->view_orientation.position[2];
@@ -329,14 +328,13 @@ void GL_DrawTube( WorldStuff* worldStuff, enum TubeType tubeType )
 			// TODO: make this based on something (yon?)
 			intensity = 1.0f - (len / 25.0f);
 			texCoord = GL_IntensityToPaletteTexCoord( worldStuff, intensity, worldStuff->tube.face[i].gradient );
-	
+
 			glTexCoord2f( 0, texCoord );
 			glVertex3f( v[0], v[1], v[2] );
 		}
 		glEnd();
 	}
-	glDisable( GL_TEXTURE_2D );		
-	glFlush();		
+	glDisable( GL_TEXTURE_2D );
 	glDisable( GL_CULL_FACE );
 }
 
@@ -372,7 +370,7 @@ void GL_DrawEverything( WorldStuff* worldStuff )
 
 	// draw the shizit.
 	for ( i = 0; i < worldStuff->everything.faces; ++i )
-	{				
+	{
 		n[0] = mtof( worldStuff->everything.face[i].normal[0] );
 		n[1] = mtof( worldStuff->everything.face[i].normal[1] );
 		n[2] = mtof( worldStuff->everything.face[i].normal[2] );
@@ -415,16 +413,15 @@ void GL_DrawEverything( WorldStuff* worldStuff )
 				n_dot_l = 1;
 
 			intensity = n_dot_l * (1.0f - (len / 25.0f));
-						
+
 			texCoord = GL_IntensityToPaletteTexCoord( worldStuff, intensity, worldStuff->everything.face[i].gradient );
-	
+
 			glTexCoord2f( 0, texCoord );
 			glVertex3f( v[0], v[1], v[2] );
 		}
-		glEnd();		
+		glEnd();
 	}
 	glDisable( GL_TEXTURE_2D );
-	glFlush();
 }
 
 // overlayes the contents of the framebuffer onto the screen, blended with the current contents.
@@ -440,15 +437,15 @@ void GL_SwapBuffers()
 	glTexSubImage2D( GL_TEXTURE_2D, 0, 0, 0, 320, 200, GL_RGBA, GL_UNSIGNED_BYTE, rgbaFrameBuffer );
 
     glMatrixMode( GL_PROJECTION );
-    glLoadIdentity();	
+    glLoadIdentity();
 	float aspect = (float)g_width/g_height;
 	glOrtho(-aspect, aspect, -1, 1, -1, 1);
 
-    glMatrixMode( GL_MODELVIEW );	
+    glMatrixMode( GL_MODELVIEW );
     glLoadIdentity();
 
 	glBindTexture( GL_TEXTURE_2D, frameBufferTexture );
-	glTexEnvf( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE );	
+	glTexEnvf( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE );
 
 	glEnable(GL_TEXTURE_2D);
 	glDisable(GL_LIGHTING);
@@ -457,21 +454,21 @@ void GL_SwapBuffers()
 
 	glEnable( GL_BLEND );
 	glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
-	
+
 	float orig_aspect = 1.33333f; // 4:3
     glBegin( GL_POLYGON );
 	glColor4f( 1, 1, 1, 1 );
-	
-	glTexCoord2f( 0, FBV );	
+
+	glTexCoord2f( 0, FBV );
 	glVertex3f( -orig_aspect, -1, 0 );
 
-	glTexCoord2f( FBU, FBV );	
+	glTexCoord2f( FBU, FBV );
 	glVertex3f( orig_aspect, -1, 0 );
 
-	glTexCoord2f( FBU, 0 );	
+	glTexCoord2f( FBU, 0 );
 	glVertex3f( orig_aspect, 1, 0 );
 
-	glTexCoord2f( 0, 0 );	
+	glTexCoord2f( 0, 0 );
 	glVertex3f( -orig_aspect, 1, 0 );
 
 	glEnd();

@@ -182,6 +182,18 @@ void IntroEnter()
 	intro_start_time = SYS_GetTimeSeconds();
 }
 
+enum IntroSubState {
+    INTROSS_GOLDTREE_FADE_IN = 0,
+    INTROSS_GOLDTREE_IDLE,
+    INTROSS_GOLDTREE_FADE_OUT,
+    INTROSS_HOTWAREZ_FADE_IN,
+    INTROSS_HOTWAREZ_IDLE,
+    INTROSS_HOTWAREZ_FADE_OUT,
+    INTROSS_MOVIE_START,
+    INTROSS_MOVIE_IDLE,
+    INTROSS_DONE = 8
+};
+
 void IntroProcess()
 {
 	float timer = SYS_GetTimeSeconds() - intro_start_time;
@@ -192,36 +204,33 @@ void IntroProcess()
 
 	switch ( intro_sub_state )
 	{
-		// fade in
-		case 0:
+		case INTROSS_GOLDTREE_FADE_IN:
 			Enable_Color_Palette( intro_image[current_intro_image] );
 			if ( timer > fade_time )
 			{
-				intro_sub_state++;
+				intro_sub_state = INTROSS_GOLDTREE_IDLE;
 				intro_start_time = SYS_GetTimeSeconds();
 			}
 			else
 				fade = timer / fade_time;
 			break;
 
-		// wait
-		case 1:
+		case INTROSS_GOLDTREE_IDLE:
 			Enable_Color_Palette( intro_image[current_intro_image] );
 			if ( timer > wait_time )
 			{
-				intro_sub_state++;
+				intro_sub_state = INTROSS_GOLDTREE_FADE_OUT;
 				intro_start_time = SYS_GetTimeSeconds();
 			}
 			else
 				fade = 1.0f;
 			break;
 
-		// fade out
-		case 2:
+		case INTROSS_GOLDTREE_FADE_OUT:
 			Enable_Color_Palette( intro_image[current_intro_image] );
 			if ( timer > fade_time )
 			{
-				intro_sub_state++;
+				intro_sub_state = INTROSS_HOTWAREZ_FADE_IN;
 				intro_start_time = SYS_GetTimeSeconds();
 				// switch images
 				Pop_Buffer( intro_image[++current_intro_image]->buffer );
@@ -232,36 +241,33 @@ void IntroProcess()
 				fade = 1.0f - (timer / fade_time);
 			break;
 
-		// fade in
-		case 3:
+		case INTROSS_HOTWAREZ_FADE_IN:
 			Enable_Color_Palette( intro_image[current_intro_image] );
 			if ( timer > fade_time )
 			{
-				intro_sub_state++;
+				intro_sub_state = INTROSS_HOTWAREZ_IDLE;
 				intro_start_time = SYS_GetTimeSeconds();
 			}
 			else
 				fade = timer / fade_time;
 			break;
 
-		// wait
-		case 4:
+		case INTROSS_HOTWAREZ_IDLE:
 			Enable_Color_Palette( intro_image[current_intro_image] );
 			if ( timer > wait_time )
 			{
-				intro_sub_state++;
+				intro_sub_state = INTROSS_HOTWAREZ_FADE_OUT;
 				intro_start_time = SYS_GetTimeSeconds();
 			}
 			else
 				fade = 1.0f;
 			break;
 
-		// fade out
-		case 5:
+		case INTROSS_HOTWAREZ_FADE_OUT:
 			Enable_Color_Palette( intro_image[current_intro_image] );
 			if ( timer > fade_time )
 			{
-				intro_sub_state++;
+				intro_sub_state = INTROSS_MOVIE_START;
 				intro_start_time = SYS_GetTimeSeconds();
 				fade = 0.0f;
 			}
@@ -269,20 +275,20 @@ void IntroProcess()
 				fade = 1.0f - (timer / fade_time);
 			break;
 
-		case 6:
-			intro_sub_state++;
+		case INTROSS_MOVIE_START:
+			intro_sub_state = INTROSS_MOVIE_IDLE;
 			PlayFliEnter( "FLI/CYLINDRX.FLI" );
 			break;
 
-		case 7:
+		case INTROSS_MOVIE_IDLE:
 			if ( !PlayFliProcess() )
 			{
-				intro_sub_state = 99;
+				intro_sub_state = INTROSS_DONE;
 			}
 			break;
 
 		// fade out and jump to main menu.
-		case 99:
+		case INTROSS_DONE:
 			fade = intro_exit_fade - (exit_fade_rate * timer);
 			if ( fade < 0.0f )
 			{
@@ -297,13 +303,13 @@ void IntroProcess()
 	}
 
 	Set_Palette_Fade( fade );
-	Swap_Buffer();
+    Swap_Buffer();
 
 	// check for keyboard input.
 	if ( SYS_KeyPressed( KEY_ESC ) || SYS_KeyPressed( KEY_ENTER ) )
 	{
 		// skip the rest of the intro
-		intro_sub_state = 99;
+		intro_sub_state = INTROSS_DONE;
 		intro_exit_fade = fade;
 		intro_start_time = SYS_GetTimeSeconds();
 	}

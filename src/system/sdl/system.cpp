@@ -25,7 +25,6 @@ void SYS_SwapBuffers()
 	SDL_GL_SwapBuffers();
 }
 
-
 void SYS_TimerInit()
 {
 
@@ -38,7 +37,7 @@ float SYS_GetTimeSeconds()
 }
 
 unsigned long SYS_GetTimeMS()
-{	
+{
 	return SYS_GetTimeSeconds() * 1000.0f;
 }
 
@@ -148,7 +147,7 @@ static void processKeys()
 	for ( int i = 0; i < SIZEOFKEYTABLE; ++i )
 	{
 		SDLKey sdlKey = keyToSDLKey[i];
-		
+
 		if ( keys[sdlKey] )
 		{
 			keysPressed[i] = keysDown[i] ? 0 : 1;
@@ -165,12 +164,10 @@ static void processKeys()
 static bool process()
 {
 	processKeys();
-	
+
 	SYS_ProcessSound();
 
 	bool done = GameLoop();
-
-	SYS_SwapBuffers();
 
 	return done;
 }
@@ -205,10 +202,10 @@ int main( int argc, char* argv[] )
 	else
 	{
 		// TODO: get this from a config file or something...
-//		g_width = 1024; g_height = 768;  // 4:3
-		g_width = 1280; g_height = 720;  // 16:9
+		g_width = 1024; g_height = 768;  // 4:3
+//		g_width = 1280; g_height = 720;  // 16:9
 		bpp = videoInfo->vfmt->BitsPerPixel;
-		screen = SDL_SetVideoMode(g_width, g_height, bpp, SDL_HWSURFACE | SDL_OPENGL | SDL_DOUBLEBUF | SDL_RESIZABLE);
+		screen = SDL_SetVideoMode(g_width, g_height, bpp, SDL_HWSURFACE | SDL_OPENGL | SDL_DOUBLEBUF /*| SDL_RESIZABLE*/);
 	}
 
 	if ( !screen )
@@ -253,7 +250,7 @@ int main( int argc, char* argv[] )
 		const char* error = SDL_GetError();
 		if (error[0] != 0)
 			printf("SDL_Error = %s\n", error);
-		
+
 	}
 
 	GameShutdown();
