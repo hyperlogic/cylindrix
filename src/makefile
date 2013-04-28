@@ -1,16 +1,12 @@
 # cylindrix makefile
 
-# TODO: determine platform..
 PLATFORM = $(shell uname)
-#PLATFORM = MACOSX
-#PLATFORM = LINUX
-#PLATFORM = MINGW
 
 # SDL Mac OS X
 ifeq ($(PLATFORM),Darwin)
 GCC = g++
-CFLAGS = -Wall -D GLCYLINDRIX -O3 -D DARWIN -I /Developer/SDKs/MacOSX10.4u.sdk/System/Library/Frameworks/OpenGL.framework/Headers -I /Developer/SDKs/MacOSX10.4u.sdk/System/Library/Frameworks/GLUT.framework/Headers -I /Library/Frameworks/SDL.framework/Headers
-LFLAGS = -framework Cocoa -framework OpenGL -framework GLUT -framework SDL -framework OpenAL -lstdc++ -lmpg123 -lyaml
+CFLAGS = -Wall -D GLCYLINDRIX -O3 -D DARWIN `sdl-config --cflags`
+LFLAGS = -framework Cocoa -framework OpenGL -framework GLUT -framework OpenAL -lstdc++ -lmpg123 -lyaml `sdl-config --libs`
 endif
 
 # SDL Linux
@@ -67,7 +63,7 @@ sound.o : system/openal/sound.cpp $(DEPENDS)
 	$(GCC) $(CFLAGS) -c $<
 
 # Mac OS X system files
-ifeq ($(PLATFORM),MACOSX)
+ifeq ($(PLATFORM),Darwin)
 SDLMain.o : system/darwin/SDLMain.m $(DEPENDS)
 	$(GCC) $(CFLAGS) -c $<
 endif
