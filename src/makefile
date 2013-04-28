@@ -1,27 +1,34 @@
 # cylindrix makefile
 
 PLATFORM = $(shell uname)
+DEBUG = false
 
 # SDL Mac OS X
 ifeq ($(PLATFORM),Darwin)
 GCC = g++
-CFLAGS = -Wall -D GLCYLINDRIX -O3 -D DARWIN `sdl-config --cflags`
+CFLAGS = -Wall -D GLCYLINDRIX -D DARWIN `sdl-config --cflags`
 LFLAGS = -framework Cocoa -framework OpenGL -framework GLUT -framework OpenAL -lstdc++ -lmpg123 -lyaml `sdl-config --libs`
 endif
 
 # SDL Linux
 ifeq ($(PLATFORM),Linux)
 GCC = g++
-#CFLAGS = -Wall -D GLCYLINDRIX -O3
-CFLAGS = -Wall -D GLCYLINDRIX -g
+CFLAGS = -Wall -D GLCYLINDRIX
 LFLAGS = -lGL -lGLU -lSDL -lc -lmpg123 -lopenal -lyaml
 endif
 
 # SDL Microsoft Windows using MINGW
 ifeq ($(PLATFORM),MinGW)
 GCC = g++
-CFLAGS = -Wall -D GLCYLINDRIX -O3 -I/msys/1.0/include -I/msys/1.0/local/include -I/code/OpenAL-1.1/include
+CFLAGS = -Wall -D GLCYLINDRIX -I/msys/1.0/include -I/msys/1.0/local/include -I/code/OpenAL-1.1/include
 LFLAGS = -lmingw32 -lSDLmain -lSDL -lOpenGL32 -lGlu32 -lmpg123 -lopenal32 -lyaml -L/msys/1.0/lib -L/msys/1.0/local/lib -L/code/OpenAL-1.1/libs/Win32
+endif
+
+# debug symbols
+ifeq ($(DEBUG),true)
+CFLAGS += -g
+else
+CFLAGS += -O3
 endif
 
 OBJ = ai.o ai_move.o ai_util.o base.o clipping.o collide.o commands.o \
