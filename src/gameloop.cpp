@@ -23,8 +23,8 @@ extern boolean no_anims;
 const char* gameName = "Cylindrix";
 
 enum GameStateEnum
-{	
-	GAMESTATE_INTRO, 	
+{
+	GAMESTATE_INTRO,
 	GAMESTATE_MAINMENU,
 	GAMESTATE_CUSTOMGAME,
 	GAMESTATE_TOURNAMENTGAME,
@@ -70,7 +70,7 @@ static long status_bar = FALSE;
 
 static int tournamentLevel = 0;
 
-enum TournamentLevelEnum 
+enum TournamentLevelEnum
 {
 	Scavangers = 0,
 	Bok = 1,
@@ -110,7 +110,7 @@ struct TournamentLevelData tournamentLevelData[ NumLevels ] =
 //
 
 enum PlayGameStateEnum
-{	
+{
 	PLAYGAMESTATE_INTRO,
 	PLAYGAMESTATE_ENTERVEHICLE,
 	PLAYGAMESTATE_FIGHT,
@@ -170,7 +170,7 @@ void IntroEnter()
 
 	intro_image[1] = (pcx_picture*)malloc( sizeof( pcx_picture ) );
 	PCX_Load( "pcx_data/hotware.pcx", intro_image[1] );
-	
+
 	Pop_Buffer( intro_image[0]->buffer );
 	current_intro_image = 0;
 
@@ -183,7 +183,7 @@ void IntroEnter()
 }
 
 void IntroProcess()
-{	 
+{
 	float timer = SYS_GetTimeSeconds() - intro_start_time;
 	const float fade_time = 0.5f;
 	const float wait_time = 2.0f;
@@ -200,7 +200,7 @@ void IntroProcess()
 				intro_sub_state++;
 				intro_start_time = SYS_GetTimeSeconds();
 			}
-			else			
+			else
 				fade = timer / fade_time;
 			break;
 
@@ -220,7 +220,7 @@ void IntroProcess()
 		case 2:
 			Enable_Color_Palette( intro_image[current_intro_image] );
 			if ( timer > fade_time )
-			{				
+			{
 				intro_sub_state++;
 				intro_start_time = SYS_GetTimeSeconds();
 				// switch images
@@ -228,7 +228,7 @@ void IntroProcess()
 				Enable_Color_Palette( intro_image[current_intro_image] );
 				fade = 0.0f;
 			}
-			else			
+			else
 				fade = 1.0f - (timer / fade_time);
 			break;
 
@@ -240,7 +240,7 @@ void IntroProcess()
 				intro_sub_state++;
 				intro_start_time = SYS_GetTimeSeconds();
 			}
-			else			
+			else
 				fade = timer / fade_time;
 			break;
 
@@ -265,7 +265,7 @@ void IntroProcess()
 				intro_start_time = SYS_GetTimeSeconds();
 				fade = 0.0f;
 			}
-			else			
+			else
 				fade = 1.0f - (timer / fade_time);
 			break;
 
@@ -297,7 +297,7 @@ void IntroProcess()
 	}
 
 	Set_Palette_Fade( fade );
-	Swap_Buffer();	
+	Swap_Buffer();
 
 	// check for keyboard input.
 	if ( SYS_KeyPressed( KEY_ESC ) || SYS_KeyPressed( KEY_ENTER ) )
@@ -331,7 +331,7 @@ void IntroExit()
 //
 
 void MainMenuEnter()
-{	
+{
 	Init_Menu_Sounds();
 
     // load all of the samples needed for the menu
@@ -340,7 +340,7 @@ void MainMenuEnter()
     init_all_main_menus();
 
 	menu_event_init();
-   
+
 	Enable_Color_Palette( &menu_stuff.general_menu_background );
 
 	strcpy( game_configuration.cylinder_filename, "gamedata/level1.dat" );
@@ -377,7 +377,7 @@ void MainMenuExit()
 }
 
 static char* LookupMusicFilename(char* cylinder_filename)
-{	
+{
 	if(strcmp(cylinder_filename,"gamedata/level1.dat") == 0)
 		return SCAVENGER_SONG;
 	else if(strcmp(cylinder_filename,"gamedata/level2.dat") == 0)
@@ -420,19 +420,19 @@ void StartCustomGame()
     if( strcmp( game_configuration.cylinder_filename, "gamedata/level10.dat" ) == 0 )
         color_cycle = TRUE;
     else
-        color_cycle = FALSE;    
+        color_cycle = FALSE;
 
     // init stats.
     Clear_Game_Stats( &game_stats );
     strcpy( game_stats.name, game_configuration.pilot_name );
 
 	// play some music
-	if ( game_configuration.music_on ) 
+	if ( game_configuration.music_on )
 	{
 		if (music)
 			SYS_ReleaseSound(music);
-			
-		music = SYS_LoadSound(LookupMusicFilename(game_configuration.cylinder_filename));		
+
+		music = SYS_LoadSound(LookupMusicFilename(game_configuration.cylinder_filename));
 		SYS_PlaySoundVolume(music, true, game_configuration.music_vol);
 	}
 
@@ -460,19 +460,19 @@ void StartTournamentGame()
     if( strcmp( game_configuration.cylinder_filename, "gamedata/level10.dat" ) == 0 )
         color_cycle = TRUE;
     else
-        color_cycle = FALSE;    
+        color_cycle = FALSE;
 
     // init stats.
     Clear_Game_Stats( &game_stats );
     strcpy( game_stats.name, game_configuration.pilot_name );
 
 	// play some music
-	if ( game_configuration.music_on ) 
+	if ( game_configuration.music_on )
 	{
 		if (music)
-			SYS_ReleaseSound(music);	
-			
-		music = SYS_LoadSound(LookupMusicFilename(game_configuration.cylinder_filename));		
+			SYS_ReleaseSound(music);
+
+		music = SYS_LoadSound(LookupMusicFilename(game_configuration.cylinder_filename));
 		SYS_PlaySoundVolume(music, true, game_configuration.music_vol);
 	}
 
@@ -490,7 +490,7 @@ void EndTournamentGame()
 {
 	free_world_stuff( &world_stuff );
 	free_all_samples( &world_stuff );
-	Free_Menu_Sounds();    
+	Free_Menu_Sounds();
 }
 
 
@@ -506,10 +506,10 @@ void SetupLevel( int level )
 	strcpy( game_configuration.cylinder_filename, tournamentLevelData[level].cylinder_filename );
 
 	// play animations.
-    if ( game_configuration.animations_on && !no_anims ) 
+    if ( game_configuration.animations_on && !no_anims )
 	{
         Play_Fli( levelFli[level] );
-    }	
+    }
 
 	// TODO: play music
 
@@ -518,7 +518,7 @@ void SetupLevel( int level )
 }
 
 void PlayCustomGameEnter()
-{	
+{
 	StartCustomGame();
 }
 
@@ -658,7 +658,7 @@ void PlayGameIntroEnter()
 void PlayGameIntroProcess()
 {
 	float timer = SYS_GetTimeSeconds() - intro_start_time;
-	const float fade_time = 2.0f;	
+	const float fade_time = 2.0f;
 	float fade;
 
 	// enable the world's palette.
@@ -703,14 +703,14 @@ void PlayGameEnterVehicleProcess()
 	// AJT: todo frame rate clamping.
 
     // are we close enough to the vehicle yet?
-    if ( distance_between( world_stuff.view_orientation.position, world_stuff.player_array[user_vehicle_index()].tank.orient.position ) < 1.0 ) 
+    if ( distance_between( world_stuff.view_orientation.position, world_stuff.player_array[user_vehicle_index()].tank.orient.position ) < 1.0 )
 	{
         world_stuff.view_orientation = world_stuff.player_array[user_vehicle_index()].tank.orient;
         draw_everything( user_vehicle_index(), status_bar, first_person_view, transporting );
         first_person_view = TRUE;
-		currentPlayGameState = PLAYGAMESTATE_FIGHT;        
+		currentPlayGameState = PLAYGAMESTATE_FIGHT;
     }
-    else 
+    else
 	{
 		// move the view_orientation.position into the vehicle
         temp_vect[X] = world_stuff.player_array[user_vehicle_index()].tank.orient.position[X] - world_stuff.view_orientation.position[X];
@@ -749,7 +749,7 @@ void PlayGameFightEnter()
 void PlayGameFightProcess()
 {
 	unsigned int loopStartTime = SYS_GetTimeMS();
-	
+
 #ifdef PROFILE
 	ptime = SYS_GetTimeMicro();
 #endif
@@ -772,15 +772,15 @@ void PlayGameFightProcess()
 	move_everything_one_click();
 
 	// check to see if the round is over or not
-	if ( is_round_over() ) 
+	if ( is_round_over() )
 	{
-        if ( num_vehicles_remaining( local_user_team ) > 0 ) 			
-            user_victories++;            
+        if ( num_vehicles_remaining( local_user_team ) > 0 )
+            user_victories++;
         else
             enemy_victories++;
 
 		currentPlayGameState = PLAYGAMESTATE_OUTRO;
-	}    
+	}
 
     // figure out where the current view_orientation is
 	get_current_view_orient( &world_stuff.view_orientation, &old_orient,
@@ -789,8 +789,8 @@ void PlayGameFightProcess()
 	// Draws the tube, pylons, vehicles and projectiles into the doubler_buffer.
 	// Also draws the heads up display and the status bar.
     draw_everything( user_vehicle_index(), status_bar, first_person_view, transporting );
-    
-    if ( color_cycle ) 
+
+    if ( color_cycle )
 	{
         // Note: this will only look right if we are playing in level10.dat
         Cycle_Palette_Section( 160, 20, &world_stuff.text );	// cycle the purple gradient
@@ -801,7 +801,7 @@ void PlayGameFightProcess()
 
 
     // if 'v' is pressed change views
-    if ( SYS_KeyPressed( KEY_V ) ) 
+    if ( SYS_KeyPressed( KEY_V ) )
 	{
         first_person_view = !first_person_view;
     }
@@ -815,18 +815,18 @@ void PlayGameFightProcess()
     // if the user hits 'b' display the status bar (for debugging)
     if ( show_readout )
 	{
-		if ( SYS_KeyPressed( KEY_B ) ) 
-			status_bar = !status_bar;				
+		if ( SYS_KeyPressed( KEY_B ) )
+			status_bar = !status_bar;
 	}
 
 	// enable or disable the frame rate ceiling.
     if ( SYS_KeyPressed( KEY_C ) )
         ceiling_on = !ceiling_on;
-    
+
 #ifdef GLCYLINDRIX
 	// enable or disable software only rendering.
     if ( SYS_KeyPressed( KEY_G ) )
-        renderSoftwareBuffer = !renderSoftwareBuffer;            
+        renderSoftwareBuffer = !renderSoftwareBuffer;
 #endif
 
 #ifdef PROFILE
@@ -837,7 +837,7 @@ void PlayGameFightProcess()
     Play_Q_Samples( &world_stuff.view_orientation );
 
     if( game_configuration.sound_on )
-        Handle_Voices( &world_stuff, user_vehicle_index(), (unsigned char)first_person_view, (unsigned char)transporting );    
+        Handle_Voices( &world_stuff, user_vehicle_index(), (unsigned char)first_person_view, (unsigned char)transporting );
 
     Handle_Commands( &world_stuff, user_vehicle_index() );
 
@@ -935,7 +935,7 @@ void PlayGameOutroProcess()
     // play the win sample
 	if ( soundState == 0 )
 	{
-		if ( user_victories == 2 ) 
+		if ( user_victories == 2 )
 		{
 			soundState = 1;
 			if ( local_user_team == RED_TEAM )
@@ -960,25 +960,25 @@ void PlayGameOutroProcess()
 	if ( soundState == 2 )
 	{
 		// play the wingman victory sample
-		if ( num_vehicles_remaining( local_user_team ) > 0 ) 
+		if ( num_vehicles_remaining( local_user_team ) > 0 )
 		{
 			soundState = 3;
-			if ( user_victories == 1 ) 
+			if ( user_victories == 1 )
 			{
 				if ( local_user_team == RED_TEAM )
 					Play_Voice( world_stuff.player_array[1].character.samples[VICTORY] );
 				else
 					Play_Voice( world_stuff.player_array[4].character.samples[VICTORY] );
 			}
-			else 
+			else
 			{
-				if ( local_user_team == RED_TEAM ) 
+				if ( local_user_team == RED_TEAM )
 					Play_Voice( world_stuff.player_array[2].character.samples[VICTORY] );
 				else
 					Play_Voice( world_stuff.player_array[5].character.samples[VICTORY] );
 			}
 		}
-		else 
+		else
 		{
 			soundState = 3;
 			if ( enemy_victories == 1 )
@@ -988,7 +988,7 @@ void PlayGameOutroProcess()
 				else
 					Play_Voice( world_stuff.player_array[4].character.samples[VICTORY] );
 			}
-			else 
+			else
 			{
 				if ( local_user_team == BLUE_TEAM )
 					Play_Voice( world_stuff.player_array[2].character.samples[VICTORY] );
@@ -1001,12 +1001,12 @@ void PlayGameOutroProcess()
 	if ( (soundState == 1) && Is_Voice_Done() )
 	{
 		soundState = 2;
-	} 
+	}
 	else if ( (soundState == 3) && Is_Voice_Done() )
 	{
 		soundState = 4;
-	}	
-	
+	}
+
 //	if ( SYS_KeyPressed( KEY_SPACE ) )
 //	{
 //		currentPlayGameState = PLAYGAMESTATE_INTRO;
@@ -1019,11 +1019,11 @@ void PlayGameOutroExit()
     // if one player has won over half of the total number of rounds
     // then the game is over
 
-    if ( (user_victories > (num_rounds / 2)) || (enemy_victories > (num_rounds / 2)) ) 
+    if ( (user_victories > (num_rounds / 2)) || (enemy_victories > (num_rounds / 2)) )
 	{
-		if ( user_victories > enemy_victories ) 					
-			game_stats.victory = 1;  // user won!		
-		else		
+		if ( user_victories > enemy_victories )
+			game_stats.victory = 1;  // user won!
+		else
 			game_stats.victory = 0;  // user lost!
 
 		Figure_Game_Stats( &game_stats );
@@ -1031,7 +1031,7 @@ void PlayGameOutroExit()
 
 		currentPlayGameState = PLAYGAMESTATE_STATS;
     }
-    else 
+    else
 	{
         // go on to the next round
         Figure_Game_Stats( &game_stats );
@@ -1047,8 +1047,8 @@ void PlayGameOutroExit()
 void PlayGameMenuEnter()
 {
 	Play_Menu_Sound( menu_stuff.menu_sounds.enter_sound );
-    
-    DB_Clear_Screen();    
+
+    DB_Clear_Screen();
     Swap_Buffer();
     Enable_Color_Palette( &menu_stuff.general_menu_background );
 
@@ -1060,7 +1060,7 @@ void PlayGameMenuProcess()
 	int retVal;
     retVal = during_game_menu_event_loop();
 
-	if ( retVal == 2 )	
+	if ( retVal == 2 )
 		currentGameState = GAMESTATE_MAINMENU;
 	else if ( retVal == 1 )
 		currentPlayGameState = PLAYGAMESTATE_FIGHT;
@@ -1069,9 +1069,9 @@ void PlayGameMenuProcess()
 void PlayGameMenuExit()
 {
     DB_Clear_Screen();
-    Swap_Buffer();    
+    Swap_Buffer();
     Enable_Color_Palette( &world_stuff.text );
-    
+
     Figure_Game_Stats( &game_stats );
 }
 
@@ -1082,7 +1082,7 @@ void PlayGameMenuExit()
 
 void PlayGameStatsEnter()
 {
-    DB_Clear_Screen();    
+    DB_Clear_Screen();
     Swap_Buffer();
     Enable_Color_Palette( &menu_stuff.general_menu_background );
 
@@ -1157,7 +1157,7 @@ void GameShutdown()
 {
 	if (music)
 		SYS_ReleaseSound(music);
-	
+
 	SYS_ShutdownSound();
 	GL_Cylindrix_Shutdown();
 }
