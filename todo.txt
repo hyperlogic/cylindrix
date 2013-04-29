@@ -13,6 +13,7 @@
 * cull unused functions/variables from source
 * glcylindrix should draw wire tube
 * for HUD and menu elements, use nearest or perhaps hqx filtering
+  https://code.google.com/p/hqx/
 * do something about filtering errors at edge of screen. (clamp & 1-px padding)
 
 * move to all floating point math.
