@@ -14,7 +14,6 @@
 * glcylindrix should pay attention to detail options.
 * glcylindrix should draw wire tube
 
-* create math library
 * move to all floating point math.
 
 * decouple physics from frame rate.
@@ -24,14 +23,9 @@
 * tcp/ip networking
 * latency hiding & prediction
 
-* proper memory allocation.
-* optimization pass.
-
-* port to linux
-* port to gba/ds
-* port to iphone
+* valgrind pass.
 
 * advanced rendering features glow/trails motion blur, shadows.
 
 * Port to OpenGLES2.0 with Shaders
-* Occulus
+* Oculus Rift support
