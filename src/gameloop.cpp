@@ -176,8 +176,6 @@ const char* winningFli[] = {
 
 void IntroEnter()
 {
-	RGB_color black = { 0x0, 0x0, 0x0 };
-
 	// load the two images.
 	intro_image[0] = (pcx_picture*)malloc( sizeof( pcx_picture ) );
 	PCX_Load( "pcx_data/gt.pcx", intro_image[0] );
@@ -767,6 +765,9 @@ void PlayGameEnterVehicleProcess()
 {
 	Float_Vector temp_vect;
 
+	// enable the world's palette.
+	Enable_Color_Palette( &world_stuff.text );
+
 	// AJT: todo frame rate clamping.
 
     // are we close enough to the vehicle yet?
@@ -821,6 +822,9 @@ void PlayGameFightProcess()
 	ptime = SYS_GetTimeMicro();
 #endif
 
+	// enable the world's palette.
+	Enable_Color_Palette( &world_stuff.text );
+
 	// update some of the game_stats
 	game_stats.user_vehicle = user_vehicle_index();
 	game_stats.total_frames++;
@@ -865,7 +869,6 @@ void PlayGameFightProcess()
         Cycle_Palette_Section( 112, 159, &world_stuff.text );	// cycle the blue gradient
         Enable_Color_Palette( &world_stuff.text );
     }
-
 
     // if 'v' is pressed change views
     if ( SYS_KeyPressed( KEY_V ) )
