@@ -1120,7 +1120,10 @@ int PlayFliProcess()
 		return 0;
 
 	Swap_Buffer(); /* Swap the double buffer into video memory */
-     
+
+    if ( SYS_KeyDown( KEY_ESC ) )
+        return 0;
+
 	return 1;
 }
 

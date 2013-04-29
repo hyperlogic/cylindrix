@@ -1,7 +1,7 @@
 # cylindrix makefile
 
 PLATFORM = $(shell uname)
-DEBUG = false
+DEBUG = true
 
 # SDL Mac OS X
 ifeq ($(PLATFORM),Darwin)
@@ -80,4 +80,4 @@ clean :
 	-rm -f $(OBJ) ../cylindrix
 
 tags :
-	etags.emacs `find . -name "*.cpp" -o -name "*.h"`
+	etags `find . -name "*.cpp" -o -name "*.h"`

@@ -172,6 +172,7 @@ extern long GAME_CLICKS_PER_SECOND;
 
 int     level_warp   = 0;
 boolean no_anims     = FALSE;
+boolean nuke_cheat   = FALSE;
 boolean show_readout = FALSE;
 boolean test_samples = FALSE; /* Johns debug samples thing */
 

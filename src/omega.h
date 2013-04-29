@@ -35,6 +35,7 @@ extern team_type local_user_team;
 extern boolean show_readout;
 extern boolean ceiling_on;
 extern int level_warp;
+extern boolean nuke_cheat;
 
 #ifdef GLCYLINDRIX
 extern boolean renderSoftwareBuffer;

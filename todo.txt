@@ -1,5 +1,4 @@
 
-* fli player starves message loop.
 * gamemenu->quit goes to pilot menu
 * keyboard config not used by game.
 * joystick calibrate, does nothing. remove it?
@@ -17,8 +16,10 @@
 
 * create math library
 * move to all floating point math.
-* allow for variable timestep
-* experiment with impulse physics for control.
+
+* decouple physics from frame rate.
+* keep using fixed time step but interpolate / extrapolate in between rendering frames.
+  This is probably the easiest way to keep existing physics feel, without a re-write.
 
 * tcp/ip networking
 * latency hiding & prediction
@@ -32,3 +33,5 @@
 
 * advanced rendering features glow/trails motion blur, shadows.
 
+* Port to OpenGLES2.0 with Shaders
+* Occulus

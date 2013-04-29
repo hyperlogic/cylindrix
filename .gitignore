@@ -1,2 +1,4 @@
 *.o
 .DS_Store
+cylindrix
+src/TAGS

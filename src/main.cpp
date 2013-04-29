@@ -76,6 +76,7 @@ extern boolean show_readout;
 extern boolean test_samples;
 extern long exit_loop;  /* From omega.c */
 extern long game_over;
+extern boolean nuke_cheat;
 
 extern boolean ceiling_on;
 extern game_stats_type game_stats;
@@ -1735,8 +1736,11 @@ void check_command_line_args( int argc, const char *argv[],
          if( (argc > 1 ) && (strcmp( "-no_anims", argv[i] ) == 0 ) ) {
              no_anims = TRUE;
          }
-		 
-		 if ((argc > 1) && (strcmp( "-h", argv[i]) == 0))
+		 if ((argc > 1) && !strcmp("-nuke", argv[i])) {
+             nuke_cheat = TRUE;
+         }
+		 if ((argc > 1) && ((strcmp( "-h", argv[i]) == 0) ||
+                            (strcmp( "--help", argv[i]) == 0)))
 		 {
 			 printf("Usage: cylindrix [options]\n");
 			 printf("    -no_ai : disable enemy ai\n");

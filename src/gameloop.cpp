@@ -17,6 +17,7 @@
 #include "menu.h"
 #include "text.h"
 #include "fli.h"
+#include "explode.h"
 
 extern boolean no_anims;
 
@@ -111,12 +112,15 @@ struct TournamentLevelData tournamentLevelData[ NumLevels ] =
 
 enum PlayGameStateEnum
 {
+    PLAYGAMESTATE_MOVIE,    // tournament only
+    PLAYGAMESTATE_OPPONENT, // tournament only
 	PLAYGAMESTATE_INTRO,
 	PLAYGAMESTATE_ENTERVEHICLE,
 	PLAYGAMESTATE_FIGHT,
 	PLAYGAMESTATE_OUTRO,
 	PLAYGAMESTATE_MENU,
 	PLAYGAMESTATE_STATS,
+    PLAYGAMESTATE_WIN,      // tournament only
 	PLAYGAMESTATE_NUMSTATES,
 };
 
@@ -124,12 +128,15 @@ enum PlayGameStateEnum currentPlayGameState = PLAYGAMESTATE_INTRO;
 
 struct GameState playGameStates[PLAYGAMESTATE_NUMSTATES] =
 {
+    { PlayGameMovieEnter, PlayGameMovieProcess, PlayGameMovieExit },
+    { PlayGameOpponentEnter, PlayGameOpponentProcess, PlayGameOpponentExit },
 	{ PlayGameIntroEnter, PlayGameIntroProcess, PlayGameIntroExit },
 	{ PlayGameEnterVehicleEnter, PlayGameEnterVehicleProcess, PlayGameEnterVehicleExit },
 	{ PlayGameFightEnter, PlayGameFightProcess, PlayGameFightExit },
 	{ PlayGameOutroEnter, PlayGameOutroProcess, PlayGameOutroExit },
 	{ PlayGameMenuEnter, PlayGameMenuProcess, PlayGameMenuExit },
 	{ PlayGameStatsEnter, PlayGameStatsProcess, PlayGameStatsExit },
+    { PlayGameWinEnter, PlayGameWinProcess, PlayGameWinExit },
 };
 
 const int num_rounds = 3;
@@ -154,6 +161,13 @@ const char* levelFli[10] =
 	"FLI/EIGHT.FLI",
 	"FLI/NINE.FLI",
 	"FLI/TEN.FLI"
+};
+
+const char* winningFli[] = {
+    "FLI/FADE.FLI",
+    "FLI/FINAL.FLI",
+    "FLI/FALL.FLI",
+    NULL
 };
 
 //
@@ -472,23 +486,11 @@ void StartTournamentGame()
     Clear_Game_Stats( &game_stats );
     strcpy( game_stats.name, game_configuration.pilot_name );
 
-	// play some music
-	if ( game_configuration.music_on )
-	{
-		if (music)
-			SYS_ReleaseSound(music);
-
-		music = SYS_LoadSound(LookupMusicFilename(game_configuration.cylinder_filename));
-		SYS_PlaySoundVolume(music, true, game_configuration.music_vol);
-	}
-
     /* In tournament, USER GETS SHITTY ASS AI WINGMAN!!!! */
 	world_stuff.player_array[1].character.skill_level = 0;
 	world_stuff.player_array[2].character.skill_level = 0;
     /* HEHEHEHEHEHEHEH                     */
 
-
-	PlayGameIntroEnter();
 	currentPlayGameState = PLAYGAMESTATE_INTRO;
 }
 
@@ -510,14 +512,6 @@ void SetupLevel( int level )
 	game_configuration.blue2_vehicle = wingman_menu_data.info[ai_to_selection( game_configuration.blue2_ai )].preferred_vehicle;
 
 	strcpy( game_configuration.cylinder_filename, tournamentLevelData[level].cylinder_filename );
-
-	// play animations.
-    if ( game_configuration.animations_on && !no_anims )
-	{
-        Play_Fli( levelFli[level] );
-    }
-
-	// TODO: play music
 
 	// set's up proper pallette.
 	display_next_opponent();
@@ -562,8 +556,8 @@ void PlayTournamentGameEnter()
 {
 	tournamentLevel = level_warp;
 
-	SetupLevel( tournamentLevel );
-	StartTournamentGame();
+    PlayGameMovieEnter();
+    currentPlayGameState = PLAYGAMESTATE_MOVIE;
 }
 
 void PlayTournamentGameProcess()
@@ -587,14 +581,24 @@ void PlayTournamentGameProcess()
 		playGameStates[currentPlayGameState].enter();
 	}
 
-	// if the game state has changed, and the player one, move onto the next level
+	// if the game state has changed, and the player won, move onto the next level
 	if ( (previousGameState != currentGameState) && game_stats.victory )
 	{
-		currentGameState = GAMESTATE_TOURNAMENTGAME;
-
-		EndTournamentGame();
-		SetupLevel( ++tournamentLevel );
-		StartTournamentGame();
+        if (tournamentLevel != Watchers)
+        {
+            EndTournamentGame();
+            tournamentLevel++;
+            PlayGameMovieEnter();
+            currentPlayGameState = PLAYGAMESTATE_MOVIE;
+            currentGameState = GAMESTATE_TOURNAMENTGAME;
+        }
+        else
+        {
+            game_stats.victory = false;
+            currentGameState = GAMESTATE_TOURNAMENTGAME;
+            PlayGameWinEnter();
+            currentPlayGameState = PLAYGAMESTATE_WIN;
+        }
 	}
 }
 
@@ -623,7 +627,64 @@ void OutroExit()
 
 }
 
+//
+// PLAYGAMESTATE_MOVIE
+//
 
+void PlayGameMovieEnter()
+{
+	// play music before movie
+	if ( game_configuration.music_on )
+	{
+		if (music)
+			SYS_ReleaseSound(music);
+
+        char* filename = tournamentLevelData[tournamentLevel].cylinder_filename;
+		music = SYS_LoadSound(LookupMusicFilename(filename));
+		SYS_PlaySoundVolume(music, true, game_configuration.music_vol);
+	}
+
+	// play animations.
+    if ( game_configuration.animations_on && !no_anims )
+	{
+        PlayFliEnter(levelFli[tournamentLevel]);
+    }
+}
+
+void PlayGameMovieProcess()
+{
+    if ( game_configuration.animations_on && !no_anims )
+	{
+        if (!PlayFliProcess()) {
+            currentPlayGameState = PLAYGAMESTATE_OPPONENT;
+        }
+    }
+}
+
+void PlayGameMovieExit()
+{
+
+}
+
+//
+// PLAYGAMESTATE_OPPONENT
+//
+
+void PlayGameOpponentEnter()
+{
+
+}
+
+void PlayGameOpponentProcess()
+{
+	SetupLevel( tournamentLevel );
+	StartTournamentGame();
+}
+
+void PlayGameOpponentExit()
+{
+
+}
 
 //
 // PLAYGAMESTATE_INTRO
@@ -829,6 +890,24 @@ void PlayGameFightProcess()
     if ( SYS_KeyPressed( KEY_C ) )
         ceiling_on = !ceiling_on;
 
+    if ( nuke_cheat && SYS_KeyPressed( KEY_BACKSPACE ) )
+    {
+        // kill all enemies
+        for (int i = 3; i < 6; i++)
+        {
+            Player* p = world_stuff.player_array + i;
+            if (p->tank.alive)
+            {
+                p->tank.alive = false;
+                p->tank.current_hitpoints = 0;
+                add_explosion( ship_explosion, &(p->tank.orient), p->tank.obj, 0 );
+                if ( game_configuration.sound_on ) {
+                    Q_Jon_Sample( VEHICLE_EXPLOSION, p->tank.orient.position );
+                }
+            }
+        }
+    }
+
 #ifdef GLCYLINDRIX
 	// enable or disable software only rendering.
     if ( SYS_KeyPressed( KEY_G ) )
@@ -860,7 +939,6 @@ void PlayGameFightExit()
 {
 
 }
-
 
 //
 // PLAYGAMESTATE_OUTRO
@@ -1112,6 +1190,52 @@ void PlayGameStatsExit()
 
 
 //
+// PLAYGAMESTATE_WIN
+//
+
+static int currentWinningFli;
+
+void PlayGameWinEnter()
+{
+    currentWinningFli = 0;
+
+	// play animations.
+    if ( game_configuration.animations_on && !no_anims )
+	{
+        PlayFliEnter(winningFli[currentWinningFli]);
+    }
+}
+
+void PlayGameWinProcess()
+{
+    if ( game_configuration.animations_on && !no_anims )
+    {
+        if (!PlayFliProcess())
+        {
+            currentWinningFli++;
+            if (winningFli[currentWinningFli])
+            {
+                PlayFliEnter(winningFli[currentWinningFli]);
+            }
+            else
+            {
+                currentGameState = GAMESTATE_MAINMENU;
+            }
+        }
+    }
+    else
+    {
+        currentGameState = GAMESTATE_MAINMENU;
+    }
+}
+
+void PlayGameWinExit()
+{
+
+}
+
+
+//
 // GameInit
 //
 
@@ -1127,7 +1251,6 @@ void GameInit( int argc, const char* argv[] )
 	IntroEnter();
 	currentGameState = GAMESTATE_INTRO;
 }
-
 
 //
 // GameLoop

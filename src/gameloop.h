@@ -43,6 +43,14 @@ void OutroEnter();
 void OutroProcess();
 void OutroExit();
 
+void PlayGameMovieEnter();
+void PlayGameMovieProcess();
+void PlayGameMovieExit();
+
+void PlayGameOpponentEnter();
+void PlayGameOpponentProcess();
+void PlayGameOpponentExit();
+
 void PlayGameIntroEnter();
 void PlayGameIntroProcess();
 void PlayGameIntroExit();
@@ -66,6 +74,10 @@ void PlayGameMenuExit();
 void PlayGameStatsEnter();
 void PlayGameStatsProcess();
 void PlayGameStatsExit();
+
+void PlayGameWinEnter();
+void PlayGameWinProcess();
+void PlayGameWinExit();
 
 #endif
 
