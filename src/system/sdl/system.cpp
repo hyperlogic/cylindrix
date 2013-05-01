@@ -142,6 +142,7 @@ static SDLKey keyToSDLKey[SIZEOFKEYTABLE] =
 
 static void processKeys()
 {
+#ifndef EMSCRIPTEN
 	const Uint8* keys = SDL_GetKeyState(0);
 
 	for ( int i = 0; i < SIZEOFKEYTABLE; ++i )
@@ -159,6 +160,7 @@ static void processKeys()
 			keysDown[i] = 0;
 		}
 	}
+#endif
 }
 
 static bool process()
@@ -217,6 +219,8 @@ int main( int argc, char* argv[] )
 	const char* error = SDL_GetError();
 	if (error[0] != 0)
 		printf("SDL_Error = %s\n", error);
+
+    printf("AJT: got here!\n");
 
 	bool done = false;
 	while ( !done )

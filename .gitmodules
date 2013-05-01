@@ -1,0 +1,3 @@
+[submodule "libyaml"]
+	path = libyaml
+	url = git://github.com/zerotao/libyaml.git

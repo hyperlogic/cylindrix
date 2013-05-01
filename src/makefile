@@ -1,13 +1,15 @@
 # cylindrix makefile
 
-PLATFORM = $(shell uname)
-DEBUG = true
+#PLATFORM = $(shell uname)
+PLATFORM = Browser
+DEBUG = false
 
 # SDL Mac OS X
 ifeq ($(PLATFORM),Darwin)
 GCC = g++
 CFLAGS = -Wall -D GLCYLINDRIX -D DARWIN `sdl-config --cflags`
 LFLAGS = -framework Cocoa -framework OpenGL -framework GLUT -framework OpenAL -lstdc++ -lmpg123 -lyaml `sdl-config --libs`
+TARGET = ../cylindrix
 endif
 
 # SDL Linux
@@ -15,6 +17,7 @@ ifeq ($(PLATFORM),Linux)
 GCC = g++
 CFLAGS = -Wall -D GLCYLINDRIX
 LFLAGS = -lGL -lGLU -lSDL -lc -lmpg123 -lopenal -lyaml
+TARGET = ../cylindrix
 endif
 
 # SDL Microsoft Windows using MINGW
@@ -22,6 +25,15 @@ ifeq ($(PLATFORM),MinGW)
 GCC = g++
 CFLAGS = -Wall -D GLCYLINDRIX -I/msys/1.0/include -I/msys/1.0/local/include -I/code/OpenAL-1.1/include
 LFLAGS = -lmingw32 -lSDLmain -lSDL -lOpenGL32 -lGlu32 -lmpg123 -lopenal32 -lyaml -L/msys/1.0/lib -L/msys/1.0/local/lib -L/code/OpenAL-1.1/libs/Win32
+TARGET = ../cylindrix
+endif
+
+# Browser build using emscripten
+ifeq ($(PLATFORM),Browser)
+GCC = ~/code/emscripten/emcc
+CFLAGS = -Wall -D GLCYLINDRIX -D EMSCRIPTEN -I../libyaml/include
+LFLAGS = -lGL -lGLU -lSDL -lc -lyaml --preload-file ../pcx_data/microfnt.pcx
+TARGET = ../cylindrix.html
 endif
 
 # debug symbols
@@ -54,20 +66,27 @@ DEPENDS = ai.h ai_move.h ai_util.h base.h clipping.h collide.h commands.h \
 	util.h voices.h system/system.h
 
 cylindrix: $(OBJ) $(EXTRA_OBJ)
-	$(GCC) $(OBJ) $(EXTRA_OBJ) -o ../cylindrix $(LFLAGS)
+	$(GCC) $(OBJ) $(EXTRA_OBJ) -o $(TARGET) $(LFLAGS)
 
 %.o : %.cpp
 	$(GCC) $(CFLAGS) -c $<
 
 $(OBJ) $(EXTRA_OBJ) : $(DEPENDS)
 
+
 # SDL system files
 system.o: system/sdl/system.cpp $(DEPENDS)
 	$(GCC) $(CFLAGS) -c $<
 
+ifeq ($(PLATFORM),Browser)
+# no sound
+sound.o : system/glut/sound.cpp $(DEPENDS)
+	$(GCC) $(CFLAGS) -c $<
+else
 # OpenAL sound
 sound.o : system/openal/sound.cpp $(DEPENDS)
 	$(GCC) $(CFLAGS) -c $<
+endif
 
 # Mac OS X system files
 ifeq ($(PLATFORM),Darwin)

@@ -2,3 +2,7 @@
 .DS_Store
 cylindrix
 src/TAGS
+
+# emscripten
+cylindrix.data
+cylindrix.html
