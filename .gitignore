@@ -1,8 +1,9 @@
-*.o
+build/
 .DS_Store
-cylindrix
-src/TAGS
+TAGS
 
-# emscripten
+# executables
+cylindrix
 cylindrix.data
 cylindrix.html
+
