@@ -5,7 +5,7 @@
 void SYS_InitSound() {}
 void SYS_ShutdownSound() {}
 void SYS_ProcessSound() {}
-SYS_SOUNDHANDLE SYS_LoadSound( char* fileName ) {}
+SYS_SOUNDHANDLE SYS_LoadSound( char* fileName ) {return 0;}
 void SYS_ReleaseSound( SYS_SOUNDHANDLE soundHandle ) {}
 void SYS_TriggerSound( SYS_SOUNDHANDLE soundHandle ) {}
 void SYS_TriggerSoundVolume( SYS_SOUNDHANDLE soundHandle, unsigned char volume ) {}
@@ -14,4 +14,4 @@ void SYS_TriggerSound3D( SYS_SOUNDHANDLE soundHandle, float position[3], unsigne
 void SYS_PlaySound( SYS_SOUNDHANDLE soundHandle, int looping ) {}
 void SYS_PlaySoundVolume( SYS_SOUNDHANDLE soundHandle, int looping, unsigned char volume ) {}
 void SYS_StopSound( SYS_SOUNDHANDLE soundHandle ) {}
-int SYS_IsSoundPlaying( SYS_SOUNDHANDLE soundHandle ) {}
+int SYS_IsSoundPlaying( SYS_SOUNDHANDLE soundHandle ) {return false;}
