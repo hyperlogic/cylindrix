@@ -34,13 +34,13 @@ GCC = ~/code/emscripten/emcc
 CFLAGS = -Wall -D GLCYLINDRIX -D EMSCRIPTEN -Ilibyaml/include
 LFLAGS = -lGL -lGLU -lSDL -lc -lyaml --embed-file 3d_data/ --embed-file pcx_data/ --embed-file gamedata --embed-file people.dat
 TARGET = cylindrix.html
-endif
-
+else
 # debug symbols
 ifeq ($(DEBUG),true)
 CFLAGS += -g
 else
 CFLAGS += -O3
+endif
 endif
 
 OBJ = build/ai.o build/ai_move.o build/ai_util.o build/base.o build/clipping.o build/collide.o build/commands.o \
