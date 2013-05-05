@@ -69,6 +69,13 @@
 		6D053E741737039F00142372 /* writer.c in Sources */ = {isa = PBXBuildFile; fileRef = 6D053E6B1737039F00142372 /* writer.c */; };
 		6D053E771737060100142372 /* glescylindrix.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6D053E761737060100142372 /* glescylindrix.cpp */; };
 		6D053E791737077E00142372 /* sound.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6D053E781737077E00142372 /* sound.cpp */; };
+		6D053E8C17370F5500142372 /* pcx_data in Resources */ = {isa = PBXBuildFile; fileRef = 6D053E8B17370F5500142372 /* pcx_data */; };
+		6D053E9317370F9100142372 /* 3d_data in Resources */ = {isa = PBXBuildFile; fileRef = 6D053E8D17370F9100142372 /* 3d_data */; };
+		6D053E9417370F9100142372 /* FLI in Resources */ = {isa = PBXBuildFile; fileRef = 6D053E8E17370F9100142372 /* FLI */; };
+		6D053E9517370F9100142372 /* gamedata in Resources */ = {isa = PBXBuildFile; fileRef = 6D053E8F17370F9100142372 /* gamedata */; };
+		6D053E9617370F9100142372 /* music in Resources */ = {isa = PBXBuildFile; fileRef = 6D053E9017370F9100142372 /* music */; };
+		6D053E9717370F9100142372 /* stats in Resources */ = {isa = PBXBuildFile; fileRef = 6D053E9117370F9100142372 /* stats */; };
+		6D053E9817370F9100142372 /* wav_data in Resources */ = {isa = PBXBuildFile; fileRef = 6D053E9217370F9100142372 /* wav_data */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -183,6 +190,13 @@
 		6D053E761737060100142372 /* glescylindrix.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = glescylindrix.cpp; path = ../../../src/glescylindrix.cpp; sourceTree = "<group>"; };
 		6D053E781737077E00142372 /* sound.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = sound.cpp; path = ../../../src/system/glut/sound.cpp; sourceTree = "<group>"; };
 		6D053E7A1737082F00142372 /* config.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = config.h; path = ../../../libyaml/config.h; sourceTree = "<group>"; };
+		6D053E8B17370F5500142372 /* pcx_data */ = {isa = PBXFileReference; lastKnownFileType = folder; name = pcx_data; path = ../../../pcx_data; sourceTree = "<group>"; };
+		6D053E8D17370F9100142372 /* 3d_data */ = {isa = PBXFileReference; lastKnownFileType = folder; name = 3d_data; path = ../../../3d_data; sourceTree = "<group>"; };
+		6D053E8E17370F9100142372 /* FLI */ = {isa = PBXFileReference; lastKnownFileType = folder; name = FLI; path = ../../../FLI; sourceTree = "<group>"; };
+		6D053E8F17370F9100142372 /* gamedata */ = {isa = PBXFileReference; lastKnownFileType = folder; name = gamedata; path = ../../../gamedata; sourceTree = "<group>"; };
+		6D053E9017370F9100142372 /* music */ = {isa = PBXFileReference; lastKnownFileType = folder; name = music; path = ../../../music; sourceTree = "<group>"; };
+		6D053E9117370F9100142372 /* stats */ = {isa = PBXFileReference; lastKnownFileType = folder; name = stats; path = ../../../stats; sourceTree = "<group>"; };
+		6D053E9217370F9100142372 /* wav_data */ = {isa = PBXFileReference; lastKnownFileType = folder; name = wav_data; path = ../../../wav_data; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -386,6 +400,13 @@
 		6D053E8017370C2B00142372 /* data */ = {
 			isa = PBXGroup;
 			children = (
+				6D053E8D17370F9100142372 /* 3d_data */,
+				6D053E8E17370F9100142372 /* FLI */,
+				6D053E8F17370F9100142372 /* gamedata */,
+				6D053E9017370F9100142372 /* music */,
+				6D053E9117370F9100142372 /* stats */,
+				6D053E9217370F9100142372 /* wav_data */,
+				6D053E8B17370F5500142372 /* pcx_data */,
 			);
 			name = data;
 			sourceTree = "<group>";
@@ -445,6 +466,13 @@
 				6D053DD3173605B500142372 /* Shader.vsh in Resources */,
 				6D053DD9173605B600142372 /* ViewController_iPhone.xib in Resources */,
 				6D053DDC173605B600142372 /* ViewController_iPad.xib in Resources */,
+				6D053E8C17370F5500142372 /* pcx_data in Resources */,
+				6D053E9317370F9100142372 /* 3d_data in Resources */,
+				6D053E9417370F9100142372 /* FLI in Resources */,
+				6D053E9517370F9100142372 /* gamedata in Resources */,
+				6D053E9617370F9100142372 /* music in Resources */,
+				6D053E9717370F9100142372 /* stats in Resources */,
+				6D053E9817370F9100142372 /* wav_data in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
