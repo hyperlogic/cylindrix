@@ -220,8 +220,6 @@ int main( int argc, char* argv[] )
 	if (error[0] != 0)
 		printf("SDL_Error = %s\n", error);
 
-    printf("AJT: got here!\n");
-
 	bool done = false;
 	while ( !done )
 	{

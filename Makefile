@@ -1,7 +1,7 @@
 # cylindrix makefile
 
-#PLATFORM = $(shell uname)
-PLATFORM = Browser
+PLATFORM = $(shell uname)
+#PLATFORM = Browser
 DEBUG = false
 
 # SDL Mac OS X
