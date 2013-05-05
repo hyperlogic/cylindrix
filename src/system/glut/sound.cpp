@@ -15,3 +15,4 @@ void SYS_PlaySound( SYS_SOUNDHANDLE soundHandle, int looping ) {}
 void SYS_PlaySoundVolume( SYS_SOUNDHANDLE soundHandle, int looping, unsigned char volume ) {}
 void SYS_StopSound( SYS_SOUNDHANDLE soundHandle ) {}
 int SYS_IsSoundPlaying( SYS_SOUNDHANDLE soundHandle ) {return false;}
+void SYS_StopAllSounds() {}

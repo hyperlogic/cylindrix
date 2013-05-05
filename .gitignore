@@ -3,7 +3,9 @@ build/
 TAGS
 
 # executables
-cylindrix
 cylindrix.data
 cylindrix.html
 
+# ios project crap
+xcuserdata/
+project.xcworkspace/

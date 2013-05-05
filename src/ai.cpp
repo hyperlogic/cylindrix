@@ -18,7 +18,7 @@
 
 #include "ai.h"
 #include <assert.h>
-#include <yaml.h>
+#include "yaml.h"
 
 extern const char* g_DataPath;
 
