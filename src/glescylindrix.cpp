@@ -33,12 +33,12 @@ extern int g_width, g_height;
 
 static const char* g_vertShader = "\
 uniform mat4 mat;\n\
-attribute vec2 pos;\n\
+attribute vec3 pos;\n\
 attribute vec2 uv;\n\
 varying mediump vec2 frag_uv;\n\
 void main(void)\n\
 {\n\
-gl_Position = mat * vec4(pos, 0.0, 1.0);\n\
+gl_Position = mat * vec4(pos, 1.0);\n\
 frag_uv = uv;\n\
 }\n";
 
@@ -49,6 +49,7 @@ varying mediump vec2 frag_uv;\n\
 void main(void)\n\
 {\n\
 gl_FragColor = texture2D(tex, frag_uv);\n\
+gl_FragColor.g = 1.0;\n\
 }\n";
 
 GLuint g_prog;
@@ -78,11 +79,24 @@ void GL_CheckError()
 			break;
 
 		case GL_INVALID_ENUM:
+            fprintf(stderr, "GL_CheckError : GL_INVALID_ENUM\n");
+            assert(0);
+            break;
 		case GL_INVALID_VALUE:
+            fprintf(stderr, "GL_CheckError : GL_INVALID_VALUE\n");
+            assert(0);
+            break;
 		case GL_INVALID_OPERATION:
+            fprintf(stderr, "GL_CheckError : GL_INVALID_OPERATION\n");
+            assert(0);
+            break;
 		case GL_OUT_OF_MEMORY:
+            fprintf(stderr, "GL_CheckError : GL_OUT_OF_MEMORY\n");
+            assert(0);
+            break;
 		default:
-			assert( 0 );
+            fprintf(stderr, "GL_CheckError : ???\n");
+			assert(0);
 			break;
 	}
 }
@@ -96,7 +110,7 @@ static void GL_FrameBufferTextureInit()
     glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
     glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
 	glPixelStorei( GL_UNPACK_ALIGNMENT, 1 );
-	glTexImage2D( GL_TEXTURE_2D, 0, 4, 512, 256, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0 );
+	glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA, 512, 256, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0 );
 }
 
 // creates a 1x256 texture that we will use to subload the current 8-bit palette into.
@@ -108,12 +122,14 @@ static void GL_PalletteTextureInit()
     glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
     glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
 	glPixelStorei( GL_UNPACK_ALIGNMENT, 1 );
-	glTexImage2D( GL_TEXTURE_2D, 0, 4, 1, 256, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0 );
+	glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA, 1, 256, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0 );
 }
 
 // renders the frameBufferTexture on a quad that fills the screen.
 static void GL_RenderBuffer()
 {
+GL_CheckError();
+
 	// process fade.
 	if ( fadeFrames > 0 )
 	{
@@ -132,8 +148,13 @@ static void GL_RenderBuffer()
 		fadeAlpha = 1;
 
 	// Clear all pixels.
-	glClearColor( 0.0, 0.0, 0.0, 0.0 );
+	glClearColor( 1.0, 0.0, 0.0, 0.0 );
 	glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
+
+	float aspect = (float)g_width / (float)g_height;
+    abaci::Matrixf proj = abaci::Matrixf::Ortho(-aspect, aspect, -1, 1, -1, 1);
+    glUniformMatrix4fv(g_uniform_mat, 1, GL_FALSE, reinterpret_cast<float*>(&proj));
+    glUniform1i(g_uniform_tex, 0);
 
     // AJT: GLES2
     /*
@@ -145,7 +166,11 @@ static void GL_RenderBuffer()
 	glMatrixMode( GL_MODELVIEW );
 	glLoadIdentity();
 
-	glBindTexture( GL_TEXTURE_2D, frameBufferTexture );
+    */
+
+	glBindTexture(GL_TEXTURE_2D, frameBufferTexture);
+
+    /*
 	glTexEnvf( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE );
 
 	glEnable(GL_TEXTURE_2D);
@@ -170,9 +195,22 @@ static void GL_RenderBuffer()
 	glEnd();
     */
 
-	glDisable(GL_TEXTURE_2D);
+    const float orig_aspect = 1.33333f; // 4:3
+    static float verts[] = {
+        -orig_aspect, -1, 0, 0, FBV,
+         orig_aspect, -1, 0, FBU, FBV,
+         orig_aspect,  1, 0, FBU, 0,
+        -orig_aspect,  1, 0, 0, 0
+    };
+    glVertexAttribPointer(g_attrib_pos, 3, GL_FLOAT, GL_FALSE, 5, verts);
+    glVertexAttribPointer(g_attrib_uv, 2, GL_FLOAT, GL_FALSE, 5, verts + 3);
+
+    static unsigned short indices[] = {0, 1, 3, 1, 2, 3};
+    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, indices);
 
 	SYS_SwapBuffers();
+
+	GL_CheckError();
 
 	++frame;
 }
@@ -266,6 +304,10 @@ static void GL_ProgramInit()
     g_attrib_uv = glGetAttribLocation(g_prog, "uv");
 
     glUseProgram(g_prog);
+
+    glActiveTexture(GL_TEXTURE0);
+    glEnableVertexAttribArray(g_attrib_pos);
+    glEnableVertexAttribArray(g_attrib_uv);
 
 	GL_CheckError();
 }
@@ -521,7 +563,6 @@ void GL_DrawEverything( WorldStuff* worldStuff )
         // AJT: GLES2
 		//glEnd();
 	}
-	glDisable( GL_TEXTURE_2D );
 }
 
 // overlayes the contents of the framebuffer onto the screen, blended with the current contents.
