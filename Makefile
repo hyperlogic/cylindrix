@@ -1,7 +1,7 @@
 # cylindrix makefile
 
 PLATFORM = $(shell uname)
-#PLATFORM = Browser
+PLATFORM = Browser
 DEBUG = false
 
 # SDL Mac OS X
@@ -31,7 +31,7 @@ endif
 # Browser build using emscripten
 ifeq ($(PLATFORM),Browser)
 GCC = ~/code/emscripten/emcc
-CFLAGS = -Wall -D GLCYLINDRIX -D EMSCRIPTEN -Ilibyaml/include
+CFLAGS = -Wall -D GLCYLINDRIX -D EMSCRIPTEN -D USE_ABACI_NAMESPACE -Ilibyaml/include -Iabaci/src
 LFLAGS = -lGL -lGLU -lSDL -lc -lyaml --embed-file 3d_data/ --embed-file pcx_data/ --embed-file gamedata --embed-file people.dat
 TARGET = cylindrix.html
 else
@@ -45,10 +45,16 @@ endif
 
 OBJ = build/ai.o build/ai_move.o build/ai_util.o build/base.o build/clipping.o build/collide.o build/commands.o \
 	build/config.o build/do_state.o build/energy.o build/events.o build/explode.o build/fli.o build/fx.o build/gameloop.o \
-	build/glcylindrix.o build/hud.o build/jonsb.o build/keys.o build/level.o build/main.o build/menu.o build/motor.o \
+	build/hud.o build/jonsb.o build/keys.o build/level.o build/main.o build/menu.o build/motor.o \
 	build/movement.o build/object.o build/omega.o build/path.o build/pcx.o build/prim.o build/project.o build/pylon.o \
 	build/radar.o build/states.o build/stats.o build/stub.o build/tanks.o build/text.o \
 	build/util.o build/voices.o build/system.o build/sound.o
+
+ifeq ($(PLATFORM),Browser)
+OBJ += build/glescylindrix.o
+else
+OBJ += build/glcylindrix.o
+endif
 
 # Link with SDLMain when on MacOSX
 ifeq ($(PLATFORM),Darwin)
