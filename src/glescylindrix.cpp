@@ -1,8 +1,8 @@
 // work in progress
 #include <stdio.h>
 
-#include <OpenGLES/ES1/gl.h>
-#include <OpenGLES/ES1/glext.h>
+#include <OpenGLES/ES2/gl.h>
+#include <OpenGLES/ES2/glext.h>
 
 #include "types.h"
 #include "util.h"
@@ -30,6 +30,32 @@ extern unsigned char *double_buffer; // from prim.c
 
 extern int g_width, g_height;
 
+static const char* g_vertShader = "\
+uniform mat4 mat;\n\
+attribute vec2 pos;\n\
+attribute vec2 uv;\n\
+varying mediump vec2 frag_uv;\n\
+void main(void)\n\
+{\n\
+gl_Position = mat * vec4(pos, 0.0, 1.0);\n\
+frag_uv = uv;\n\
+}\n";
+
+static const char* g_fragShader = "\
+precision lowp float;\n\
+uniform sampler2D tex;\n\
+varying mediump vec2 frag_uv;\n\
+void main(void)\n\
+{\n\
+gl_FragColor = texture2D(tex, frag_uv);\n\
+}\n";
+
+GLuint g_prog;
+GLuint g_uniform_mat;
+GLuint g_uniform_tex;
+GLuint g_attrib_pos;
+GLuint g_attrib_uv;
+
 // converts the 8-bit double_buffer into the 32-bit rgbaFrameBuffer.
 void makeFrameBuffer( unsigned char* double_buffer )
 {
@@ -53,8 +79,6 @@ void GL_CheckError()
 		case GL_INVALID_ENUM:
 		case GL_INVALID_VALUE:
 		case GL_INVALID_OPERATION:
-		case GL_STACK_OVERFLOW:
-		case GL_STACK_UNDERFLOW:
 		case GL_OUT_OF_MEMORY:
 		default:
 			assert( 0 );
@@ -108,7 +132,6 @@ static void GL_RenderBuffer()
 
 	// Clear all pixels.
 	glClearColor( 0.0, 0.0, 0.0, 0.0 );
-
 	glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 
     // AJT: GLES2
@@ -199,9 +222,59 @@ void GL_FadeInFrameBuffer( int frames )
 	fadeDelta = 1.0f / (float)frames;
 }
 
+static GLint GL_CompileShader(const char* source, GLenum type)
+{
+	int size = strlen(source);
+    GLint shader = glCreateShader(type);
+	glShaderSource(shader, 1, (const GLchar**)&source, &size);
+	glCompileShader(shader);
+
+	GLint success;
+	glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
+	if (!success)
+	{
+        fprintf(stderr, "error compiling shader, type = %d\n", type);
+    }
+    assert(success);
+    return shader;
+}
+
+static void GL_ProgramInit()
+{
+    GLint vertShader = GL_CompileShader(g_vertShader, GL_VERTEX_SHADER);
+    GLint fragShader = GL_CompileShader(g_fragShader, GL_FRAGMENT_SHADER);
+    g_prog = glCreateProgram();
+    glAttachShader(g_prog, vertShader);
+    glAttachShader(g_prog, fragShader);
+    glLinkProgram(g_prog);
+
+    GLint success;
+    glGetProgramiv(g_prog, GL_LINK_STATUS, &success);
+    if (!success)
+    {
+        fprintf(stderr, "error linking program\n");
+    }
+    assert(success);
+
+    // save uniform locs
+    g_uniform_mat = glGetUniformLocation(g_prog, "mat");
+    g_uniform_tex = glGetUniformLocation(g_prog, "tex");
+
+    // save attrib locs
+    g_attrib_pos = glGetAttribLocation(g_prog, "pos");
+    g_attrib_uv = glGetAttribLocation(g_prog, "uv");
+
+    glUseProgram(g_prog);
+
+	GL_CheckError();
+}
+
 // creates the framebuffer & palette textures.
 void GL_Cylindrix_Init()
 {
+    // initialize the glprogram
+	GL_ProgramInit();
+
 	// initialize the texture used that the game bitmap is sub-loaded into.
 	GL_FrameBufferTextureInit();
 
@@ -478,7 +551,11 @@ void GL_SwapBuffers()
     */
 
 	glBindTexture( GL_TEXTURE_2D, frameBufferTexture );
+
+	// AJT: GLES2
+	/*
 	glTexEnvf( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE );
+	*/
 
     // AJT: GLES2
 	glEnable(GL_TEXTURE_2D);
