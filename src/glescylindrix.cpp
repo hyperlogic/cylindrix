@@ -9,6 +9,7 @@
 #include "glcylindrix.h"
 #include "assert.h"
 #include <math.h>
+#include "abaci.h"
 
 static int frame = 0;
 

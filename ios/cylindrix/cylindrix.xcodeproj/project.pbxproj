@@ -76,6 +76,7 @@
 		6D053E9617370F9100142372 /* music in Resources */ = {isa = PBXBuildFile; fileRef = 6D053E9017370F9100142372 /* music */; };
 		6D053E9717370F9100142372 /* stats in Resources */ = {isa = PBXBuildFile; fileRef = 6D053E9117370F9100142372 /* stats */; };
 		6D053E9817370F9100142372 /* wav_data in Resources */ = {isa = PBXBuildFile; fileRef = 6D053E9217370F9100142372 /* wav_data */; };
+		6D053E9F1737573200142372 /* abaciinlines.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6D053E9E1737573200142372 /* abaciinlines.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -197,6 +198,8 @@
 		6D053E9017370F9100142372 /* music */ = {isa = PBXFileReference; lastKnownFileType = folder; name = music; path = ../../../music; sourceTree = "<group>"; };
 		6D053E9117370F9100142372 /* stats */ = {isa = PBXFileReference; lastKnownFileType = folder; name = stats; path = ../../../stats; sourceTree = "<group>"; };
 		6D053E9217370F9100142372 /* wav_data */ = {isa = PBXFileReference; lastKnownFileType = folder; name = wav_data; path = ../../../wav_data; sourceTree = "<group>"; };
+		6D053E9D1737573200142372 /* abaci.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = abaci.h; path = ../../../abaci/src/abaci.h; sourceTree = "<group>"; };
+		6D053E9E1737573200142372 /* abaciinlines.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = abaciinlines.cpp; path = ../../../abaci/src/abaciinlines.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -247,6 +250,7 @@
 		6D053DC4173605B500142372 /* cylindrix */ = {
 			isa = PBXGroup;
 			children = (
+				6D053E991737539500142372 /* abaci */,
 				6D053E8017370C2B00142372 /* data */,
 				6D053E631737036000142372 /* libyaml */,
 				6D053DE31736FF3200142372 /* ios */,
@@ -411,6 +415,15 @@
 			name = data;
 			sourceTree = "<group>";
 		};
+		6D053E991737539500142372 /* abaci */ = {
+			isa = PBXGroup;
+			children = (
+				6D053E9D1737573200142372 /* abaci.h */,
+				6D053E9E1737573200142372 /* abaciinlines.cpp */,
+			);
+			name = abaci;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -535,6 +548,7 @@
 				6D053E741737039F00142372 /* writer.c in Sources */,
 				6D053E771737060100142372 /* glescylindrix.cpp in Sources */,
 				6D053E791737077E00142372 /* sound.cpp in Sources */,
+				6D053E9F1737573200142372 /* abaciinlines.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -623,6 +637,7 @@
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					GLCYLINDRIX,
 					IOS,
+					USE_ABACI_NAMESPACE,
 				);
 				GCC_PREPROCESSOR_DEFINITIONS_NOT_USED_IN_PRECOMPS = "";
 				"GCC_THUMB_SUPPORT[arch=armv6]" = "";
@@ -642,6 +657,7 @@
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					GLCYLINDRIX,
 					IOS,
+					USE_ABACI_NAMESPACE,
 				);
 				GCC_PREPROCESSOR_DEFINITIONS_NOT_USED_IN_PRECOMPS = "";
 				"GCC_THUMB_SUPPORT[arch=armv6]" = "";
