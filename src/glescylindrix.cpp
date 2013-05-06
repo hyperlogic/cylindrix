@@ -49,7 +49,6 @@ varying mediump vec2 frag_uv;\n\
 void main(void)\n\
 {\n\
 gl_FragColor = texture2D(tex, frag_uv);\n\
-gl_FragColor.g = 1.0;\n\
 }\n";
 
 GLuint g_prog;
@@ -153,6 +152,7 @@ GL_CheckError();
 
 	float aspect = (float)g_width / (float)g_height;
     abaci::Matrixf proj = abaci::Matrixf::Ortho(-aspect, aspect, -1, 1, -1, 1);
+
     glUniformMatrix4fv(g_uniform_mat, 1, GL_FALSE, reinterpret_cast<float*>(&proj));
     glUniform1i(g_uniform_tex, 0);
 
@@ -202,8 +202,10 @@ GL_CheckError();
          orig_aspect,  1, 0, FBU, 0,
         -orig_aspect,  1, 0, 0, 0
     };
-    glVertexAttribPointer(g_attrib_pos, 3, GL_FLOAT, GL_FALSE, 5, verts);
-    glVertexAttribPointer(g_attrib_uv, 2, GL_FLOAT, GL_FALSE, 5, verts + 3);
+
+    const GLsizei stride = sizeof(float) * 5;
+    glVertexAttribPointer(g_attrib_pos, 3, GL_FLOAT, GL_FALSE, stride, verts);
+    glVertexAttribPointer(g_attrib_uv, 2, GL_FLOAT, GL_FALSE, stride, verts + 3);
 
     static unsigned short indices[] = {0, 1, 3, 1, 2, 3};
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, indices);
