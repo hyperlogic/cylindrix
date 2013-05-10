@@ -72,8 +72,13 @@ void makeFrameBuffer( unsigned char* double_buffer )
 	}
 }
 
+#define GL_CheckError()                           \
+    do {                                          \
+        GL_CheckErrorFunc(__FILE__, __LINE__);    \
+	} while (0)
+
 // for debugging
-void GL_CheckError()
+void GL_CheckErrorFunc(const char* file, int line)
 {
 	GLenum error = glGetError();
 
@@ -83,23 +88,23 @@ void GL_CheckError()
 			break;
 
 		case GL_INVALID_ENUM:
-            fprintf(stderr, "GL_CheckError : GL_INVALID_ENUM\n");
+            fprintf(stderr, "GL_CheckError : GL_INVALID_ENUM, %s:%d\n", file, line);
             assert(0);
             break;
 		case GL_INVALID_VALUE:
-            fprintf(stderr, "GL_CheckError : GL_INVALID_VALUE\n");
+            fprintf(stderr, "GL_CheckError : GL_INVALID_VALUE, %s:%d\n", file, line);
             assert(0);
             break;
 		case GL_INVALID_OPERATION:
-            fprintf(stderr, "GL_CheckError : GL_INVALID_OPERATION\n");
+            fprintf(stderr, "GL_CheckError : GL_INVALID_OPERATION, %s:%d\n", file, line);
             assert(0);
             break;
 		case GL_OUT_OF_MEMORY:
-            fprintf(stderr, "GL_CheckError : GL_OUT_OF_MEMORY\n");
+            fprintf(stderr, "GL_CheckError : GL_OUT_OF_MEMORY, %s:%d\n", file, line);
             assert(0);
             break;
 		default:
-            fprintf(stderr, "GL_CheckError : ???\n");
+            fprintf(stderr, "GL_CheckError : ???, %s:%d\n", file, line);
 			assert(0);
 			break;
 	}
@@ -132,7 +137,7 @@ static void GL_PalletteTextureInit()
 // renders the frameBufferTexture on a quad that fills the screen.
 static void GL_RenderBuffer()
 {
-GL_CheckError();
+	GL_CheckError();
 
 	// process fade.
 	if ( fadeFrames > 0 )
