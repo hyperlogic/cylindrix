@@ -159,7 +159,7 @@ static void GL_RenderBuffer()
 		fadeAlpha = 1;
 
 	// Clear all pixels.
-	glClearColor( 1.0, 0.0, 0.0, 0.0 );
+	glClearColor( 0.0, 0.0, 0.0, 0.0 );
 	glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 
 	float aspect = (float)g_width / (float)g_height;
@@ -574,63 +574,26 @@ void GL_SwapBuffers()
 	glBindTexture(GL_TEXTURE_2D, frameBufferTexture);
 	glTexSubImage2D( GL_TEXTURE_2D, 0, 0, 0, 320, 200, GL_RGBA, GL_UNSIGNED_BYTE, rgbaFrameBuffer );
 
-    // AJT: GLES2
-    /*
-    glMatrixMode( GL_PROJECTION );
-    glLoadIdentity();
-    */
-	float aspect = (float)g_width/g_height;
-
-    // AJT: GLES2
-	/*
-	glOrtho(-aspect, aspect, -1, 1, -1, 1);
-
-    glMatrixMode( GL_MODELVIEW );
-    glLoadIdentity();
-    */
-
-	glBindTexture( GL_TEXTURE_2D, frameBufferTexture );
-
-	// AJT: GLES2
-	/*
-	glTexEnvf( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE );
-	*/
-
-    // AJT: GLES2
-	glEnable(GL_TEXTURE_2D);
-	//glDisable(GL_LIGHTING);
-
-	glDisable(GL_DEPTH_TEST);
+	float aspect = (float)g_width / (float)g_height;
+    abaci::Matrixf proj = abaci::Matrixf::Ortho(-aspect, aspect, -1, 1, -1, 1);
+    glUniformMatrix4fv(g_uniform_mat, 1, GL_FALSE, reinterpret_cast<float*>(&proj));
+    glUniform1i(g_uniform_tex, 0);
 
 	glEnable( GL_BLEND );
 	glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
+	glDisable(GL_DEPTH_TEST);
 
-	float orig_aspect = 1.33333f; // 4:3
-
-    // AJT: GLES2
-    /*
-    glBegin( GL_POLYGON );
-	glColor4f( 1, 1, 1, 1 );
-
-	glTexCoord2f( 0, FBV );
-	glVertex3f( -orig_aspect, -1, 0 );
-
-	glTexCoord2f( FBU, FBV );
-	glVertex3f( orig_aspect, -1, 0 );
-
-	glTexCoord2f( FBU, 0 );
-	glVertex3f( orig_aspect, 1, 0 );
-
-	glTexCoord2f( 0, 0 );
-	glVertex3f( -orig_aspect, 1, 0 );
-
-	glEnd();
-    */
+	glBindTexture( GL_TEXTURE_2D, frameBufferTexture );
+    glBindBuffer(GL_ARRAY_BUFFER, g_quadVBO[0]);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, g_quadVBO[1]);
+    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, (void*)0);
 
 	glDisable( GL_BLEND );
 	glEnable( GL_DEPTH_TEST );
 
 	SYS_SwapBuffers();
+
+printf("GL_SwapBuffers()\n");
 
 	++frame;
 }

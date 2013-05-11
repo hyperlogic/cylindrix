@@ -140,6 +140,8 @@ void print_all_input_tables( Player p[], long frame_counter )
 
 void cylindrix_init_print( char str[] )
 {
+    printf("cylindrix_init_print : %s\n", str);
+
     Pop_Buffer( menu_stuff.general_menu_background.buffer );
 
     string_blit( "CYLINDRIX INITIALIZATION", 30, 80,
@@ -372,6 +374,8 @@ void display_next_opponent()
 
 void tournament_init_print( char str[] )
 {
+    printf("tournament_init_print : %s\n", str);
+
     pcx_picture *pcx = NULL;
     long anchor_x = 0, anchor_y = 0;
 

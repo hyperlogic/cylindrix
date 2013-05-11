@@ -146,8 +146,11 @@ static SDLKey keyToSDLKey[SIZEOFKEYTABLE] =
 
 static void processKeys()
 {
-#ifndef BROWSER
+#if SDL_MAJOR_VERSION == 1 && SDL_MINOR_VERSION <= 2
     const Uint8* keys = SDL_GetKeyState(0);
+#else
+    const Uint8* keys = SDL_GetKeyboardState(0);
+#endif
 
     for ( int i = 0; i < SIZEOFKEYTABLE; ++i )
     {
@@ -164,7 +167,6 @@ static void processKeys()
             keysDown[i] = 0;
         }
     }
-#endif
 }
 
 static bool process()

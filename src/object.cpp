@@ -424,6 +424,8 @@ int in_edge_table( EdgeTable *et, Edge edge )
 
 void init_edge_table( Vehicle *v )
 {
+printf("init_edge_table start\n");
+
     long i, j;
     EdgeTable et;
     Edge edge;
@@ -455,7 +457,6 @@ void init_edge_table( Vehicle *v )
     }
 
     /* realloc edges */
-
     if( ( et.edge = (Edge *) realloc( et.edge, sizeof( Edge ) * et.edges )) == NULL )
 		SYS_Error( "init_edge_table() : realloc failed\n" );    
 

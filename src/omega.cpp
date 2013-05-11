@@ -185,7 +185,11 @@ boolean test_samples = FALSE; /* Johns debug samples thing */
 boolean ceiling_on = TRUE;
 
 #ifdef GLCYLINDRIX
-boolean renderSoftwareBuffer = FALSE; 
+#ifdef BROWSER
+boolean renderSoftwareBuffer = TRUE;
+#else
+boolean renderSoftwareBuffer = TRUE;
+#endif
 #endif
 
 /* Stat shit */
