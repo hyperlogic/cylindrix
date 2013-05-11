@@ -31,7 +31,7 @@ endif
 # Browser build using emscripten
 ifeq ($(PLATFORM),Browser)
 GCC = ~/code/emscripten/emcc
-CFLAGS = -Wall -D GLCYLINDRIX -D EMSCRIPTEN -D USE_ABACI_NAMESPACE -Ilibyaml/include -Iabaci/src
+CFLAGS = -Wall -D GLCYLINDRIX -D BROWSER -D USE_ABACI_NAMESPACE -Ilibyaml/include -Iabaci/src
 LFLAGS = -lGL -lGLU -lSDL -lc -lyaml --embed-file 3d_data/ --embed-file pcx_data/ --embed-file gamedata --embed-file people.dat
 TARGET = cylindrix.html
 else
@@ -73,7 +73,7 @@ $(TARGET): $(OBJ) deltarget
 	$(GCC) $(OBJ) -o $(TARGET) $(LFLAGS)
 
 deltarget:
-	rm $(TARGET)
+	rm -f $(TARGET)
 
 build/%.o : src/%.cpp
 	$(GCC) $(CFLAGS) -c $< -o $@

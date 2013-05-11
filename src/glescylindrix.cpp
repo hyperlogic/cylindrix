@@ -62,6 +62,8 @@ GLuint g_uniform_tex;
 GLuint g_attrib_pos;
 GLuint g_attrib_uv;
 
+GLuint g_quadVBO[2];
+
 // converts the 8-bit double_buffer into the 32-bit rgbaFrameBuffer.
 void makeFrameBuffer( unsigned char* double_buffer )
 {
@@ -166,59 +168,10 @@ static void GL_RenderBuffer()
     glUniformMatrix4fv(g_uniform_mat, 1, GL_FALSE, reinterpret_cast<float*>(&proj));
     glUniform1i(g_uniform_tex, 0);
 
-    // AJT: GLES2
-    /*
-	glMatrixMode( GL_PROJECTION );
-	glLoadIdentity();
-	float aspect = (float)g_width/g_height;
-	glOrtho(-aspect, aspect, -1, 1, -1, 1);
-
-	glMatrixMode( GL_MODELVIEW );
-	glLoadIdentity();
-
-    */
-
 	glBindTexture(GL_TEXTURE_2D, frameBufferTexture);
-
-    /*
-	glTexEnvf( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE );
-
-	glEnable(GL_TEXTURE_2D);
-	glDisable(GL_LIGHTING);
-
-	float orig_aspect = 1.33333f; // 4:3
-	glBegin( GL_POLYGON );
-	glColor3f( fadeAlpha, fadeAlpha, fadeAlpha );
-
-	glTexCoord2f( 0, FBV );
-	glVertex3f( -orig_aspect, -1, 0 );
-
-	glTexCoord2f( FBU, FBV );
-	glVertex3f( orig_aspect, -1, 0 );
-
-	glTexCoord2f( FBU, 0 );
-	glVertex3f( orig_aspect, 1, 0 );
-
-	glTexCoord2f( 0, 0 );
-	glVertex3f( -orig_aspect, 1, 0 );
-
-	glEnd();
-    */
-
-    const float orig_aspect = 1.33333f; // 4:3
-    static float verts[] = {
-        -orig_aspect, -1, 0, 0, FBV,
-         orig_aspect, -1, 0, FBU, FBV,
-         orig_aspect,  1, 0, FBU, 0,
-        -orig_aspect,  1, 0, 0, 0
-    };
-
-    const GLsizei stride = sizeof(float) * 5;
-    glVertexAttribPointer(g_attrib_pos, 3, GL_FLOAT, GL_FALSE, stride, verts);
-    glVertexAttribPointer(g_attrib_uv, 2, GL_FLOAT, GL_FALSE, stride, verts + 3);
-
-    static unsigned short indices[] = {0, 1, 3, 1, 2, 3};
-    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, indices);
+    glBindBuffer(GL_ARRAY_BUFFER, g_quadVBO[0]);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, g_quadVBO[1]);
+    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, (void*)0);
 
 	SYS_SwapBuffers();
 
@@ -318,10 +271,35 @@ static void GL_ProgramInit()
     glUseProgram(g_prog);
 
     glActiveTexture(GL_TEXTURE0);
+
+	GL_CheckError();
+}
+
+static void GL_VBOInit()
+{
+    glGenBuffers(2, g_quadVBO);
+    glBindBuffer(GL_ARRAY_BUFFER, g_quadVBO[0]);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, g_quadVBO[1]);
+
     glEnableVertexAttribArray(g_attrib_pos);
     glEnableVertexAttribArray(g_attrib_uv);
 
-	GL_CheckError();
+    const float orig_aspect = 1.33333f; // 4:3
+    static float verts[] = {
+        -orig_aspect, -1, 0, 0, FBV,
+         orig_aspect, -1, 0, FBU, FBV,
+         orig_aspect,  1, 0, FBU, 0,
+        -orig_aspect,  1, 0, 0, 0
+    };
+    glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 5 * 4, verts, GL_STATIC_DRAW);
+
+    static unsigned short indices[] = {0, 1, 3, 1, 2, 3};
+
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned short) * 6, indices, GL_STATIC_DRAW);
+
+    const GLsizei stride = sizeof(float) * 5;
+    glVertexAttribPointer(g_attrib_pos, 3, GL_FLOAT, GL_FALSE, stride, (float*)0);
+    glVertexAttribPointer(g_attrib_uv, 2, GL_FLOAT, GL_FALSE, stride, (float*)0 + 3);
 }
 
 // creates the framebuffer & palette textures.
@@ -329,12 +307,19 @@ void GL_Cylindrix_Init()
 {
     // initialize the glprogram
 	GL_ProgramInit();
+    GL_CheckError();
+
+	// initialize some vbos
+    GL_VBOInit();
+    GL_CheckError();
 
 	// initialize the texture used that the game bitmap is sub-loaded into.
 	GL_FrameBufferTextureInit();
+    GL_CheckError();
 
 	// init the palette texture
 	GL_PalletteTextureInit();
+    GL_CheckError();
 }
 
 void GL_Cylindrix_Shutdown()

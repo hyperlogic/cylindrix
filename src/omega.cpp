@@ -172,7 +172,7 @@ extern long GAME_CLICKS_PER_SECOND;
 
 int     level_warp   = 0;
 
-#ifdef EMSCRIPTEN
+#ifdef BROWSER
 boolean no_anims     = TRUE;
 #else
 boolean no_anims     = FALSE;
