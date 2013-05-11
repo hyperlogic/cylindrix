@@ -24,8 +24,8 @@ extern const char* g_DataPath;
 
 /* prototype for the initalization screen print out */
 
-void cylindrix_init_print( char str[] );  /* from main.c */
-void tournament_init_print( char str[] ); /* from main.c */
+extern void cylindrix_init_print( const char str[] );  /* from main.c */
+extern void tournament_init_print( const char str[] ); /* from main.c */
 
 /* This is all six vehicles connection with the outside
    world for the ai to use */

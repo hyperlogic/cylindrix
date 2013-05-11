@@ -1,7 +1,7 @@
 # cylindrix makefile
 
 PLATFORM = $(shell uname)
-#PLATFORM = Browser
+PLATFORM = Browser
 DEBUG = false
 
 OBJ = build/ai.o build/ai_move.o build/ai_util.o build/base.o build/clipping.o build/collide.o build/commands.o \

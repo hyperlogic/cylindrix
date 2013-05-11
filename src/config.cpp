@@ -429,7 +429,7 @@ void Load_Game_Configuration( game_configuration_type *game_configuration )
 void Save_Game_Configuration( game_configuration_type *game_configuration )
     {
      FILE *fp;
-     char *write_strings[13] =
+     const char *write_strings[13] =
      { "Serial_Com_Port", "Serial_Baud", "Modem_Com_Port", "Modem_Baud",
        "Joystick", "Mouse_Active", "World_Detail_Level",
        "Tube_Detail_Level", "Hubs_On", "Sound_On", "Music_On", "Modem_Game",

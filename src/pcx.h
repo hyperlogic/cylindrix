@@ -44,7 +44,7 @@
 void PCX_Allocate( pcx_picture_ptr image );
 
 /* Load a pcx and color palette from file */
-void PCX_Load( char *filename, pcx_picture_ptr image );
+void PCX_Load( const char *filename, pcx_picture_ptr image );
 
 /* Enable the color palette stored in the pcx file */
 void Enable_Color_Palette( pcx_picture_ptr image );

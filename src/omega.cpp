@@ -203,9 +203,6 @@ team_type local_user_team;    /* the team (red or blue) that the user is on */
 
 int master = 0; /* = 0 to shut up compiler */
 
-static string debug_string[6];
-static string temp_str2[6];  /* ditto */
-
 boolean ai_active = TRUE;
 
 game_configuration_type game_configuration;

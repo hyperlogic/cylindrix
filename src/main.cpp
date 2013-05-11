@@ -99,8 +99,6 @@ extern MenuStuff menu_stuff;
 
 extern int profile;
 
-static string debug_string[6];
-
 extern string temp_str2[6];  /* ditto */
 
 extern char frame_rate_str[80]; /* frame rate to be blitted on the screen */
@@ -138,7 +136,7 @@ void print_all_input_tables( Player p[], long frame_counter )
     printf("\n");
 }
 
-void cylindrix_init_print( char str[] )
+void cylindrix_init_print( const char str[] )
 {
     printf("cylindrix_init_print : %s\n", str);
 
@@ -372,7 +370,7 @@ void display_next_opponent()
 }
 
 
-void tournament_init_print( char str[] )
+void tournament_init_print( const char str[] )
 {
     printf("tournament_init_print : %s\n", str);
 
@@ -1771,7 +1769,7 @@ int user_vehicle_index()
     int i;
 
     for( i = 0; i < 6; i++ ) {
-        if( (world_stuff.player_array[i].controller == USER_CONTROL) ) {
+        if( world_stuff.player_array[i].controller == USER_CONTROL ) {
             return i;
         }
     }

@@ -354,7 +354,7 @@ void FillDSBuffer( struct SYS_Wave* wave )
 
 }
 
-SYS_SOUNDHANDLE SYS_LoadSound( char* fileName )
+SYS_SOUNDHANDLE SYS_LoadSound( const char* fileName )
 {
 	int size = strlen( fileName );
 

@@ -88,7 +88,7 @@ void Init_Menu_Voices( void );
 
 void Free_Menu_Voices( void );
 
-void cylindrix_init_print( char str[] );
+void cylindrix_init_print( const char str[] );
 
 void print_game_configuration_info( game_configuration_type *game_configuration, int master );
 
@@ -102,7 +102,7 @@ void ipx_get_current_view_orient( Orientation *view_o, Orientation *old_o, team_
 
 void display_next_opponent();
 
-void tournament_init_print( char str[] );
+void tournament_init_print( const char str[] );
 
 void print_p_mem( char *str );
 

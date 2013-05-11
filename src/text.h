@@ -21,10 +21,10 @@
 
 void letter_blit( char ch, int x, int y, unsigned char *packed_array,
                   int length, int height, unsigned char color );
-void string_blit( char *str, int x, int y, unsigned char *packed_array,
+void string_blit( const char *str, int x, int y, unsigned char *packed_array,
                   int length, int height, unsigned char color );
 void micro_letter_blit( char ch, int x, int y, unsigned char *packed_array,
                         int length, int height, unsigned char color );
-void micro_string_blit( char *str, int x, int y, unsigned char *packed_array,
+void micro_string_blit( const char *str, int x, int y, unsigned char *packed_array,
                         int length, int height, unsigned char color );
 #endif

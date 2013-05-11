@@ -5,7 +5,7 @@
 void SYS_InitSound() {}
 void SYS_ShutdownSound() {}
 void SYS_ProcessSound() {}
-SYS_SOUNDHANDLE SYS_LoadSound( char* fileName ) {return 0;}
+SYS_SOUNDHANDLE SYS_LoadSound( const char* fileName ) {return 0;}
 void SYS_ReleaseSound( SYS_SOUNDHANDLE soundHandle ) {}
 void SYS_TriggerSound( SYS_SOUNDHANDLE soundHandle ) {}
 void SYS_TriggerSoundVolume( SYS_SOUNDHANDLE soundHandle, unsigned char volume ) {}

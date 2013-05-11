@@ -104,7 +104,7 @@ int Save_Overall_Stats_Text( overall_stats_type *overall_stats, char *filename )
 } /* End of Save_Overall_Stats_Text() */
 
 
-int Save_Overall_Stats_Binary( overall_stats_type *overall_stats, char *filename )
+int Save_Overall_Stats_Binary( overall_stats_type *overall_stats, const char *filename )
     {
      FILE *fp;
 	char newfilename[512];
@@ -126,7 +126,7 @@ int Save_Overall_Stats_Binary( overall_stats_type *overall_stats, char *filename
     } /* End of Save_Overall_Stats_Binary() */
 
 
-int Load_Overall_Stats_Binary( overall_stats_type *overall_stats, char *filename )
+int Load_Overall_Stats_Binary( overall_stats_type *overall_stats, const char *filename )
     {
      FILE *fp;
 	char newfilename[512];

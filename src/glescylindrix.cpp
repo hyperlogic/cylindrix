@@ -390,7 +390,7 @@ void GL_DrawTube( WorldStuff* worldStuff, enum TubeType tubeType )
     glLoadIdentity();
     */
 
-	float aspect = (float)g_width/g_height;
+	//float aspect = (float)g_width/g_height;
 
     // AJT: GLES2
     /*

@@ -267,7 +267,7 @@ static int SDLFormatToOpenALFormat(Uint16 format,Uint8 channels)
 	}
 }
 
-static SYS_SOUNDHANDLE SYS_LoadWAVFile(char* filename)
+static SYS_SOUNDHANDLE SYS_LoadWAVFile(const char* filename)
 {
 	// use SDL to load a wave file.
 	SDL_AudioSpec wav_spec;
@@ -303,7 +303,7 @@ static SYS_SOUNDHANDLE SYS_LoadWAVFile(char* filename)
 	return (SYS_SOUNDHANDLE)wave;
 }
 
-static SYS_SOUNDHANDLE SYS_LoadMP3File(char* filename)
+static SYS_SOUNDHANDLE SYS_LoadMP3File(const char* filename)
 {
 	mpg123_handle* mh = 0;
 	int error = MPG123_OK;
@@ -438,7 +438,7 @@ static void SYS_ProcessStreaming()
 	}
 }
 
-SYS_SOUNDHANDLE SYS_LoadSound(char* filename)
+SYS_SOUNDHANDLE SYS_LoadSound(const char* filename)
 {
 
 	int len = strlen(filename);

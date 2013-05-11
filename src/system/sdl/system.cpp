@@ -239,7 +239,7 @@ int main( int argc, char* argv[] )
 
     SDL_WM_SetCaption("cylindrix", "cylindrix");
 
-    putenv("__GL_SYNC_TO_VBLANK=1");
+    setenv("__GL_SYNC_TO_VBLANK", "1", true);
     g_fullscreen = false;
 
     // Get the current desktop width & height

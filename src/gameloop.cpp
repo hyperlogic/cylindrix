@@ -89,7 +89,7 @@ enum TournamentLevelEnum
 struct TournamentLevelData
 {
 	int blueAI[3];
-	char* cylinder_filename;
+	const char* cylinder_filename;
 };
 
 struct TournamentLevelData tournamentLevelData[ NumLevels ] =
@@ -394,7 +394,7 @@ void MainMenuExit()
 	Free_Menu_Sounds();
 }
 
-static char* LookupMusicFilename(char* cylinder_filename)
+static const char* LookupMusicFilename(const char* cylinder_filename)
 {
 	if(strcmp(cylinder_filename,"gamedata/level1.dat") == 0)
 		return SCAVENGER_SONG;
@@ -637,7 +637,7 @@ void PlayGameMovieEnter()
 		if (music)
 			SYS_ReleaseSound(music);
 
-        char* filename = tournamentLevelData[tournamentLevel].cylinder_filename;
+        const char* filename = tournamentLevelData[tournamentLevel].cylinder_filename;
 		music = SYS_LoadSound(LookupMusicFilename(filename));
 		SYS_PlaySoundVolume(music, true, game_configuration.music_vol);
 	}

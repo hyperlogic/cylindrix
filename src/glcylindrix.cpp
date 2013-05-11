@@ -259,7 +259,7 @@ float GL_IntensityToPaletteTexCoord( WorldStuff* worldStuff, float intensity, Gr
 	// clamp shade
 	if( shade < offset )
 		shade = offset;
-	else if ( shade > offset + (num_colors - 1) )
+	else if ( shade > (unsigned int)(offset + (num_colors - 1)) )
 		shade = offset + (num_colors - 1);
 
 	return ((float)shade + 0.5f) / 255.0f;

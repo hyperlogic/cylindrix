@@ -339,7 +339,7 @@ void print_wire_object( PointEdge *pe )
     }
 }
 
-void get_wire_object( PointEdge *pe, char *filename )
+void get_wire_object( PointEdge *pe, const char *filename )
 {
     FILE *fp;
     long points, edges, i;
@@ -1003,7 +1003,7 @@ void free_object( PointFace *obj )
        2 2
 */
 
-void get_object( PointFace *obj, char *filename )
+void get_object( PointFace *obj, const char *filename )
 {
     FILE *fp;    /* input filepointer */
     int pts;     /* total number of points in the object */
@@ -1338,7 +1338,7 @@ void linear_transformation1( long *m, long *v )
 
 void linear_transformation2( long *m, long *v )
 {
-    long tv[3];
+    long tv[4];
 
     tv[X] = rounding_fixed_multiply(m[0], v[X]) +
             rounding_fixed_multiply(m[1], v[Y]) +

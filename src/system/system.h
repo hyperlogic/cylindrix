@@ -132,7 +132,7 @@ typedef unsigned long SYS_SOUNDHANDLE;
 void SYS_InitSound();
 void SYS_ShutdownSound();
 void SYS_ProcessSound();	// TODO: maybe this should be hidden from game client.
-SYS_SOUNDHANDLE SYS_LoadSound( char* fileName );
+SYS_SOUNDHANDLE SYS_LoadSound( const char* fileName );
 void SYS_ReleaseSound( SYS_SOUNDHANDLE soundHandle );
 
 // plays this sound once, (fire and forget)

@@ -319,7 +319,8 @@ long Read_Chunk( FILE *fp )
 
      /* If the first_frame flag (-1) is set, record our current 
         position as the first frame */
-     if( first_frame == -1 )
+     const uint32_t ALL_BITS_TRUE = -1;
+     if( first_frame == ALL_BITS_TRUE )
          {
           first_frame = ftell( fp );
          }
@@ -397,7 +398,8 @@ void Delta_Chunk_Ram( uint8_t *file_buffer, uint32_t *file_pos )
      
      unsigned char pixel_data;      /* One pixel to put on screen */
      unsigned long byte_count;       /* Index for loop             */
-     long x, y, i;
+     long x, y;
+     unsigned long i;
      unsigned char *temp_buffer;
 
 
@@ -481,8 +483,8 @@ void Color_Chunk_Ram( uint8_t *file_buffer, uint32_t *file_pos )
      unsigned char color_count;
      unsigned char color_index = 0; /* Index into 256 palette */
      unsigned char r,g,b;
-     long i, j;
-     
+     unsigned long i;
+     long j;
 
      temp_buffer = (unsigned char *)&num_packets;
      for( i = 0; i < sizeof( uint16_t ); i++ )
@@ -619,7 +621,7 @@ void Byte_Run_Chunk_Ram( uint8_t *file_buffer, uint32_t *file_pos )
 int Read_Sub_Chunk_Ram( uint8_t *file_buffer, uint32_t *file_pos )
     {
      sub_chunk_header header;
-     long i;
+     unsigned long i;
      unsigned char *temp_buffer;
 
 
@@ -666,7 +668,7 @@ int Read_Sub_Chunk_Ram( uint8_t *file_buffer, uint32_t *file_pos )
 long Read_Chunk_Ram( uint8_t *file_buffer, uint32_t *file_pos )
     {
      chunk_header header;
-     long i;
+     unsigned long i;
      unsigned long pos;
      unsigned char *temp_buffer;
 
@@ -700,7 +702,8 @@ long Read_Chunk_Ram( uint8_t *file_buffer, uint32_t *file_pos )
      
      /* If the first_frame flag (-1) is set, record our current 
         position as the first frame */
-     if( first_frame == -1 )
+     const uint32_t ALL_BITS_TRUE = -1;
+     if( first_frame == ALL_BITS_TRUE )
          {
           first_frame = *file_pos;
          }
@@ -1106,8 +1109,6 @@ void PlayFliEnter( const char* filename )
 
 int PlayFliProcess()
 {	
-	int exit = 0;
-
 	if ( feof( gCurrentFile ) )
 		return 0;
 

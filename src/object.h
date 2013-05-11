@@ -41,7 +41,7 @@ void print_object( PointFace *obj );
 
 void free_object( PointFace *obj );
 
-void get_object( PointFace *obj, char *filename );
+void get_object( PointFace *obj, const char *filename );
 
 void wtov_transformation( long *wtov_matrix, long *vertex );
 
@@ -93,7 +93,7 @@ void create_edge_table( PointFace *obj, EdgeTable *et );
 
 void print_wire_object( PointEdge *pe );
 
-void get_wire_object( PointEdge *pe, char *filename );
+void get_wire_object( PointEdge *pe, const char *filename );
 
 void translation_matrix_init( Matrix t, long tx, long ty, long tz );
 

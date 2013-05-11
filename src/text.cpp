@@ -100,7 +100,7 @@ void micro_letter_blit( char ch, int x, int y, unsigned char *packed_array,
 
 /*  string blitter */
 
-void string_blit( char *str, int x, int y, unsigned char *packed_array,
+void string_blit( const char *str, int x, int y, unsigned char *packed_array,
                   int length, int height, unsigned char color )
 {
     int str_len = strlen( str );
@@ -120,7 +120,7 @@ void string_blit( char *str, int x, int y, unsigned char *packed_array,
 
 /* micro string blitter */
 
-void micro_string_blit( char *str, int x, int y, unsigned char *packed_array,
+void micro_string_blit( const char *str, int x, int y, unsigned char *packed_array,
                         int length, int height, unsigned char color )
 {
     int str_len = strlen( str );

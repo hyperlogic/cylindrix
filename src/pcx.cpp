@@ -45,7 +45,7 @@ void PCX_Allocate( pcx_picture_ptr image )
 /* Function PCX load loads and uncompresses a PCX image into image->buffer
    And loads the palette into image->palette
    Based on code from Graphics Gurus book */
-void PCX_Load( char *filename, pcx_picture_ptr image )
+void PCX_Load( const char *filename, pcx_picture_ptr image )
     {
 
      FILE *fp;              /* File pointer */

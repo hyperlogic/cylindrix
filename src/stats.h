@@ -68,10 +68,10 @@ int Save_Game_Stats( game_stats_type *game_stats, char *filename );
 int Save_Overall_Stats_Text( overall_stats_type *overall_stats, char *filename );
 
 /* Save this players overall stats for into a binary file (used by game) */
-int Save_Overall_Stats_Binary( overall_stats_type *overall_stats, char *filename );
+int Save_Overall_Stats_Binary( overall_stats_type *overall_stats, const char *filename );
 
 /* Load this players overall stats from a binary file */
-int Load_Overall_Stats_Binary( overall_stats_type *overall_stats, char *filename );
+int Load_Overall_Stats_Binary( overall_stats_type *overall_stats, const char *filename );
 
 /* Update this characters overall stats with this game's stats */
 void Add_Game_Stats_To_Overall_Stats( game_stats_type *game_stats, overall_stats_type *overall_stats );
