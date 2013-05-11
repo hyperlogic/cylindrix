@@ -32,7 +32,8 @@ endif
 ifeq ($(PLATFORM),Browser)
 GCC = ~/code/emscripten/emcc
 CFLAGS = -Wall -D GLCYLINDRIX -D BROWSER -D USE_ABACI_NAMESPACE -Ilibyaml/include -Iabaci/src
-LFLAGS = -lGL -lGLU -lSDL -lc -lyaml --embed-file 3d_data/ --embed-file pcx_data/ --embed-file gamedata --embed-file people.dat
+LFLAGS = -lGL -lGLU -lSDL -lc -lyaml
+LFLAGS += --embed-file 3d_data/ --embed-file pcx_data/ --embed-file gamedata --embed-file people.dat --embed-file FLI/CYLINDRX.FLI
 TARGET = cylindrix.html
 else
 # debug symbols
