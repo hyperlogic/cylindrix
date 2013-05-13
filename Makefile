@@ -16,10 +16,12 @@ YAML_OBJ = build/libyaml/api.o build/libyaml/dumper.o build/libyaml/emitter.o \
 	build/libyaml/loader.o build/libyaml/parser.o build/libyaml/reader.o \
 	build/libyaml/scanner.o build/libyaml/writer.o
 
+OPT_FLAG = -O3
+
 # SDL Mac OS X
 ifeq ($(PLATFORM),Darwin)
 OBJ += build/glcylindrix.o
-GCC = g++
+GCC = llvm-g++
 CFLAGS = -Wall -D GLCYLINDRIX -D DARWIN `sdl-config --cflags` -Ilibyaml/include -Ilibyaml
 LFLAGS = -framework Cocoa -framework OpenGL -framework GLUT -framework OpenAL -lstdc++ -lmpg123 `sdl-config --libs`
 TARGET = cylindrix
@@ -49,16 +51,18 @@ OBJ += build/glescylindrix.o
 GCC = ~/code/emscripten/emcc
 CFLAGS = -Wall -D GLCYLINDRIX -D BROWSER -D USE_ABACI_NAMESPACE -Ilibyaml/include -Ilibyaml -Iabaci/src
 LFLAGS = -lGL -lGLU -lSDL -lc -lyaml
-LFLAGS += --embed-file 3d_data/ --embed-file pcx_data/ --embed-file gamedata --embed-file people.dat --embed-file FLI/CYLINDRX.FLI
+LFLAGS += --embed-file 3d_data/ --embed-file pcx_data/ --embed-file gamedata --embed-file people.dat --embed-file FLI/CYLINDRX.FLI -O2
 TARGET = cylindrix.html
-else
+OPT_FLAG =
+endif
+
 # debug symbols
 ifeq ($(DEBUG),true)
 CFLAGS += -g
 else
-CFLAGS += -O3
+CFLAGS += $(OPT_FLAG)
 endif
-endif
+
 
 # Link with SDLMain when on MacOSX
 ifeq ($(PLATFORM),Darwin)

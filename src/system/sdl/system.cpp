@@ -257,7 +257,8 @@ int main( int argc, char* argv[] )
     else
     {
         // TODO: get this from a config file or something...
-        g_width = 1024; g_height = 768;  // 4:3
+        //g_width = 1024; g_height = 768;  // 4:3
+        g_width = 320 * 2; g_height = 240 * 2;
 //      g_width = 1280; g_height = 720;  // 16:9
         g_bpp = videoInfo->vfmt->BitsPerPixel;
         g_screen = SDL_SetVideoMode(g_width, g_height, g_bpp, SDL_HWSURFACE | SDL_OPENGL | SDL_DOUBLEBUF /*| SDL_RESIZABLE*/);

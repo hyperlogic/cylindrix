@@ -348,6 +348,7 @@ void get_wire_object( PointEdge *pe, const char *filename )
 
 	sprintf(newfilename,"%s%s",g_DataPath,filename);
 
+    printf("AJT: get_wire_object \"%s\"\n", newfilename);
 
     /* free the pointedge */
 
@@ -361,38 +362,52 @@ void get_wire_object( PointEdge *pe, const char *filename )
     if( (fp = fopen( newfilename, "r" )) <= 0 ) 	
         SYS_Error( "get_wire_object(): Invalid filename %s!\n", filename );    
 
+
+    fseek(fp, 0, SEEK_END);
+    int sz = ftell(fp);
+    fseek(fp, 0, SEEK_SET);
+    char* buffer = (char*)malloc(sz + 1);
+    fread(buffer, 1, sz, fp);
+    buffer[sz] = 0;
+
     /* get the size of the object */
 
-    fscanf( fp, " %ld %ld ", &points, &edges );
+    points = atoi(strtok(buffer, "\n\r \t"));
+    edges = atoi(strtok(NULL, "\n\r \t"));
+
     pe->points = points;
     pe->edges = edges;
 
     /* malloc the points */
 
-    if( ( pe->point = (Point *)malloc( sizeof( Point ) * points ) ) == NULL ) 	
+    if( ( pe->point = (Point *)malloc( sizeof( Point ) * points ) ) == NULL )
 		SYS_Error( "get_wire_object() : malloc failed\n" );
 
     /* malloc the edges */
 
-    if( ( pe->edge = (Edge *)malloc( sizeof( Edge ) * edges ) ) == NULL ) 	
-		SYS_Error( "get_wire_object() : malloc failed\n" );    
+    if( ( pe->edge = (Edge *)malloc( sizeof( Edge ) * edges ) ) == NULL )
+		SYS_Error( "get_wire_object() : malloc failed\n" );
 
     /* scan in the points */
 
     for( i = 0; i < points; i++ ) {
-	fscanf( fp, " %f %f %f ", &x, &y, &z );
-	pe->point[i][X] = ftom( x );
-	pe->point[i][Y] = ftom( y );
-	pe->point[i][Z] = ftom( z );
+        x = atof(strtok(NULL, "\n\r \t"));
+        y = atof(strtok(NULL, "\n\r \t"));
+        z = atof(strtok(NULL, "\n\r \t"));
+        pe->point[i][X] = ftom( x );
+        pe->point[i][Y] = ftom( y );
+        pe->point[i][Z] = ftom( z );
     }
 
     /* scan in the edges */
 
     for( i = 0; i < edges; i++ ) {
-	fscanf( fp, " %ld %ld ", &(pe->edge[i][0]), &(pe->edge[i][1]) );
+        pe->edge[i][0] = atoi(strtok(NULL, "\n\r \t"));
+        pe->edge[i][1] = atoi(strtok(NULL, "\n\r \t"));
     }
 
     fclose( fp );
+    free(buffer);
 }
 
 /* Tells if a given edge is already in an EdgeTable.  Used to eliminate
@@ -424,7 +439,7 @@ int in_edge_table( EdgeTable *et, Edge edge )
 
 void init_edge_table( Vehicle *v )
 {
-printf("init_edge_table start\n");
+    print_object(v->collision_obj);
 
     long i, j;
     EdgeTable et;
@@ -444,16 +459,16 @@ printf("init_edge_table start\n");
     /* insert edges into edge table, while not inserting redundent edges. */
 
     for( i = 0; i < v->collision_obj->faces; i++ ) {
-	for( j = 0; j < v->collision_obj->face[i].size; j++ ) {
-	    edge[0] = v->collision_obj->face[i].index[j];
-	    edge[1] = v->collision_obj->face[i].index[(j + 1) % v->collision_obj->face[i].size];
+        for( j = 0; j < v->collision_obj->face[i].size; j++ ) {
+            edge[0] = v->collision_obj->face[i].index[j];
+            edge[1] = v->collision_obj->face[i].index[(j + 1) % v->collision_obj->face[i].size];
 
-	    if( !in_edge_table( &et, edge ) ) {
-		et.edge[et.edges][0] = edge[0];
-		et.edge[et.edges][1] = edge[1];
-		et.edges++;
-	    }
-	}
+            if( !in_edge_table( &et, edge ) ) {
+                et.edge[et.edges][0] = edge[0];
+                et.edge[et.edges][1] = edge[1];
+                et.edges++;
+            }
+        }
     }
 
     /* realloc edges */
@@ -1015,11 +1030,12 @@ void get_object( PointFace *obj, const char *filename )
     float u[3];         /* one edge of a polgon */
     float v[3];         /* another edge of a polgon */
     float uxv[3];       /* the normal vector of that polygon (u X v) */
-    int grad;           /* used to read in the color of each face */
+    int grad = 0;       /* used to read in the color of each face */
 	char newfilename[512];
 
 	sprintf(newfilename,"%s%s",g_DataPath,filename);
 
+    printf("AJT: get_object \"%s\"\n", newfilename);
 
     /* free the object */
 
@@ -1030,9 +1046,17 @@ void get_object( PointFace *obj, const char *filename )
     if( (fp = fopen( newfilename, "r" )) <= 0 )
 		SYS_Error( "get_object(): Invalid filname '%s'!\n", newfilename );
 
-    /* get the size of the object */
+    fseek(fp, 0, SEEK_END);
+    int sz = ftell(fp);
+    fseek(fp, 0, SEEK_SET);
+    char* buffer = (char*)malloc(sz + 1);
+    fread(buffer, 1, sz, fp);
+    buffer[sz] = 0;
 
-    fscanf( fp, " %d %d ", &pts, &polys );
+    /* get the size of the object */
+    pts = atoi(strtok(buffer, "\n\r \t"));
+    polys = atoi(strtok(NULL, "\n\r \t"));
+
     obj->points = pts;
     obj->faces = polys;
 
@@ -1049,32 +1073,39 @@ void get_object( PointFace *obj, const char *filename )
     /* get each vertex */
 
     for( i = 0; i < pts; i++ ) {
-	fscanf( fp, " %f %f %f ", &x, &y, &z );
-	obj->point[i][X] = ftom( x );
-	obj->point[i][Y] = ftom( y );
-	obj->point[i][Z] = ftom( z );
+        x = atof(strtok(NULL, "\n\r \t"));
+        y = atof(strtok(NULL, "\n\r \t"));
+        z = atof(strtok(NULL, "\n\r \t"));
+
+        obj->point[i][X] = ftom( x );
+        obj->point[i][Y] = ftom( y );
+        obj->point[i][Z] = ftom( z );
     }
 
     /* get each face */
 
     for( i = 0; i < polys; i++ ) {
-	fscanf( fp, " %d ", &pts );
-	obj->face[i].size = pts;
-	for( j = 0; j < pts; j++ ) {
-	    fscanf( fp, " %ld ", &obj->face[i].index[j]);
-	    obj->face[i].index[j]--; /* face indices start at 1 in file but */
-	}                            /* start at 0 in C. */
+        pts = atoi(strtok(NULL, "\n\r \t"));
+
+        obj->face[i].size = pts;
+        for( j = 0; j < pts; j++ ) {
+            obj->face[i].index[j] = atoi(strtok(NULL, "\n\r \t"));
+            obj->face[i].index[j]--; /* face indices start at 1 in file but */
+        }                            /* start at 0 in C. */
     }
 
     /* get each faces color */
 
     for( i = 0; i < polys; i++ ) {
-	fscanf( fp, " %d ", &(grad) );
-	obj->face[i].gradient = grad;
+        char* temp = strtok(NULL, "\n\r \t");
+        if (temp) {
+            grad = atoi(temp);
+        }
+        obj->face[i].gradient = grad;
     }
 
-
     fclose(fp);
+    free(buffer);
 
     /* pre-compute normal vectors for each face  */
     /* ( so we don't have to figure them out every time we draw a face ) */

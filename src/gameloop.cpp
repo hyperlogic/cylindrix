@@ -651,11 +651,16 @@ void PlayGameMovieEnter()
 
 void PlayGameMovieProcess()
 {
+	// play animations.
     if ( game_configuration.animations_on && !no_anims )
 	{
         if (!PlayFliProcess()) {
             currentPlayGameState = PLAYGAMESTATE_OPPONENT;
         }
+    }
+    else
+    {
+        currentPlayGameState = PLAYGAMESTATE_OPPONENT;
     }
 }
 
