@@ -1,7 +1,6 @@
 # cylindrix makefile
 
 PLATFORM = $(shell uname)
-PLATFORM = Browser
 DEBUG = false
 
 OBJ = build/ai.o build/ai_move.o build/ai_util.o build/base.o build/clipping.o build/collide.o build/commands.o \
@@ -32,8 +31,9 @@ ifeq ($(PLATFORM),Linux)
 OBJ += build/glcylindrix.o
 GCC = g++
 CFLAGS = -Wall -D GLCYLINDRIX
-LFLAGS = -lGL -lGLU -lSDL -lc -lmpg123 -lopenal
+LFLAGS = -lGL -lGLU -lSDL -lc -lmpg123 -lopenal -lyaml
 TARGET = cylindrix
+YAML_OBJ =
 endif
 
 # SDL Microsoft Windows using MINGW
