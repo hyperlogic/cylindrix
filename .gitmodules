@@ -1,6 +1,6 @@
 [submodule "libyaml"]
 	path = libyaml
-	url = git@github.com:yaml/libyaml.git
+	url = https://github.com/yaml/libyaml.git
 [submodule "abaci"]
 	path = abaci
-	url = git@github.com:hyperlogic/abaci.git
+	url = https://github.com/hyperlogic/abaci.git
