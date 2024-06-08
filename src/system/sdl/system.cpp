@@ -3,7 +3,7 @@
 #include <assert.h>
 #include <time.h>
 #include <string.h>
-#include <SDL/SDL.h>
+#include <SDL2/SDL.h>
 #include "../../gameloop.h"
 #include "../system.h"
 #include <stdarg.h>
@@ -24,9 +24,16 @@
 unsigned char keysDown[255];
 unsigned char keysPressed[255];
 
+int g_width = 0;
+int g_height = 0;
+int g_bpp = 0;
+bool g_fullscreen = false;
+SDL_Window* g_window = NULL;
+SDL_GLContext g_gl_context;
+
 void SYS_SwapBuffers()
 {
-    SDL_GL_SwapBuffers();
+    SDL_GL_SwapWindow(g_window);
 }
 
 void SYS_TimerInit()
@@ -69,94 +76,92 @@ int SYS_KeyPressed( unsigned char key )
     return keysPressed[key];
 }
 
-static SDLKey keyToSDLKey[SIZEOFKEYTABLE] =
+static SDL_Scancode keyToScancode[SIZEOFKEYTABLE] =
 {
-    SDLK_a, // KEY_A
-    SDLK_b, // KEY_B
-    SDLK_c, // KEY_C
-    SDLK_d, // KEY_D
-    SDLK_e, // KEY_E
-    SDLK_f, // KEY_F
-    SDLK_g, // KEY_G
-    SDLK_h, // KEY_H
-    SDLK_i, // KEY_I
-    SDLK_j, // KEY_J,
-    SDLK_k, // KEY_K,
-    SDLK_l, // KEY_L,
-    SDLK_m, // KEY_M,
-    SDLK_n, // KEY_N,
-    SDLK_o, // KEY_O,
-    SDLK_p, // KEY_P,
-    SDLK_q, // KEY_Q,
-    SDLK_r, // KEY_R,
-    SDLK_s, // KEY_S,
-    SDLK_t, // KEY_T,
-    SDLK_u, // KEY_U,
-    SDLK_v, // KEY_V,
-    SDLK_w, // KEY_W,
-    SDLK_x, // KEY_X,
-    SDLK_y, // KEY_Y,
-    SDLK_z, // KEY_Z,
-    SDLK_UP, // KEY_UP_ARROW,
-    SDLK_DOWN, // KEY_DOWN_ARROW,
-    SDLK_LEFT, // KEY_LEFT_ARROW,
-    SDLK_RIGHT, // KEY_RIGHT_ARROW,
-    SDLK_SPACE, // KEY_SPACE,
-    SDLK_LCTRL, // KEY_CONTROL,
-    SDLK_LALT, // KEY_ALT,
-    SDLK_F1, // KEY_F1,
-    SDLK_F2, // KEY_F2,
-    SDLK_F3, // KEY_F3,
-    SDLK_F4, // KEY_F4,
-    SDLK_F5, // KEY_F5,
-    SDLK_F6, // KEY_F6,
-    SDLK_F7, // KEY_F7,
-    SDLK_F8, // KEY_F8,
-    SDLK_F9, // KEY_F9,
-    SDLK_F10, // KEY_F10,
-    SDLK_F11, // KEY_F11,
-    SDLK_F12, // KEY_F12,
-    SDLK_RETURN, // KEY_ENTER,
-    SDLK_0, // KEY_0,
-    SDLK_1, // KEY_1,
-    SDLK_2, // KEY_2,
-    SDLK_3, // KEY_3,
-    SDLK_4, // KEY_4,
-    SDLK_5, // KEY_5,
-    SDLK_6, // KEY_6,
-    SDLK_7, // KEY_7,
-    SDLK_8, // KEY_8,
-    SDLK_9, // KEY_9,
-    SDLK_MINUS, // KEY_MINUS,
-    SDLK_EQUALS, // KEY_EQUALS,
-    SDLK_LEFTBRACKET, // KEY_LEFT_BRACKET,
-    SDLK_RIGHTBRACKET, // KEY_RIGHT_BRACKET,
-    SDLK_BACKSLASH, // KEY_BACKSLASH,
-    SDLK_SEMICOLON, // KEY_SEMICOLON,
-    SDLK_QUOTE, // KEY_APOSTROPHE,
-    SDLK_COMMA, // KEY_COMMA,
-    SDLK_PERIOD, // KEY_PERIOD,
-    SDLK_SLASH, // KEY_SLASH,
-    SDLK_BACKQUOTE, // KEY_TILDE,
-    SDLK_TAB, // KEY_TAB,
-    SDLK_LSHIFT, // KEY_SHIFT,
-    SDLK_BACKSPACE, // KEY_BACKSPACE,
-    SDLK_ESCAPE // KEY_ESC,
+    SDL_SCANCODE_A, // KEY_A
+    SDL_SCANCODE_B, // KEY_B
+    SDL_SCANCODE_C, // KEY_C
+    SDL_SCANCODE_D, // KEY_D
+    SDL_SCANCODE_E, // KEY_E
+    SDL_SCANCODE_F, // KEY_F
+    SDL_SCANCODE_G, // KEY_G
+    SDL_SCANCODE_H, // KEY_H
+    SDL_SCANCODE_I, // KEY_I
+    SDL_SCANCODE_J, // KEY_J,
+    SDL_SCANCODE_K, // KEY_K,
+    SDL_SCANCODE_L, // KEY_L,
+    SDL_SCANCODE_M, // KEY_M,
+    SDL_SCANCODE_N, // KEY_N,
+    SDL_SCANCODE_O, // KEY_O,
+    SDL_SCANCODE_P, // KEY_P,
+    SDL_SCANCODE_Q, // KEY_Q,
+    SDL_SCANCODE_R, // KEY_R,
+    SDL_SCANCODE_S, // KEY_S,
+    SDL_SCANCODE_T, // KEY_T,
+    SDL_SCANCODE_U, // KEY_U,
+    SDL_SCANCODE_V, // KEY_V,
+    SDL_SCANCODE_W, // KEY_W,
+    SDL_SCANCODE_X, // KEY_X,
+    SDL_SCANCODE_Y, // KEY_Y,
+    SDL_SCANCODE_Z, // KEY_Z,
+    SDL_SCANCODE_UP, // KEY_UP_ARROW,
+    SDL_SCANCODE_DOWN, // KEY_DOWN_ARROW,
+    SDL_SCANCODE_LEFT, // KEY_LEFT_ARROW,
+    SDL_SCANCODE_RIGHT, // KEY_RIGHT_ARROW,
+    SDL_SCANCODE_SPACE, // KEY_SPACE,
+    SDL_SCANCODE_LCTRL, // KEY_CONTROL,
+    SDL_SCANCODE_LALT, // KEY_ALT,
+    SDL_SCANCODE_F1, // KEY_F1,
+    SDL_SCANCODE_F2, // KEY_F2,
+    SDL_SCANCODE_F3, // KEY_F3,
+    SDL_SCANCODE_F4, // KEY_F4,
+    SDL_SCANCODE_F5, // KEY_F5,
+    SDL_SCANCODE_F6, // KEY_F6,
+    SDL_SCANCODE_F7, // KEY_F7,
+    SDL_SCANCODE_F8, // KEY_F8,
+    SDL_SCANCODE_F9, // KEY_F9,
+    SDL_SCANCODE_F10, // KEY_F10,
+    SDL_SCANCODE_F11, // KEY_F11,
+    SDL_SCANCODE_F12, // KEY_F12,
+    SDL_SCANCODE_RETURN, // KEY_ENTER,
+    SDL_SCANCODE_0, // KEY_0,
+    SDL_SCANCODE_1, // KEY_1,
+    SDL_SCANCODE_2, // KEY_2,
+    SDL_SCANCODE_3, // KEY_3,
+    SDL_SCANCODE_4, // KEY_4,
+    SDL_SCANCODE_5, // KEY_5,
+    SDL_SCANCODE_6, // KEY_6,
+    SDL_SCANCODE_7, // KEY_7,
+    SDL_SCANCODE_8, // KEY_8,
+    SDL_SCANCODE_9, // KEY_9,
+    SDL_SCANCODE_MINUS, // KEY_MINUS,
+    SDL_SCANCODE_EQUALS, // KEY_EQUALS,
+    SDL_SCANCODE_LEFTBRACKET, // KEY_LEFT_BRACKET,
+    SDL_SCANCODE_RIGHTBRACKET, // KEY_RIGHT_BRACKET,
+    SDL_SCANCODE_BACKSLASH, // KEY_BACKSLASH,
+    SDL_SCANCODE_SEMICOLON, // KEY_SEMICOLON,
+    SDL_SCANCODE_APOSTROPHE, // KEY_APOSTROPHE,
+    SDL_SCANCODE_COMMA, // KEY_COMMA,
+    SDL_SCANCODE_PERIOD, // KEY_PERIOD,
+    SDL_SCANCODE_SLASH, // KEY_SLASH,
+    SDL_SCANCODE_GRAVE, // KEY_TILDE,
+    SDL_SCANCODE_TAB, // KEY_TAB,
+    SDL_SCANCODE_LSHIFT, // KEY_SHIFT,
+    SDL_SCANCODE_BACKSPACE, // KEY_BACKSPACE,
+    SDL_SCANCODE_ESCAPE // KEY_ESC,
 };
 
 static void processKeys()
 {
-#if SDL_MAJOR_VERSION == 1 && SDL_MINOR_VERSION <= 2
-    const Uint8* keys = SDL_GetKeyState(0);
-#else
     const Uint8* keys = SDL_GetKeyboardState(0);
-#endif
+
+    assert(keys);
 
     for ( int i = 0; i < SIZEOFKEYTABLE; ++i )
     {
-        SDLKey sdlKey = keyToSDLKey[i];
+        SDL_Scancode scanCode = keyToScancode[i];
 
-        if ( keys[sdlKey] )
+        if ( keys[scanCode] )
         {
             keysPressed[i] = keysDown[i] ? 0 : 1;
             keysDown[i] = 1;
@@ -178,12 +183,6 @@ static bool process()
     return done;
 }
 
-int g_width = 0;
-int g_height = 0;
-int g_bpp = 0;
-bool g_fullscreen = false;
-SDL_Surface* g_screen = NULL;
-
 static bool event_loop()
 {
     bool done = false;
@@ -196,6 +195,7 @@ static bool event_loop()
             done = true;
             break;
 
+        /* AJT: OLD SDL1 code
         case SDL_VIDEORESIZE:
             if (!g_fullscreen)
             {
@@ -206,6 +206,7 @@ static bool event_loop()
             }
             printf("SDL_VIDEORESIZE: (%d, %d)\n", event.resize.w, event.resize.h);
             break;
+        */
         }
     }
 
@@ -214,16 +215,8 @@ static bool event_loop()
         done = process();
     }
 
-#ifndef BROWSER
-    // TODO: bug in emscripten sdl
-    // report sdl errors
-    const char* error = SDL_GetError();
-    if (error[0] != 0)
-        printf("SDL_Error = %s\n", error);
-#endif
-
     return done;
-} 
+}
 
 #ifdef BROWSER
 static void browser_loop()
@@ -234,14 +227,22 @@ static void browser_loop()
 
 int main( int argc, char* argv[] )
 {
-    if ( SDL_Init( SDL_INIT_VIDEO ) < 0 )
-        SYS_Error( "Couldn't init SDL!\n" );
+    const char* error = nullptr;
 
-    SDL_WM_SetCaption("cylindrix", "cylindrix");
+    if ( SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS | SDL_INIT_JOYSTICK) < 0 )
+    {
+        SYS_Error( "Couldn't init SDL!\n" );
+        // TODO: bug in emscripten sdl.
+        // report sdl errors
+        error = SDL_GetError();
+        if (error[0] != 0)
+            printf("SDL_Init() failed! SDL_Error = %s\n", error);
+    }
 
     setenv("__GL_SYNC_TO_VBLANK", "1", true);
     g_fullscreen = false;
 
+    /* AJT: OLD SDL1 code
     // Get the current desktop width & height
     const SDL_VideoInfo* videoInfo = SDL_GetVideoInfo();
 
@@ -261,21 +262,38 @@ int main( int argc, char* argv[] )
         g_width = 320 * 2; g_height = 240 * 2;
 //      g_width = 1280; g_height = 720;  // 16:9
         g_bpp = videoInfo->vfmt->BitsPerPixel;
-        g_screen = SDL_SetVideoMode(g_width, g_height, g_bpp, SDL_HWSURFACE | SDL_OPENGL | SDL_DOUBLEBUF /*| SDL_RESIZABLE*/);
+        g_screen = SDL_SetVideoMode(g_width, g_height, g_bpp, SDL_HWSURFACE | SDL_OPENGL | SDL_DOUBLEBUF);
     }
 
     if ( !g_screen )
         SYS_Error( "Couldn't create SDL screen!\n" );
+    */
+
+    uint32_t windowFlags = SDL_WINDOW_OPENGL;
+    if (g_fullscreen)
+    {
+        windowFlags |= SDL_WINDOW_FULLSCREEN_DESKTOP;
+    }
+    else
+    {
+        windowFlags |= SDL_WINDOW_RESIZABLE;
+    }
+    g_width = 320 * 2;
+    g_height = 240 * 2;
+    g_window = SDL_CreateWindow("splatapult", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, g_width, g_height, windowFlags);
+
+    if (!g_window)
+    {
+        // report sdl errors
+        error = SDL_GetError();
+        if (error[0] != 0)
+            printf("CreateWindow! SDL_Error = %s\n", error);
+    }
+
+    g_gl_context = SDL_GL_CreateContext(g_window);
+    SDL_GL_MakeCurrent(g_window, g_gl_context);
 
     GameInit( argc, const_cast<const char**>(argv) );
-
-#ifndef BROWSER
-    // TODO: bug in emscripten sdl.
-    // report sdl errors
-    const char* error = SDL_GetError();
-    if (error[0] != 0)
-        printf("SDL_Error = %s\n", error);
-#endif
 
 #ifndef BROWSER
     bool done = false;

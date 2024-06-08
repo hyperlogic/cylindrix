@@ -359,7 +359,7 @@ void get_wire_object( PointEdge *pe, const char *filename )
 
     /* open up the file */
 
-    if( (fp = fopen( newfilename, "r" )) <= 0 ) 	
+    if( !(fp = fopen( newfilename, "r" )) ) 	
         SYS_Error( "get_wire_object(): Invalid filename %s!\n", filename );    
 
 
@@ -1043,7 +1043,7 @@ void get_object( PointFace *obj, const char *filename )
 
     /* open up the file */
 
-    if( (fp = fopen( newfilename, "r" )) <= 0 )
+    if( !(fp = fopen( newfilename, "r" )) )
 		SYS_Error( "get_object(): Invalid filname '%s'!\n", newfilename );
 
     fseek(fp, 0, SEEK_END);

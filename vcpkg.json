@@ -1,0 +1,14 @@
+{
+  "name": "cylindrix",
+  "version": "2.0.2",
+  "description": "3-on-3 vehicle combat game with retro tron style graphics. Originally released commercially for MSDOS in 1995. It has been refactored to be cross-platform by building upon SDL, OpenGL and OpenAL.",
+  "license": "LGPL-2.0-only",
+  "dependencies": [
+    "sdl2",
+    "mpg123",
+    "glew",
+    "glm",
+    "openal-soft",
+    "libyaml"
+  ]
+}

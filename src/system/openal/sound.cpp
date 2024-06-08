@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <ctype.h>
-#include <SDL/SDL_audio.h>
+#include <SDL2/SDL_audio.h>
 #ifdef DARWIN
 #include <OpenAL/al.h>
 #include <OpenAL/alc.h>

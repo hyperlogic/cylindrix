@@ -133,7 +133,7 @@ void get_pylons( Pylons *pylons, char *filename )
     z_step = ( top_edge - bottom_edge ) / ( n - 1 );
     theta = (2 * PI) / m;
 
-    if( (fp = fopen( newfilename, "r" )) <= 0 )
+    if( !(fp = fopen( newfilename, "r" )) )
         SYS_Error("get_pylons(): Invalid filname!\n");    
 
     /* get the number of pylons in file */

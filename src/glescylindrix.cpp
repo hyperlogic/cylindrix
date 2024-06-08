@@ -2,19 +2,21 @@
 #include <stdio.h>
 
 #ifdef IOS
-#include <OpenGLES/ES2/gl.h>
-#include <OpenGLES/ES2/glext.h>
+#include <OpenGLES/ES3/gl.h>
+#include <OpenGLES/ES3/glext.h>
 #else
-#include <GLES2/gl2.h>
-#include <GLES2/gl2ext.h>
+#include <GLES3/gl3.h>
+#include <GLES3/gl3ext.h>
 #endif
+
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 
 #include "types.h"
 #include "util.h"
 #include "glcylindrix.h"
 #include "assert.h"
 #include <math.h>
-#include "abaci.h"
 
 static int frame = 0;
 
@@ -37,10 +39,12 @@ extern unsigned char *double_buffer; // from prim.c
 extern int g_width, g_height;
 
 static const char* g_vertShader = "\
+#version 320 es\n\
+precision highp float;\n\
 uniform mat4 mat;\n\
-attribute vec3 pos;\n\
-attribute vec2 uv;\n\
-varying mediump vec2 frag_uv;\n\
+in vec3 pos;\n\
+in vec2 uv;\n\
+out vec2 frag_uv;\n\
 void main(void)\n\
 {\n\
 gl_Position = mat * vec4(pos, 1.0);\n\
@@ -48,12 +52,14 @@ frag_uv = uv;\n\
 }\n";
 
 static const char* g_fragShader = "\
-precision lowp float;\n\
+#version 320 es\n\
+precision highp float;\n\
 uniform sampler2D tex;\n\
-varying mediump vec2 frag_uv;\n\
+in vec2 frag_uv;\n\
+out vec4 out_color;\n\
 void main(void)\n\
 {\n\
-gl_FragColor = texture2D(tex, frag_uv);\n\
+out_color = texture(tex, frag_uv);\n\
 }\n";
 
 GLuint g_prog;
@@ -163,7 +169,8 @@ static void GL_RenderBuffer()
 	glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 
 	float aspect = (float)g_width / (float)g_height;
-    abaci::Matrixf proj = abaci::Matrixf::Ortho(-aspect, aspect, -1, 1, -1, 1);
+    //abaci::Matrixf proj = abaci::Matrixf::Ortho(-aspect, aspect, -1, 1, -1, 1);
+    glm::mat4 proj = glm::ortho(-aspect, aspect, -1.0f, 1.0f, -1.0f, 1.0f);
 
     glUniformMatrix4fv(g_uniform_mat, 1, GL_FALSE, reinterpret_cast<float*>(&proj));
     glUniform1i(g_uniform_tex, 0);
@@ -233,13 +240,31 @@ static GLint GL_CompileShader(const char* source, GLenum type)
 	glShaderSource(shader, 1, (const GLchar**)&source, &size);
 	glCompileShader(shader);
 
-	GLint success;
+    GLint success;
 	glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
 	if (!success)
 	{
         fprintf(stderr, "error compiling shader, type = %d\n", type);
     }
+
+    GLint bufferLen = 0;
+    glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &bufferLen);
+    if (bufferLen > 1)
+    {
+        if (success)
+        {
+            fprintf(stderr, "shader compilation warning!\n");
+        }
+
+        GLsizei len = 0;
+        char* buffer = new char[bufferLen];
+        glGetShaderInfoLog(shader, bufferLen, &len, buffer);
+        fprintf(stderr, "%s\n", buffer);
+        //DumpShaderSource(source);
+        delete [] buffer;
+    }
     assert(success);
+
     return shader;
 }
 
@@ -575,7 +600,9 @@ void GL_SwapBuffers()
 	glTexSubImage2D( GL_TEXTURE_2D, 0, 0, 0, 320, 200, GL_RGBA, GL_UNSIGNED_BYTE, rgbaFrameBuffer );
 
 	float aspect = (float)g_width / (float)g_height;
-    abaci::Matrixf proj = abaci::Matrixf::Ortho(-aspect, aspect, -1, 1, -1, 1);
+    //abaci::Matrixf proj = abaci::Matrixf::Ortho(-aspect, aspect, -1, 1, -1, 1);
+    glm::mat4 proj = glm::ortho(-aspect, aspect, -1.0f, 1.0f, -1.0f, 1.0f);
+
     glUniformMatrix4fv(g_uniform_mat, 1, GL_FALSE, reinterpret_cast<float*>(&proj));
     glUniform1i(g_uniform_tex, 0);
 

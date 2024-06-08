@@ -1,4 +1,9 @@
+sdl-vckpg port
+----------------------
+* add .github/workflows/build.yaml
+* remove libyaml, and abaci submodule
 
+---------------
 * gamemenu->quit goes to pilot menu
 * keyboard config not used by game.
 * joystick calibrate, does nothing. remove it?

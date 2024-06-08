@@ -1502,8 +1502,8 @@ void draw_vertical_bottom_justified_bar( BarInfo *barinfo )
 
 void blit_screen( unsigned char *buffer )
 {
-    register unsigned char *ptr = buffer;
-    register unsigned char *end = buffer + 64000;
+    unsigned char *ptr = buffer;
+    unsigned char *end = buffer + 64000;
 
     while( ptr < end ) {
         if( *ptr != TRANSPARENT_COLOR ) {
