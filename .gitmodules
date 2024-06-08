@@ -1,9 +1,3 @@
-[submodule "libyaml"]
-	path = libyaml
-	url = git@github.com:yaml/libyaml.git
-[submodule "abaci"]
-	path = abaci
-	url = git@github.com:hyperlogic/abaci.git
 [submodule "vcpkg"]
 	path = vcpkg
 	url = https://github.com/microsoft/vcpkg.git
