@@ -42,7 +42,7 @@ struct SYS_Wave* usedList = 0;
 // used for dynamic sounds (fire & forget, play once)
 #define SIZEOFSOURCEPOOL 50
 ALuint sourcePool[SIZEOFSOURCEPOOL];
-extern char* g_DataPath;
+extern const char* g_DataPath;
 
 #ifdef SYS_SOUNDDEBUG
 FILE* soundLog;

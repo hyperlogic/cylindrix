@@ -128,7 +128,8 @@ int SYS_KeyPressed( unsigned char key );
 
 
 // sound stuff
-typedef unsigned long SYS_SOUNDHANDLE;
+#include <stdint.h>
+typedef uintptr_t SYS_SOUNDHANDLE;
 void SYS_InitSound();
 void SYS_ShutdownSound();
 void SYS_ProcessSound();	// TODO: maybe this should be hidden from game client.
